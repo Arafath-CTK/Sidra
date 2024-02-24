@@ -22,7 +22,10 @@ const app = express();
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./views"));
 
-app.use("/", adminRouter);
+app.use(express.urlencoded({ extended: true })); //same use of body parser. its built in express itself.
+app.use(express.json()); // for parsing json to js object.
+
+app.use("/admin", adminRouter);
 
 app.use(express.static(path.join(__dirname, "./public")));
 
