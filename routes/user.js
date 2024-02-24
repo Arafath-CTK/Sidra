@@ -4,5 +4,10 @@ const router = express.Router();
 const userControllers = require("../controllers/user");
 
 router.get("/", userControllers.homePage);
+router.get("/signUp", userControllers.signUpPage)
+router.get("/signIn", userControllers.signInPage)
+router.get("/myAccount", userControllers.myAccountPage)
+// router.get("/checkAuthentication", userControllers.checkAuthentication);
+
 
 module.exports = router;

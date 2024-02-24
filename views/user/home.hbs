@@ -83,13 +83,15 @@
                   </div>
                   <div class="header_account_area">
                     <div class="header_account-list top_links">
-                      <a href="#"><i class="icon-users"></i></a>
-                      {{!-- <ul class="dropdown_links">
+                      <a href="#" id="accountButton"><i
+                          class="icon-users"
+                        ></i></a>
+                      {{! <ul class="dropdown_links">
                         <li><a href="checkout.html">Checkout </a></li>
                         <li><a href="my-account.html">My Account </a></li>
                         <li><a href="cart.html">Shopping Cart</a></li>
                         <li><a href="wishlist.html">Wishlist</a></li>
-                      </ul> --}}
+                      </ul> }}
                     </div>
                     <div class="header_account-list header_wishlist">
                       <a href="wishlist.html"><i class="icon-heart"></i></a>
@@ -99,7 +101,7 @@
                           class="icon-shopping-bag"
                         ></i><span class="item_count">4</span></a>
                       <!--mini cart-->
-                      {{!-- <div class="mini_cart">
+                      {{! <div class="mini_cart">
                         <div class="cart_gallery">
                           <div class="cart_close">
                             <div class="cart_text">
@@ -169,7 +171,7 @@
                           </div>
 
                         </div>
-                      </div> --}}
+                      </div> }}
                       <!--mini cart end-->
                     </div>
                   </div>
@@ -182,6 +184,7 @@
           <div class="container">
             <div class="row align-items-center">
               <div class="col-lg-3">
+
                 <div class="categories_menu">
                   <div class="categories_title">
                     <h2 class="categori_toggle">Categories</h2>
@@ -415,11 +418,11 @@
                 </div>
                 <!--main menu end-->
               </div>
-              <div class="col-lg-3">
+              {{! <div class="col-lg-3">
                 <div class="call-support">
                   <p>Call Support: <a href="tel:0123456789">0123456789</a></p>
                 </div>
-              </div>
+              </div> }}
             </div>
           </div>
         </div>
@@ -3303,9 +3306,10 @@
     <script src="/user/assets/js/slinky.menu.js"></script>
     <!-- Plugins JS -->
     <script src="/user/assets/js/plugins.js"></script>
-
     <!-- Main JS -->
     <script src="/user/assets/js/main.js"></script>
+    <!-- Custom JS -->
+    <script src="/user/scripts/home.js"></script>
 
   </body>
 </html>
