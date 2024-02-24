@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const adminRouter = require("./routes/admin");
+const userRouter = require("./routes/user");
 const hbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true })); //same use of body parser. its 
 app.use(express.json()); // for parsing json to js object.
 
 app.use("/admin", adminRouter);
+app.use("/", userRouter);
 
 app.use(express.static(path.join(__dirname, "./public")));
 
