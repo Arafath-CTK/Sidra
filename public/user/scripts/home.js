@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
           window.location.href = "/myAccount";
         } else {
-          window.location.href = "/login";
+          window.location.href = "/signIn";
         }
       })
       .catch((error) =>

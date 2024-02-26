@@ -5,8 +5,8 @@ let homePage = (req, res) => {
 };
 
 let signUpPage = (req, res) => {
-  res.render("user/signUp")
-}
+  res.render("user/signUp");
+};
 
 let signInPage = (req, res) => {
   res.render("user/signIn");
@@ -16,7 +16,11 @@ let myAccountPage = (req, res) => {
   res.render("user/myAccount");
 };
 
-
+let signUpPost = (req, res) => {
+  console.log(req.body);
+  let { name, email, phoneNumber, password, confirmPassword } = req.body;
+  
+};
 
 // let checkAuthentication = (req, res) => {
 //   if (req.user) {
@@ -26,4 +30,10 @@ let myAccountPage = (req, res) => {
 //   }
 // };
 
-module.exports = { homePage, signUpPage, signInPage, myAccountPage };
+module.exports = {
+  homePage,
+  signUpPage,
+  signInPage,
+  myAccountPage,
+  signUpPost,
+};

@@ -34,5 +34,5 @@ app.use(express.static(path.join(__dirname, "./public")));
 //Server hosting locally
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server runs at port: ${port}`);
+  console.log(`Server started on : http://localhost:${port}`);
 });
