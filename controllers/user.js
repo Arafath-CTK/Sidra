@@ -16,19 +16,35 @@ let myAccountPage = (req, res) => {
   res.render("user/myAccount");
 };
 
-let signUpPost = (req, res) => {
-  console.log(req.body);
-  let { name, email, phoneNumber, password, confirmPassword } = req.body;
-  
+let signUpPost = async (req, res) => {
+  try {
+    console.log("User registration started");
+    let registered = await helper.signUpHelper(req.body);
+    if (registered.emailExist) {
+      console.log("The entered email already exists");
+      res.status(200).render("user/signUp", {
+        emailError: "Email already exists",
+        enteredName: req.body.name,
+        enteredEmail: req.body.email,
+        enteredPhoneNumber: phoneNumber,
+      });
+    } else {
+      console.log(registered.user, "User registration completed");
+      return res.redirect("/signIn");
+    }
+  } catch (error) {
+    res.render("error", { errorMessage: error });
+  }
 };
 
-// let checkAuthentication = (req, res) => {
-//   if (req.user) {
-//     res.status(200).send("Authenticated");
-//   } else {
-//     res.status(401).send("Not Authenticated");
-//   }
-// };
+let signInPost = async (req, res) => {
+  try {
+    console.log("Signing in started");
+    let signedIn = await helper.signInHelper(req.body);
+  } catch (error) {
+    return res.render("error", { errorMessage: error });
+  }
+};
 
 module.exports = {
   homePage,
@@ -36,4 +52,5 @@ module.exports = {
   signInPage,
   myAccountPage,
   signUpPost,
+  signInPost,
 };
