@@ -28,4 +28,23 @@ function signUpHelper(userData) {
   });
 }
 
-module.exports = { signUpHelper };
+let signInHelper = async (signInData) => {
+    try {
+        const {email, password} = signInData
+        let existingUser = await User.findOne({email: email})
+        if (existingUser) {
+            const passwordMatch = await bcrypt.compare(password, existingUser.password)
+            if (!passwordMatch) {
+                return {passwordNotMatching: true}
+            } else {
+                return {verified: true, existingUser}
+            }
+        } else {
+            return {invalidEmail: true}
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { signUpHelper, signInHelper };
