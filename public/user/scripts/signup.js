@@ -21,7 +21,7 @@ function validateForm() {
   }
   if (!/^\d{10}$/.test(phoneNumber)) {
     document.getElementById("phoneNumberError").innerHTML =
-      "Enter a valid name";
+      "Enter a valid phone number";
     errorCount++;
   } else {
     document.getElementById("phoneNumberError").innerHTML = "";

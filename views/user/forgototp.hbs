@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Sidra | Signin</title>
+    <title>Sidra | Forgot Password</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Favicon -->
@@ -52,7 +52,7 @@
             <div class="row align-items-center">
               <div class="col-lg-3 col-md-3 col-4">
                 <div class="logo">
-                  <a href="index.html"><img
+                  <a href="/"><img
                       src="/user/assets/img/logo/logo.png"
                       alt=""
                     /></a>
@@ -449,8 +449,8 @@
             <div class="breadcrumb_content">
               <h3>My Account</h3>
               <ul>
-                <li><a href="index.html">home</a></li>
-                <li>SignIn</li>
+                <li><a href="/">home</a></li>
+                <li>Forgot Password</li>
               </ul>
             </div>
           </div>
@@ -466,37 +466,45 @@
           <!--login area start-->
           <div class="col-lg-6 col-md-6">
             <div class="account_form">
-              <h2>Sign In</h2>
-              <form action="signInPost" method="post">
-                <p>
-                  <label>Email</label>
-                  <input type="text" name="email" value="{{email}}" />
-                  <small style="color: red;">{{emailError}}</small>
-                </p>
-                <p>
-                  <label>Password</label>
-                  <input type="password" name="password" value="{{password}}" />
-                  <small style="color: red;">{{passwordError}}</small>
-                </p>
-                <div
-                  class="login_submit"
-                  style="display: flex; justify-content: space-between;"
-                >
-                  <div style="display: flex; flex-direction: column;">
-                    <a
-                      href="forgotPassword"
-                      style="align-self: flex-start;"
-                    >Lost your password?</a>
-                    <a
-                      href="signUp"
-                      style="align-self: flex-start;"
-                    >Don't have an account? Signup</a>
-                  </div>
-                  <button type="submit">SignIn</button>
-                </div>
+              <h2>Recover Your Account</h2>
+              <form action="/resetPassword" method="post">
+
+                <input type="hidden" name="email" value="{{email}} " />
+                <label for="name">Enter OTP <span>**</span></label>
+                <input
+                  id="name"
+                  name="otp"
+                  type="text"
+                  placeholder="Enter OTP"
+                  required
+                />
+
+                <label for="newPassword">Password <span>**</span></label>
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type="password"
+                  placeholder="Enter password..."
+                  required
+                />
+
+                <label for="confirmPassword">confirm Password
+                  <span>**</span></label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Enter password..."
+                  required
+                />
+
+                <button type="submit" class="btn theme-btn-2 w-100">Change
+                  password</button><br />
+
               </form>
             </div>
           </div>
+          <!--login area start-->
         </div>
       </div>
     </div>

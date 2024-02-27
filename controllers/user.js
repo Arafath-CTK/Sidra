@@ -4,12 +4,12 @@ const JWT = require("../middlewares/jwt");
 let homePage = async (req, res) => {
   try {
     if (req.cookies.jwt) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt)
-      let userName = tokenExtracted.userName
-      return res.render("user/home", {user: true})
+      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
+      return res.render("user/home", { user: true });
     }
+    return res.render("user/home");
   } catch (error) {
-    res.render("error", {errorMessage: error})
+    res.render("error", { errorMessage: error });
   }
 };
 
@@ -27,8 +27,23 @@ let signInPage = async (req, res) => {
   res.render("user/signIn");
 };
 
-let myAccountPage = (req, res) => {
-  res.render("user/myAccount");
+let myAccountPage = async (req, res) => {
+  try {
+    if (!req.cookies.jwt) {
+      return res.render("user/signIn");
+    }
+    if (req.cookies.jwt) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
+      role = tokenExtracted.role;
+      if (role !== "user") {
+        return res.render("user/signIn");
+      }
+    }
+    return res.render("user/myAccount", { user: true });
+  } catch (error) {
+    console.error("Unexpected error occured due to: ", error);
+    return res.status(404).render("error", { errorMessage: error });
+  }
 };
 
 let signUpPost = async (req, res) => {
@@ -81,6 +96,19 @@ let signInPost = async (req, res) => {
   }
 };
 
+let logout = (req, res) => {
+  res.clearCookie("jwt");
+  console.log("Cookies are cleared and user logged out");
+  return res.redirect("/");
+};
+
+// forgot password
+let forgotPasswordPage = (req, res) => {
+  res.render("user/forgotPassword");
+};
+
+let forgotPasswordPost = async (req, res) => {};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -88,4 +116,7 @@ module.exports = {
   myAccountPage,
   signUpPost,
   signInPost,
+  logout,
+  forgotPasswordPage,
+  forgotPasswordPost,
 };

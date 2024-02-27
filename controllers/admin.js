@@ -12,7 +12,7 @@ let adminHome = (req, res) => {
 let signInPost = async (req, res) => {
   try {
     const { signInEmail, signInPassword } = req.body;
-    const adminData = await Admin.findById("65d86b85958675a31c9de541");
+    const adminData = await Admin.findOne(signInEmail);
     console.log(adminData);
     if (adminData === null) {
       return res.status(401).render("admin/signin", {

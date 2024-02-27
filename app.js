@@ -3,24 +3,10 @@ const path = require("path");
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const hbs = require("express-handlebars");
-const {
-  allowInsecurePrototypeAccess,
-} = require("@handlebars/allow-prototype-access");
 
 const app = express();
 
-// app.engine(
-//   "hbs",
-//   hbs.engine({
-//     handlebars: allowInsecurePrototypeAccess(require("handlebars")),
-//     extname: "hbs",
-//     defaultLayout: "layout",
-//     layoutsDir: path.join(__dirname, "./views/layout/"),
-//     partialsDir: path.join(__dirname, "./views/partials/"),
-//   })
-// );
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./views"));
 
