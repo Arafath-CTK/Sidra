@@ -1,5 +1,4 @@
 const User = require("../models/user");
-
 const bcrypt = require("bcrypt");
 
 // user signup helper
@@ -46,4 +45,14 @@ let signInHelper = async (signInData) => {
     }
 }
 
-module.exports = { signUpHelper, signInHelper };
+let forgotPasswordHelper = async (userData) => {
+  try {
+    const {email} = userData
+    const existingUser = await User.findOne({email: email})
+    
+  } catch (error) {
+    throw error
+  }
+}
+
+module.exports = { signUpHelper, signInHelper, forgotPasswordHelper };

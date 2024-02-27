@@ -107,7 +107,10 @@ let forgotPasswordPage = (req, res) => {
   res.render("user/forgotPassword");
 };
 
-let forgotPasswordPost = async (req, res) => {};
+let forgotPasswordPost = async (req, res) => {
+  console.log("forgot password started");
+  let resolved = helper.forgotPasswordHelper(req.body)
+};
 
 module.exports = {
   homePage,
