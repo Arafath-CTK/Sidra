@@ -33,7 +33,7 @@ function validateForm() {
   } else {
     document.getElementById("passwordError").innerHTML = "";
   }
-  if (password === confirmPassword) {
+  if (password !== confirmPassword) {
     document.getElementById("confirmPasswordError").innerHTML =
       "Password confirmation does not match the original password";
     errorCount++;
@@ -42,7 +42,7 @@ function validateForm() {
   }
 
   if (errorCount > 0) {
-    return true;
+    return false;
   } else {
     return true;
   }

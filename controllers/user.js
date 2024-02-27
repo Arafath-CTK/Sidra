@@ -1,14 +1,29 @@
 const helper = require("../helpers/user");
+const JWT = require("../middlewares/jwt");
 
-let homePage = (req, res) => {
-  res.render("user/home");
+let homePage = async (req, res) => {
+  try {
+    if (req.cookies.jwt) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt)
+      let userName = tokenExtracted.userName
+      return res.render("user/home", {user: true})
+    }
+  } catch (error) {
+    res.render("error", {errorMessage: error})
+  }
 };
 
 let signUpPage = (req, res) => {
   res.render("user/signUp");
 };
 
-let signInPage = (req, res) => {
+let signInPage = async (req, res) => {
+  if (req.cookies.jwt) {
+    let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
+    if (tokenExtracted.role === "user") {
+      return res.redirect("/");
+    }
+  }
   res.render("user/signIn");
 };
 
@@ -43,15 +58,23 @@ let signInPost = async (req, res) => {
     let signedIn = await helper.signInHelper(req.body);
     if (signedIn.invalidEmail) {
       console.log("invalid email id");
-      return res.render("user/signIn", {emailError: "Invalid email id", email: req.body.email, password: req.body.password})
+      return res.render("user/signIn", {
+        emailError: "Invalid email id",
+        email: req.body.email,
+        password: req.body.password,
+      });
     } else if (signedIn.passwordNotMatching) {
       console.log("Incorrect Password");
-      return res.render("user/signIn", {passwordError: "Incorrect Password", email: req.body.email, password: req.body.password })
-    } else if(signedIn.verified) {
+      return res.render("user/signIn", {
+        passwordError: "Incorrect Password",
+        email: req.body.email,
+        password: req.body.password,
+      });
+    } else if (signedIn.verified) {
       console.log("User verified and Signed in successfully");
-      // const token = await signUser(signedIn.existingUser)
-      // res.cookie("jwt", token, {htttpOnly: true, maxAge: 7200000})
-      return res.redirect("/")
+      const token = await JWT.signUser(signedIn.existingUser);
+      res.cookie("jwt", token, { htttpOnly: true, maxAge: 7200000 });
+      return res.redirect("/");
     }
   } catch (error) {
     return res.render("error", { errorMessage: error });

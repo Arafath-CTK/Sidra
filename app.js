@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const hbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
@@ -19,17 +21,16 @@ const app = express();
 //     partialsDir: path.join(__dirname, "./views/partials/"),
 //   })
 // );
-
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./views"));
 
+app.use(cookieParser()); // For JWT
 app.use(express.urlencoded({ extended: true })); //same use of body parser. its built in express itself.
 app.use(express.json()); // for parsing json to js object.
+app.use(express.static(path.join(__dirname, "./public"))); // Setting the public forlder as the forlder for static files.
 
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
-
-app.use(express.static(path.join(__dirname, "./public")));
 
 //Server hosting locally
 const port = process.env.PORT || 3000;
