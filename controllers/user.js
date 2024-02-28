@@ -1,5 +1,8 @@
 const helper = require("../helpers/user");
+const User = require("../models/user");
 const JWT = require("../middlewares/jwt");
+const bcrypt = require("bcrypt");
+
 
 let homePage = async (req, res) => {
   try {
@@ -89,7 +92,7 @@ let signInPost = async (req, res) => {
       console.log("User verified and Signed in successfully");
       const token = await JWT.signUser(signedIn.existingUser);
       res.cookie("jwt", token, { htttpOnly: true, maxAge: 7200000 });
-      return res.redirect("/");
+      return res.redirect("/myAccount");
     }
   } catch (error) {
     return res.render("error", { errorMessage: error });
@@ -108,8 +111,71 @@ let forgotPasswordPage = (req, res) => {
 };
 
 let forgotPasswordPost = async (req, res) => {
-  console.log("forgot password started");
-  let resolved = helper.forgotPasswordHelper(req.body)
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("not found");
+      res.status(404).json({ userNotFound: true });
+    } else {
+      const { otp, expiry } = await helper.generateAndSendOTP(email);
+
+      user.otp = otp;
+      user.otpExpiry = new Date(expiry);
+      await user.save();
+
+      res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error initiating password reset: ", error);
+    res
+      .status(500)
+      .render("error", { errorMessage: `internal server error: ${error}` });
+  }
+};
+
+let verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ userNotFound: true });
+    } else if (otp !== user.otp || new Date() > user.otpExpiry) {
+      return res.status(400).json({ invalidOTP: true });
+    } else {
+      res.status(200).json({ otpVerified: true });
+    }
+  } catch (error) {
+    console.error("Error verifying OTP: ", error);
+    res
+      .status(500)
+      .render("error", { errorMessage: `internal server error: ${error}` });
+  }
+};
+
+let resetPassword = async (req, res) => {
+  try {
+    const {email, confirmPassword} = req.body
+
+    const user = await User.findOne({email})
+    const passwordMatch = await bcrypt.compare(confirmPassword, user.password)
+    if (!user) {
+      return res.status(404).json({ userNotFound: true });
+    } else if (passwordMatch) {
+      return res.status(400).json({samePassword: true})
+    } else {
+      const hashedPassword = await bcrypt.hash(confirmPassword, 10);
+      user.password = hashedPassword
+      await user.save();
+
+      res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error while resetting the password");
+    res
+      .status(500)
+      .render("error", { errorMessage: `internal server error: ${error}` });
+  }
 };
 
 module.exports = {
@@ -122,4 +188,6 @@ module.exports = {
   logout,
   forgotPasswordPage,
   forgotPasswordPost,
+  verifyOTP,
+  resetPassword,
 };

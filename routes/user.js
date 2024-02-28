@@ -10,10 +10,12 @@ router.get("/signIn", preventBack, userControllers.signInPage);
 router.get("/signUp", preventBack, userControllers.signUpPage);
 router.post("/signUpPost", userControllers.signUpPost);
 router.post("/signInPost", userControllers.signInPost);
-router.get("/logout", preventBack, userControllers.logout)
 
-router.get("/myAccount", userControllers.myAccountPage);
-router.get("/forgotPassword", userControllers.forgotPasswordPage)
-router.post("/forgotPassword",userControllers.forgotPasswordPost)
+router.get("/myAccount", preventBack, userControllers.myAccountPage);
+router.get("/logout", preventBack, userControllers.logout);
+router.get("/forgotPassword", userControllers.forgotPasswordPage);
+router.post("/forgotPasswordPost", preventBack, userControllers.forgotPasswordPost);
+router.post("/verifyOTP", preventBack, userControllers.verifyOTP);
+router.post("/resetPassword", preventBack, userControllers.resetPassword);
 
 module.exports = router;

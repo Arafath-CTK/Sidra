@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     phone_number: { type: String },
     password: { type: String },
     otp: { type: String },
-    otpExpiration: { type: Date },
+    otpExpiry: { type: Date },
     // addresses: [
     //   {
     //     name: String,

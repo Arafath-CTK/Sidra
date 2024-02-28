@@ -4,7 +4,7 @@ const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
 const cookieParser = require('cookie-parser');
 const hbs = require("express-handlebars");
-
+ 
 const app = express();
 
 app.set("view engine", "hbs");

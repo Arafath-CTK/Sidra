@@ -1,5 +1,9 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+require("dotenv").config();
+
 
 // user signup helper
 function signUpHelper(userData) {
@@ -45,14 +49,47 @@ let signInHelper = async (signInData) => {
     }
 }
 
-let forgotPasswordHelper = async (userData) => {
+// config of nodemailer
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+})
+
+// OTP generating functiion 
+function generateOTP() {
+  return crypto.randomBytes(3).toString("hex").toUpperCase()
+}
+
+let sendOTP = async (email, otp) => {
   try {
-    const {email} = userData
-    const existingUser = await User.findOne({email: email})
-    
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset OTP",
+      text: `Your OTP for password reset is: ${otp}`
+    }
+    await transporter.sendMail(mailOptions)
   } catch (error) {
-    throw error
+    console.error("Error sending email: ", error);
+    throw new Error("Failed to send OTP");
   }
 }
 
-module.exports = { signUpHelper, signInHelper, forgotPasswordHelper };
+let generateAndSendOTP = async (email) => {
+  try {
+    const otp = generateOTP()
+    const expiry = Date.now() + (10 * 60 * 1000) // otp expires in 10 mins
+    await sendOTP(email, otp);
+    return { otp, expiry };
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { signUpHelper, signInHelper, generateAndSendOTP };
