@@ -18,6 +18,7 @@ function signUpHelper(userData) {
           email: email,
           phone_number: phoneNumber,
           password: hashedPassword,
+          status: "Active"
         });
         user.save();
         resolve({ success: true, user });

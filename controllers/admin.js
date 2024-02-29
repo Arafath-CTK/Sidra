@@ -35,4 +35,15 @@ let signInPost = async (req, res) => {
   }
 };
 
-module.exports = { signInPage, adminHome, signInPost };
+let usersListPage = async (req, res) => {
+  try {
+    return res.status(200).render("admin/usersList");
+  } catch (error) {
+    console.error("Error rendering the users list page", error);
+    res
+      .status(404)
+      .render("error", { errorMessage: "Error rendering the users list page" });
+  }
+};
+
+module.exports = { signInPage, adminHome, signInPost, usersListPage };
