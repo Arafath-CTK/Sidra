@@ -1,4 +1,5 @@
 const Admin = require("../models/admin");
+const User = require("../models/user");
 
 // Admin signup page
 let signInPage = (req, res) => {
@@ -37,13 +38,40 @@ let signInPost = async (req, res) => {
 
 let usersListPage = async (req, res) => {
   try {
-    return res.status(200).render("admin/usersList");
+    const users = await User.find();
+
+    users.forEach((user) => {
+      user.isActive = user.status === "Active";
+    });
+
+    res.status(200).render("admin/usersList", { users });
   } catch (error) {
     console.error("Error rendering the users list page", error);
     res
-      .status(404)
-      .render("error", { errorMessage: "Error rendering the users list page" });
+      .status(500)
+      .render("error", { errorMessage: "Error rendering the users list" });
   }
 };
 
-module.exports = { signInPage, adminHome, signInPost, usersListPage };
+let userAction = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    user.status = user.status === "Active" ? "Blocked" : "Active";
+    await user.save();
+    res.status(200).redirect("/admin/usersList");
+  } catch (error) {
+    console.error(error);
+    res.status(500).render("error", {
+      errorMessage: "Error occured while taking action against user",
+    });
+  }
+};
+
+module.exports = {
+  signInPage,
+  adminHome,
+  signInPost,
+  usersListPage,
+  userAction,
+};

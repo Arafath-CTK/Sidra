@@ -23,6 +23,8 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="/admin/assets/css/ebazar.style.min.css" />
+
+    {{!-- <script src="/admin/scripts/userList.js"></script> --}}
   </head>
   <body>
     <div id="ebazar-layout" class="theme-teal">
@@ -251,7 +253,7 @@
             <div class="row align-items-center">
               <div class="border-0 mb-4">
                 <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                  <h3 class="fw-bold mb-0">Users Information</h3>
+                  <h3 class="fw-bold mb-0">User Details</h3>
                 </div>
               </div>
             </div>
@@ -267,7 +269,7 @@
                     >
                       <thead>
                         <tr>
-                          <th>Customers</th>
+                          <th>Users</th>
                           <th>Mail</th>
                           <th>Phone</th>
                           <th>Register Date</th>
@@ -276,8 +278,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {{#each user}}
-                           <tr>
+                        {{#each users}}
+                         <tr>
                           <td><span class="fw-bold ms-1">{{this.name}}</span></td>
                           <td>{{this.email}}</td>
                           <td>{{this.phone_number}}</td>
@@ -288,14 +290,22 @@
                               class="btn-group"
                               role="group"
                               aria-label="Basic outlined example"
-                            >
-                              <button
-                                type="button"
+                            > 
+                            <form action="/admin/usersList/{{this._id}}/block" method="post">
+                            <button
+                                type="submit"
                                 class="btn btn-outline-secondary"
-                              ><i class="icofont-ui-lock text-danger"></i></button>
+                              >
+                              {{#if this.isActive}}
+                                <i class="icofont-ui-lock text-danger"></i>
+                              {{else}}
+                                <i class="icofont-ui-unlock text-success"></i>
+                              {{/if}}
+                              </button>
+                            </form>
                             </div>
                           </td>
-                        </tr>
+                         </tr>
                         {{/each}}
                       </tbody>
                     </table>

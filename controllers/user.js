@@ -3,7 +3,6 @@ const User = require("../models/user");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
 
-
 let homePage = async (req, res) => {
   try {
     if (req.cookies.jwt) {
@@ -81,6 +80,14 @@ let signInPost = async (req, res) => {
         email: req.body.email,
         password: req.body.password,
       });
+    } else if (signedIn.blockedUser) {
+      console.log("The user is blocked");
+      return res.render("user/signIn", {
+        emailError:
+          "Access Denied: Your account has been temporarily suspended",
+        email: req.body.email,
+        password: req.body.password,
+      });
     } else if (signedIn.passwordNotMatching) {
       console.log("Incorrect Password");
       return res.render("user/signIn", {
@@ -155,17 +162,17 @@ let verifyOTP = async (req, res) => {
 
 let resetPassword = async (req, res) => {
   try {
-    const {email, confirmPassword} = req.body
+    const { email, confirmPassword } = req.body;
 
-    const user = await User.findOne({email})
-    const passwordMatch = await bcrypt.compare(confirmPassword, user.password)
+    const user = await User.findOne({ email });
+    const passwordMatch = await bcrypt.compare(confirmPassword, user.password);
     if (!user) {
       return res.status(404).json({ userNotFound: true });
     } else if (passwordMatch) {
-      return res.status(400).json({samePassword: true})
+      return res.status(400).json({ samePassword: true });
     } else {
       const hashedPassword = await bcrypt.hash(confirmPassword, 10);
-      user.password = hashedPassword
+      user.password = hashedPassword;
       await user.save();
 
       res.status(200).json({ success: true });

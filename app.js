@@ -2,11 +2,24 @@ const express = require("express");
 const path = require("path");
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
-const cookieParser = require('cookie-parser');
-const hbs = require("express-handlebars");
- 
+const cookieParser = require("cookie-parser");
+// const hbs = require("express-handlebars");
+// const helpers = require("handlebars-helpers").comparison;
+
 const app = express();
 
+
+// app.engine(
+//   "hbs",
+//   hbs({
+//     extname: ".hbs",
+//     helpers: {
+//       // Register the `eq` helper
+//       ...hbs.helpers,
+//       eq: helpers.eq, // Access the `eq` helper from imported comparison helpers
+//     },
+//   })
+// ); 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./views"));
 
