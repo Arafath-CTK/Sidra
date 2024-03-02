@@ -467,7 +467,7 @@
             <div class="account_form register">
               <h2>Sign Up</h2>
               <form
-                action="signUpPost"
+                action="signUp"
                 method="post"
                 onsubmit="return validateForm()"
               >
@@ -489,7 +489,10 @@
                     id="email"
                     value="{{enteredEmail}}"
                   />
-                  <small id="emailError" style="color: red;">{{emailError}}</small>
+                  <small
+                    id="emailError"
+                    style="color: red;"
+                  >{{emailError}}</small>
                 </p>
                 <p>
                   <label>Phone Number</label>

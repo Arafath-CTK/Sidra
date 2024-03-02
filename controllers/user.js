@@ -73,10 +73,18 @@ let signInPost = async (req, res) => {
   try {
     console.log("Signing in started");
     let signedIn = await helper.signInHelper(req.body);
+
     if (signedIn.invalidEmail) {
       console.log("invalid email id");
       return res.render("user/signIn", {
         emailError: "Invalid email id",
+        email: req.body.email,
+        password: req.body.password,
+      });
+    } else if (signedIn.passwordNotMatching) {
+      console.log("Incorrect Password");
+      return res.render("user/signIn", {
+        passwordError: "Incorrect Password",
         email: req.body.email,
         password: req.body.password,
       });
@@ -88,19 +96,13 @@ let signInPost = async (req, res) => {
         email: req.body.email,
         password: req.body.password,
       });
-    } else if (signedIn.passwordNotMatching) {
-      console.log("Incorrect Password");
-      return res.render("user/signIn", {
-        passwordError: "Incorrect Password",
-        email: req.body.email,
-        password: req.body.password,
-      });
     } else if (signedIn.verified) {
       console.log("User verified and Signed in successfully");
       const token = await JWT.signUser(signedIn.existingUser);
       res.cookie("jwt", token, { htttpOnly: true, maxAge: 7200000 });
       return res.redirect("/myAccount");
     }
+    
   } catch (error) {
     return res.render("error", { errorMessage: error });
   }

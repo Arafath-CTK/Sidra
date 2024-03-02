@@ -1,6 +1,7 @@
 async function sendOTP() {
   try {
     const email = document.getElementById("email").value;
+    
 
     if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
       document.getElementById("emailError").innerHTML =
@@ -8,9 +9,8 @@ async function sendOTP() {
     } else {
       document.getElementById("emailError").innerHTML = "";
 
-      let response = await axios.post("/forgotPasswordPost", { email });
+      let response = await axios.post("/forgotPassword", { email });
       if (response.data.userNotFound) {
-        console.log("illaaa");
         document.getElementById("emailError").innerHTML = "User doesn't exist";
       } else if (response.data.success) {
         document.getElementById("email-section").style.display = "none";

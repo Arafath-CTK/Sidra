@@ -467,16 +467,36 @@
           <div class="col-lg-6 col-md-6">
             <div class="account_form">
               <h2>Sign In</h2>
-              <form action="signInPost" method="post">
+              <form
+                action="signIn"
+                method="post"
+                onsubmit="return validateForm()"
+              >
                 <p>
                   <label>Email</label>
-                  <input type="text" name="email" value="{{email}}" />
-                  <small style="color: red;">{{emailError}}</small>
+                  <input
+                    id="email"
+                    type="text"
+                    name="email"
+                    value="{{email}}"
+                  />
+                  <small
+                    id="emailError"
+                    style="color: red;"
+                  >{{emailError}}</small>
                 </p>
                 <p>
                   <label>Password</label>
-                  <input type="password" name="password" value="{{password}}" />
-                  <small style="color: red;">{{passwordError}}</small>
+                  <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    value="{{password}}"
+                  />
+                  <small
+                    id="passwordError"
+                    style="color: red;"
+                  >{{passwordError}}</small>
                 </p>
                 <div
                   class="login_submit"
@@ -487,10 +507,8 @@
                       href="forgotPassword"
                       style="align-self: flex-start;"
                     >Lost your password?</a>
-                    <a
-                      href="signUp"
-                      style="align-self: flex-start;"
-                    >Don't have an account? Signup</a>
+                    <a href="signUp" style="align-self: flex-start;">Don't have
+                      an account? Signup</a>
                   </div>
                   <button type="submit">SignIn</button>
                 </div>
@@ -642,8 +660,8 @@
     </footer>
     <!--footer area end-->
 
-    <!-- JS
-============================================ -->
+    <!-- JS ============================================ -->
+
     <!--jquery min js-->
     <script src="/user/assets/js/vendor/jquery-3.4.1.min.js"></script>
     <!--popper min js-->
@@ -673,6 +691,9 @@
 
     <!-- Main JS -->
     <script src="/user/assets/js/main.js"></script>
+
+    {{! Custom }}
+    <script src="/user/scripts/signIn.js"></script>
 
   </body>
 </html>
