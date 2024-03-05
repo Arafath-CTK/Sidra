@@ -3,7 +3,7 @@ const router = express.Router();
 
 const userControllers = require("../controllers/user");
 const preventBack = require("../middlewares/preventBack");
-const user = require("../models/user");
+const User = require("../models/user");
 
 router.get("/", preventBack, userControllers.homePage);
 router.get("/signIn", preventBack, userControllers.signInPage);
