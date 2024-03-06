@@ -5,7 +5,6 @@ const cloudinary = require("../config/cloudinary");
 let addProductHelper = (productData, imageData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("helper started");
       let {
         ProductName,
         Price,

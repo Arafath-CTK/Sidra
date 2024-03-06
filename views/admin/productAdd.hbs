@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="/admin/assets/plugin/datatables/responsive.dataTables.min.css"><!-- Datatable Css -->
   <link rel="stylesheet" href="/admin/assets/plugin/datatables/dataTables.bootstrap5.min.css"><!-- Datatable Css -->
 
+  {{!-- Custom --}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
   <!-- Project css file  -->
   <link rel="stylesheet" href="/admin/assets/css/ebazar.style.min.css">
 
@@ -199,22 +202,23 @@
                     <div class="row g-3 align-items-center">
                       <div class="col-md-12">
                         <label for="ProductName" class="form-label">ProductName</label>
-                        <input type="text" id="productName" name="ProductName" value="{{productName}}" placeholder="Product Name"
-                          class="form-control">
+                        <input type="text" id="productName" name="ProductName" value="{{productName}}"
+                          placeholder="Product Name" class="form-control">
                       </div>
                       <div class="col-md-6">
                         <label for="Price" class="form-label">Price</label>
-                        <input name="Price" type="number" id="price" value="{{price}}" placeholder="Price" class="form-control">
+                        <input name="Price" type="number" id="price" value="{{price}}" placeholder="Price"
+                          class="form-control">
                       </div>
                       <div class="col-md-6">
                         <label for="Stock" class="form-label">Stock Quantity</label>
-                        <input type="number" name="Stock" id="stockQuantity" value="{{stock}}" placeholder="Total Stocks"
-                          class="form-control">
+                        <input type="number" name="Stock" id="stockQuantity" value="{{stock}}"
+                          placeholder="Total Stocks" class="form-control">
                       </div>
                       <div class="col-md-12">
                         <label for="Description" class="form-label col-12">Product Description</label>
-                        <input name="Description" id="description" value="{{description}}" class="col-12 pb-3 form-control" type="text"
-                          placeholder="Add Discription Here">
+                        <input name="Description" id="description" value="{{description}}"
+                          class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
                       </div>
                     </div>
                     <div class="card my-3">
@@ -319,6 +323,9 @@
 
       <!-- Jquery Page Js -->
       <script src="/admin/assets/js/template.js"></script>
+
+      {{!-- Custom --}}
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
       {{!-- Custom JS --}}
       <script src="/admin/scripts/productAdd.js"></script>

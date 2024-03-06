@@ -1,7 +1,7 @@
 const helper = require("../helpers/admin");
 const Admin = require("../models/admin");
 const User = require("../models/user");
-// const { default: Swal } = require("sweetalert2");
+const Swal = require("sweetalert2").default;
 
 // Admin signup page
 let signInPage = (req, res) => {
@@ -83,10 +83,8 @@ let addProductPage = async (req, res) => {
 
 let addProductPost = async (req, res) => {
   try {
-    console.log(req.body, req.files);
-    console.log("product adding started");
     let uploaded = await helper.addProductHelper(req.body, req.files);
-    console.log(uploaded);
+
     if (uploaded.productExist) {
       console.log("Product already exists");
       return res.render("admin/productAdd", {
@@ -99,26 +97,19 @@ let addProductPost = async (req, res) => {
         title: "Product Added!",
         text: "What would you like to do next?",
         icon: "success",
-        buttons: {
-          productList: {
-            text: "View Products",
-            value: "productList",
-          },
-          addNew: {
-            text: "Add New Product",
-            value: "addNew",
-          },
-        },
+        showCancelButton: true,
+        confirmButtonText: "View Products",
+        cancelButtonText: "Add New Product",
       };
 
-      const selection = await Swal.fire(options);
+      const result = await Swal.fire(options);
 
-      if (selection.value === "productList") {
-        res.redirect("/listProduct"); // Replace with your product listing page URL
-      } else if (selection.value === "addNew") {
-        res.redirect("/addProduct"); // Replace with your product creation page URL
+      if (result.isConfirmed) {
+        // If user clicks on "View Products" button
+        res.redirect("/listProduct");
       } else {
-        console.warn("Unexpected selection:", selection.value); // Handle unexpected selection
+        // If user clicks on "Add New Product" button or closes the modal
+        res.redirect("/addProduct");
       }
     }
   } catch (error) {

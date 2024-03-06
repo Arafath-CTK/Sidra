@@ -20,20 +20,3 @@ const fileFilter = function (req, file, cb) {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 module.exports = upload;
-
-// const multer = require("multer");
-// const { CloudinaryStorage } = require("multer-storage-cloudinary");
-// const cloudinary = require("./cloudinary");
-
-// const storage = new CloudinaryStorage({
-//   cloudinary: cloudinary,
-//   params: {
-//     folder: "uploads", // specify the folder name where you want to store uploaded files
-//     allowed_formats: ["jpg", "png"],
-//     // other parameters can be added based on your requirements
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-
-// module.exports = upload;
