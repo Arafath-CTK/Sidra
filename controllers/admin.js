@@ -1,7 +1,8 @@
 const helper = require("../helpers/admin");
 const Admin = require("../models/admin");
 const User = require("../models/user");
-const Swal = require("sweetalert2").default;
+const Product = require("../models/product");
+// const Swal = require("sweetalert2").default;
 
 // Admin signup page
 let signInPage = (req, res) => {
@@ -92,25 +93,26 @@ let addProductPost = async (req, res) => {
       });
     } else if (uploaded.success) {
       console.log("Product added successfully");
+      res.status(200).redirect("/admin/listproduct");
 
-      const options = {
-        title: "Product Added!",
-        text: "What would you like to do next?",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: "View Products",
-        cancelButtonText: "Add New Product",
-      };
+      // const options = {
+      //   title: "Product Added!",
+      //   text: "What would you like to do next?",
+      //   icon: "success",
+      //   showCancelButton: true,
+      //   confirmButtonText: "View Products",
+      //   cancelButtonText: "Add New Product",
+      // };
 
-      const result = await Swal.fire(options);
+      // const result = await Swal.fire(options);
 
-      if (result.isConfirmed) {
-        // If user clicks on "View Products" button
-        res.redirect("/listProduct");
-      } else {
-        // If user clicks on "Add New Product" button or closes the modal
-        res.redirect("/addProduct");
-      }
+      // if (result.isConfirmed) {
+      //   // If user clicks on "View Products" button
+      //   res.redirect("/listProduct");
+      // } else {
+      //   // If user clicks on "Add New Product" button or closes the modal
+      //   res.redirect("/addProduct");
+      // }
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
@@ -122,7 +124,8 @@ let addProductPost = async (req, res) => {
 
 let productListPage = async (req, res) => {
   try {
-    res.status(200).render("admin/productList");
+    const products = await Product.find();
+    res.status(200).render("admin/productList", { products });
   } catch (error) {
     console.error("Error rendering the Product listing page: ", error);
     res.status(500).render("error", {

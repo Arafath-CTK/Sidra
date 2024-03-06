@@ -1,15 +1,30 @@
 const helper = require("../helpers/user");
 const User = require("../models/user");
+const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
 
 let homePage = async (req, res) => {
   try {
+    const plants = await Product.find({ category: "plants" });
+    const containers = await Product.find({ category: "pots" });
+    const supplies = await Product.find({ category: "supplies" });
+
     if (req.cookies.jwt) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
-      return res.render("user/home", { user: true });
+      return res.render("user/home", {
+        user: true,
+        plants,
+        containers,
+        supplies,
+      });
     }
-    return res.render("user/home");
+    return res.render("user/home", {
+      user: false,
+      plants,
+      containers,
+      supplies,
+    });
   } catch (error) {
     res.render("error", { errorMessage: error });
   }
@@ -102,7 +117,6 @@ let signInPost = async (req, res) => {
       res.cookie("jwt", token, { htttpOnly: true, maxAge: 7200000 });
       return res.redirect("/myAccount");
     }
-    
   } catch (error) {
     return res.render("error", { errorMessage: error });
   }
@@ -187,6 +201,18 @@ let resetPassword = async (req, res) => {
   }
 };
 
+let shopPage = async (req, res) => {
+  try {
+    let products = await Product.find();
+    res.status(200).render("user/shop", { products });
+  } catch (error) {
+    console.error("Error rendering the Shop page: ", error);
+    res.status(500).render("error", {
+      errorMessage: "Error rendering the Shop page",
+    });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -199,4 +225,5 @@ module.exports = {
   forgotPasswordPost,
   verifyOTP,
   resetPassword,
+  shopPage,
 };

@@ -18,4 +18,6 @@ router.post("/forgotPassword", preventBack, userControllers.forgotPasswordPost);
 router.post("/verifyOTP", preventBack, userControllers.verifyOTP);
 router.post("/resetPassword", preventBack, userControllers.resetPassword);
 
+router.get("/shop",userControllers.shopPage)
+
 module.exports = router;
