@@ -10,7 +10,10 @@ let signInPage = (req, res) => {
 };
 
 let adminHome = (req, res) => {
-  res.render("admin/dashboard", { title: "Sidra Admin | Dashboard" });
+  res.render("admin/dashboard", {
+    layout: "adminLayout",
+    title: "Sidra Admin | Dashboard",
+  });
 };
 
 let signInPost = async (req, res) => {
@@ -47,7 +50,13 @@ let usersListPage = async (req, res) => {
       user.isActive = user.status === "Active";
     });
 
-    res.status(200).render("admin/usersList", { users });
+    res
+      .status(200)
+      .render("admin/usersList", {
+        users,
+        layout: "adminLayout",
+        title: "Sidra Admin | Users",
+      });
   } catch (error) {
     console.error("Error rendering the users list page", error);
     res
@@ -73,7 +82,10 @@ let userAction = async (req, res) => {
 
 let addProductPage = async (req, res) => {
   try {
-    res.status(200).render("admin/productAdd");
+    res.status(200).render("admin/productAdd", {
+      layout: "adminLayout",
+      title: "Sidra Admin | Add Product",
+    });
   } catch (error) {
     console.error("Error rendering the Product adding page: ", error);
     res.status(500).render("error", {
@@ -89,6 +101,8 @@ let addProductPost = async (req, res) => {
     if (uploaded.productExist) {
       console.log("Product already exists");
       return res.render("admin/productAdd", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Add Product",
         productAddError: "Product already exists",
       });
     } else if (uploaded.success) {
@@ -116,16 +130,26 @@ let addProductPost = async (req, res) => {
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
-    res.status(500).render("admin/productAdd", {
-      productAddError: "Error submitting the Product",
-    });
+    res
+      .status(500)
+      .render("admin/productAdd", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Add Product",
+        productAddError: "Error submitting the Product",
+      });
   }
 };
 
 let productListPage = async (req, res) => {
   try {
     const products = await Product.find();
-    res.status(200).render("admin/productList", { products });
+    res
+      .status(200)
+      .render("admin/productList", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Product List",
+        products,
+      });
   } catch (error) {
     console.error("Error rendering the Product listing page: ", error);
     res.status(500).render("error", {

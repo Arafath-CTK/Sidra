@@ -1,344 +1,152 @@
-<html class="no-js" lang="en" dir="ltr">
-
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Sidra Admin | Products List </title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <!-- Favicon-->
-
-    <!--plugin css file -->
-    <link rel="stylesheet" href="/admin/assets/plugin/nouislider/nouislider.min.css" />
-
-    <!-- project css file  -->
-    <link rel="stylesheet" href="/admin/assets/css/ebazar.style.min.css" />
-</head>
-
-<body>
-    <div id="ebazar-layout" class="teal">
-
-        <!-- sidebar -->
-        <div class="sidebar px-4 py-4 py-md-4 me-0">
-            <div class="d-flex flex-column h-100">
-                <ul class="menu-list flex-grow-1 mt-3">
-                    <li>
-                        <a class="m-link" href="/admin/home"><i class="icofont-home fs-5"></i>
-                            <span>Dashboard</span></a>
-                    </li>
-                    <li class="collapsed">
-                        <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
-                            <i class="icofont-truck-loaded fs-5"></i>
-                            <span>Products</span>
-                            <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="menu-product">
-                            <li>
-                                <a class="ms-link" href="/admin/listProduct">Product List</a>
-                            </li>
-                            <li>
-                                <a class="ms-link active" href="/admin/addProduct">Product Add</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#categories" href="#">
-                            <i class="icofont-chart-flow fs-5"></i>
-                            <span>Categories</span>
-                            <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="categories">
-                            <li>
-                                <a class="ms-link" href="categorie-list.html">Categories List</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="categories-edit.html">Categories Edit</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="categories-add.html">Categories Add</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
-                            <i class="icofont-notepad fs-5"></i>
-                            <span>Orders</span>
-                            <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="menu-order">
-                            <li>
-                                <a class="ms-link" href="order-list.html">Orders List</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="order-details.html">Order Details</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="order-invoices.html">Order Invoices</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="collapsed">
-                        <a class="m-link" href="/admin/usersList">
-                            <i class="icofont-funky-man fs-5"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
-                            <i class="icofont-sale-discount fs-5"></i>
-                            <span>Coupons</span>
-                            <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="menu-sale">
-                            <li>
-                                <a class="ms-link" href="coupons-list.html">Coupons List</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="coupon-add.html">Coupons Add</a>
-                            </li>
-                            <li>
-                                <a class="ms-link" href="coupon-edit.html">Coupons Edit</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- Menu: menu collepce btn -->
-                <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-                    <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- main body area -->
-        <div class="main px-lg-4 px-md-4">
-
-            <!-- Body: Header -->
-            <div class="header">
-                <nav class="navbar py-4">
-                    <div class="container-xxl">
-                        <!-- header rightbar icon -->
-                        <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
-                                <div class="u-info me-2">
-                                    <p class="mb-0 text-end line-height-sm">
-                                        <span class="font-weight-bold">John Quinn</span>
-                                    </p>
-                                    <small>Admin Profile</small>
-                                </div>
-                                <img class="avatar lg rounded-circle img-thumbnail"
-                                    src="/admin/assets/images/profile_av.svg" alt="profile" />
-                            </div>
-
-                            <div class="setting ms-2">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i
-                                        class="icofont-gear-alt fs-5"></i></a>
-                            </div>
-                        </div>
-
-                        <!-- menu toggler -->
-                        <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#mainHeader">
-                            <span class="fa fa-bars"></span>
-                        </button>
-
-                        <!-- main menu Icon-->
-                        <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0">
-                            <div class="col-lg-3 col-md-3 col-4">
-                                <div class="logo">
-                                    <a><img src="/user/assets/img/logo/logo.png" alt="" height="41px"
-                                            width="150px" /></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-
-            <!-- Body: Body -->
-            <div class="body d-flex py-3">
-                <div class="container-xxl">
-                    <div class="row align-items-center">
-                        <div class="border-0 mb-3">
-                            <div
-                                class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Products</h3>
-                                <a href="/admin/addProduct"><button type="button"
-                                        class="btn btn-primary btn-set-task py-2 px-5 text-uppercase">Add
-                                        Product</button></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Row end  -->
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
-                            <div class="card mb-3">
-                                <div class="reset-block">
-                                    <div class="filter-title">
-                                        <h4 class="title">Reset-Filter : </h4>
-                                    </div>
-                                    <div class="filter-btn">
-                                        <a class="btn btn-primary" href="/admin/listProduct">Reset</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="categories">
-                                    <div class="filter-title">
-                                        <a class="title" data-bs-toggle="collapse" href="#category" role="button"
-                                            aria-expanded="true">Category</a>
-                                    </div>
-                                    <div class="collapse show" id="category">
-                                        <div class="filter-category">
-                                            <ul class="category-list">
-                                                <li value="plants">
-                                                    <a href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                                        aria-expanded="false" class="collapsed">Plants</a>
-                                                    <ul id="collapseOne" class="sub-category collapse"
-                                                        data-parent="#category">
-                                                        <li value="indoor"><a
-                                                                onclick="selectCategory('plants', 'indoor')">Indoor</a>
-                                                        </li>
-                                                        <li value="outdoor"><a
-                                                                onclick="selectCategory('plants', 'outdoor')">Outdoor</a>
-                                                        </li>
-                                                        <li value="flowering"><a
-                                                                onclick="selectCategory('plants', 'flowering')">Flowering</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li value="pots">
-                                                    <a class="collapsed" href="#" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseTwo">Planters And Pots</a>
-                                                    <ul id="collapseTwo" class="sub-category collapse"
-                                                        data-parent="#category">
-                                                        <li value="clay"><a
-                                                                onclick="selectCategory('pots', 'clay')">Clay</a></li>
-                                                        <li value="plastic"><a
-                                                                onclick="selectCategory('pots', 'plastic')">Plastic</a>
-                                                        </li>
-                                                        <li value="ceramic"><a
-                                                                onclick="selectCategory('pots', 'ceramic')">Ceramic</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li value="supplies">
-                                                    <a class="collapsed" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseThree">Gardening Supplies</a>
-                                                    <ul id="collapseThree" class="sub-category collapse"
-                                                        data-parent="#category">
-                                                        <li value="fertilizers"><a
-                                                                onclick="selectCategory('supplies', 'fertilizers')">Fertilizers
-                                                                And Pesticides</a>
-                                                        </li>
-                                                        <li value="tools"><a
-                                                                onclick="selectCategory('supplies', 'tools')">Planting
-                                                                Tools</a>
-                                                        </li>
-                                                        <li value="accessories"><a
-                                                                onclick="selectCategory('supplies', 'accessories')">Accessories</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-                            <div class="body d-flex py-3">
-                                <div class="container-xxl">
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <table id="myDataTable" class="table align-middle mb-0"
-                                                        style="width: 100%;">
-                                                        <thead>
-                                                            <tr>
-                                                                <h4><b>Your Products</b></h4>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {{#each products}}
-                                                            <tr class="col-12 g-0">
-                                                                <td class="col-4">
-                                                                    <img class="w120 rounded img-fluid mb-2"
-                                                                        src="{{this.images.[0]}}" alt="" />
-                                                                    <div class="ms-2"><b>
-                                                                            {{this.name}}
-                                                                        </b></div>
-                                                                </td>
-                                                                <td class="col-6">
-                                                                    <div class="mb-5" style="width:250px;">
-                                                                        <p class="mb-1 mt-2"><b>Description
-                                                                                :</b><br /><span class="text-primary">
-                                                                                {{this.description}}
-                                                                            </span></p>
-                                                                        <div class="mt-1"><b>Price:
-                                                                                <span class="text-primary">
-                                                                                    {{this.price}}
-                                                                                </span></b></div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="col-2">
-                                                                    <div class="d-flex">
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-secondary me-2"><i
-                                                                                class="icofont-edit text-success"></i></button>
-                                                                       
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-secondary"
-                                                                            onclick="deleteProduct('{{this._id}}')">
-                                                                            <i
-                                                                                class="icofont-ui-delete text-danger"></i>
-                                                                        </button>
-
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            {{/each}}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Row end  -->
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-3">
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Products</h3>
+                    <a href="/admin/addProduct"><button type="button"
+                            class="btn btn-primary btn-set-task py-2 px-5 text-uppercase">Add
+                            Product</button></a>
                 </div>
             </div>
         </div>
+        <!-- Row end  -->
+        <div class="row g-2 mb-3">
+            <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
+                <div class="card mb-3">
+                    <div class="reset-block">
+                        <div class="filter-title">
+                            <h4 class="title">Reset-Filter : </h4>
+                        </div>
+                        <div class="filter-btn">
+                            <a class="btn btn-primary" href="/admin/listProduct">Reset</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="categories">
+                        <div class="filter-title">
+                            <a class="title" data-bs-toggle="collapse" href="#category" role="button"
+                                aria-expanded="true">Category</a>
+                        </div>
+                        <div class="collapse show" id="category">
+                            <div class="filter-category">
+                                <ul class="category-list">
+                                    <li value="plants">
+                                        <a href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                            aria-expanded="false" class="collapsed">Plants</a>
+                                        <ul id="collapseOne" class="sub-category collapse" data-parent="#category">
+                                            <li value="indoor"><a
+                                                    onclick="selectCategory('plants', 'indoor')">Indoor</a>
+                                            </li>
+                                            <li value="outdoor"><a
+                                                    onclick="selectCategory('plants', 'outdoor')">Outdoor</a>
+                                            </li>
+                                            <li value="flowering"><a
+                                                    onclick="selectCategory('plants', 'flowering')">Flowering</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li value="pots">
+                                        <a class="collapsed" href="#" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseTwo">Planters And Pots</a>
+                                        <ul id="collapseTwo" class="sub-category collapse" data-parent="#category">
+                                            <li value="clay"><a onclick="selectCategory('pots', 'clay')">Clay</a></li>
+                                            <li value="plastic"><a
+                                                    onclick="selectCategory('pots', 'plastic')">Plastic</a>
+                                            </li>
+                                            <li value="ceramic"><a
+                                                    onclick="selectCategory('pots', 'ceramic')">Ceramic</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li value="supplies">
+                                        <a class="collapsed" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseThree">Gardening Supplies</a>
+                                        <ul id="collapseThree" class="sub-category collapse" data-parent="#category">
+                                            <li value="fertilizers"><a
+                                                    onclick="selectCategory('supplies', 'fertilizers')">Fertilizers
+                                                    And Pesticides</a>
+                                            </li>
+                                            <li value="tools"><a onclick="selectCategory('supplies', 'tools')">Planting
+                                                    Tools</a>
+                                            </li>
+                                            <li value="accessories"><a
+                                                    onclick="selectCategory('supplies', 'accessories')">Accessories</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
+                <div class="body d-flex py-3">
+                    <div class="container-xxl">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table id="myDataTable" class="table align-middle mb-0" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <h4><b>Your Products</b></h4>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each products}}
+                                                <tr class="col-12 g-0">
+                                                    <td class="col-4">
+                                                        <img class="w120 rounded img-fluid mb-2"
+                                                            src="{{this.images.[0]}}" alt="" />
+                                                        <div class="ms-2"><b>
+                                                                {{this.name}}
+                                                            </b></div>
+                                                    </td>
+                                                    <td class="col-6">
+                                                        <div class="mb-5" style="width:250px;">
+                                                            <p class="mb-1 mt-2"><b>Description
+                                                                    :</b><br /><span class="text-primary">
+                                                                    {{this.description}}
+                                                                </span></p>
+                                                            <div class="mt-1"><b>Price:
+                                                                    <span class="text-primary">
+                                                                        {{this.price}}
+                                                                    </span></b></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="col-2">
+                                                        <div class="d-flex">
+                                                            <button type="button"
+                                                                class="btn btn-outline-secondary me-2"><i
+                                                                    class="icofont-edit text-success"></i></button>
+
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                onclick="deleteProduct('{{this._id}}')">
+                                                                <i class="icofont-ui-delete text-danger"></i>
+                                                            </button>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Row end  -->
     </div>
+</div>
 
-    <!-- Jquery Core Js -->
-    <script src="/admin/assets/bundles/libscripts.bundle.js"></script>
 
-    <!-- Jquery Plugin -->
-    <script src="/admin/assets/plugin/nouislider/nouislider.min.js"></script>
-
-    <!-- Jquery Page Js -->
-    <script src="/admin/assets/js/template.js"></script>
-    <script>
-        var stepsSlider2 = document.getElementById('slider-range2'); var input3 =
-            document.getElementById('minAmount2'); var input4 =
-                document.getElementById('maxAmount2'); var inputs2 = [input3, input4];
-        noUiSlider.create(stepsSlider2, {
-            start: [149, 399], connect: true, step:
-                1, range: { 'min': [0], 'max': 2000 },
-        });
-        stepsSlider2.noUiSlider.on('update', function (values, handle) {
-            inputs2[handle].value = values[handle];
-        });
-
-    </script>
-
-    <script src="/admin/scripts/productList.js"></script>
-</body>
-
-</html>
+<script src="/admin/scripts/productList.js"></script>

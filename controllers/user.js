@@ -20,6 +20,7 @@ let homePage = async (req, res) => {
       });
     }
     return res.render("user/home", {
+      title: "Sidra | Home",
       user: false,
       plants,
       containers,

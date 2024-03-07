@@ -4,18 +4,23 @@ const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
 const cookieParser = require("cookie-parser");
 const { engine } = require("express-handlebars");
+const {
+  allowInsecurePrototypeAccess,
+} = require("@handlebars/allow-prototype-access");
 
 const app = express();
 
 app.engine(
   "hbs",
   engine({
+    handlebars: allowInsecurePrototypeAccess(require("handlebars")),
     extname: "hbs",
-    layoutsDir: __dirname + "/views/admin/layouts",
-    partialsDir: __dirname + "/views/admin/layouts/_partials", // Admin partials
+    defaultLayout: "layout",
+    layoutsDir: path.join(__dirname, "/views/layouts/"),
+    partialsDir: path.join(__dirname, "views/partials/"),
   })
 );
-app.set("view engine", "hbs"); 
+app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./views"));
 
 app.use(cookieParser()); // For JWT
@@ -24,7 +29,7 @@ app.use(express.json()); // for parsing json to js object.
 app.use(express.static(path.join(__dirname, "./public"))); // Setting the public forlder as the forlder for static files.
 
 app.use("/admin", adminRouter);
-// app.use("/", userRouter);
+app.use("/", userRouter);
 
 //Server hosting locally
 const port = process.env.PORT || 3000;
