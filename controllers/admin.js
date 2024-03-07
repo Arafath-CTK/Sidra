@@ -50,13 +50,11 @@ let usersListPage = async (req, res) => {
       user.isActive = user.status === "Active";
     });
 
-    res
-      .status(200)
-      .render("admin/usersList", {
-        users,
-        layout: "adminLayout",
-        title: "Sidra Admin | Users",
-      });
+    res.status(200).render("admin/usersList", {
+      users,
+      layout: "adminLayout",
+      title: "Sidra Admin | Users",
+    });
   } catch (error) {
     console.error("Error rendering the users list page", error);
     res
@@ -130,26 +128,22 @@ let addProductPost = async (req, res) => {
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
-    res
-      .status(500)
-      .render("admin/productAdd", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Add Product",
-        productAddError: "Error submitting the Product",
-      });
+    res.status(500).render("admin/productAdd", {
+      layout: "adminLayout",
+      title: "Sidra Admin | Add Product",
+      productAddError: "Error submitting the Product",
+    });
   }
 };
 
 let productListPage = async (req, res) => {
   try {
     const products = await Product.find();
-    res
-      .status(200)
-      .render("admin/productList", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Product List",
-        products,
-      });
+    res.status(200).render("admin/productList", {
+      layout: "adminLayout",
+      title: "Sidra Admin | Product List",
+      products,
+    });
   } catch (error) {
     console.error("Error rendering the Product listing page: ", error);
     res.status(500).render("error", {
@@ -173,6 +167,20 @@ let deleteProduct = async (req, res) => {
   }
 };
 
+let editProduct = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    console.error("Error while editing the product: ", error);
+    res
+      .status(500)
+      .render("error", {
+        errorMessage: "Error while editing the product: ",
+        error,
+      });
+  }
+};
+
 module.exports = {
   signInPage,
   adminHome,
@@ -183,4 +191,5 @@ module.exports = {
   addProductPost,
   productListPage,
   deleteProduct,
+  editProduct,
 };
