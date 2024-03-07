@@ -10,7 +10,7 @@ let signInPage = (req, res) => {
 };
 
 let adminHome = (req, res) => {
-  res.render("admin/dashboard");
+  res.render("admin/dashboard", { title: "Sidra Admin | Dashboard" });
 };
 
 let signInPost = async (req, res) => {
@@ -134,6 +134,21 @@ let productListPage = async (req, res) => {
   }
 };
 
+let deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    // Your code to delete the product from the database
+    await Product.findByIdAndDelete(productId);
+    // Respond with success message or appropriate response
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res
+      .status(500)
+      .render("error", { errorMessage: "Error deleting product:", error });
+  }
+};
+
 module.exports = {
   signInPage,
   adminHome,
@@ -143,4 +158,5 @@ module.exports = {
   addProductPage,
   addProductPost,
   productListPage,
+  deleteProduct,
 };

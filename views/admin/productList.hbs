@@ -1,18 +1,18 @@
-<!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Sidra Admin | Products List </title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Favicon-->
 
     <!--plugin css file -->
-    <link rel="stylesheet" href="/admin/assets/plugin/nouislider/nouislider.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugin/nouislider/nouislider.min.css" />
 
     <!-- project css file  -->
-    <link rel="stylesheet" href="/admin/assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/ebazar.style.min.css" />
 </head>
 
 <body>
@@ -169,7 +169,8 @@
                                         Product</button></a>
                             </div>
                         </div>
-                    </div> <!-- Row end  -->
+                    </div>
+                    <!-- Row end  -->
                     <div class="row g-2 mb-3">
                         <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
                             <div class="card mb-3">
@@ -224,8 +225,7 @@
                                                 </li>
                                                 <li value="supplies">
                                                     <a class="collapsed" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseThree">Gardening
-                                                        Supplies</a>
+                                                        data-bs-target="#collapseThree">Gardening Supplies</a>
                                                     <ul id="collapseThree" class="sub-category collapse"
                                                         data-parent="#category">
                                                         <li value="fertilizers"><a
@@ -254,7 +254,7 @@
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <table id="myDataTable" class="table  align-middle mb-0"
+                                                    <table id="myDataTable" class="table align-middle mb-0"
                                                         style="width: 100%;">
                                                         <thead>
                                                             <tr>
@@ -266,38 +266,38 @@
                                                             <tr class="col-12 g-0">
                                                                 <td class="col-4">
                                                                     <img class="w120 rounded img-fluid mb-2"
-                                                                        src="{{this.images.[0]}}" alt="">
-                                                                    <div class="ms-2 "><b>
+                                                                        src="{{this.images.[0]}}" alt="" />
+                                                                    <div class="ms-2"><b>
                                                                             {{this.name}}
                                                                         </b></div>
                                                                 </td>
                                                                 <td class="col-6">
                                                                     <div class="mb-5" style="width:250px;">
                                                                         <p class="mb-1 mt-2"><b>Description
-                                                                                :</b><br><span class="text-primary">
+                                                                                :</b><br /><span class="text-primary">
                                                                                 {{this.description}}
                                                                             </span></p>
-                                                                        <div class="mt-1"><b>Price: <span
-                                                                                    class="text-primary">
+                                                                        <div class="mt-1"><b>Price:
+                                                                                <span class="text-primary">
                                                                                     {{this.price}}
                                                                                 </span></b></div>
                                                                     </div>
                                                                 </td>
-                                                                {{!-- <td class="col-2">
-                                                                    <div class="mb-5">
-                                                                        <button
-                                                                            class="text-primary border-1 font-weight-bold text-light"
-                                                                            style="width:80px;">View</button>
-                                                                    </div>
+                                                                <td class="col-2">
                                                                     <div class="d-flex">
-                                                                        <button type="submit"
+                                                                        <button type="button"
                                                                             class="btn btn-outline-secondary me-2"><i
                                                                                 class="icofont-edit text-success"></i></button>
-                                                                        <button type="submit"
-                                                                            class="btn btn-outline-secondary"><i
-                                                                                class="icofont-ui-delete text-danger"></i></button>
+                                                                       
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-secondary"
+                                                                            onclick="deleteProduct('{{this._id}}')">
+                                                                            <i
+                                                                                class="icofont-ui-delete text-danger"></i>
+                                                                        </button>
+
                                                                     </div>
-                                                                </td> --}}
+                                                                </td>
                                                             </tr>
                                                             {{/each}}
                                                         </tbody>
@@ -309,7 +309,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- Row end  -->
+                    </div>
+                    <!-- Row end  -->
                 </div>
             </div>
         </div>
@@ -324,25 +325,20 @@
     <!-- Jquery Page Js -->
     <script src="/admin/assets/js/template.js"></script>
     <script>
-        var stepsSlider2 = document.getElementById('slider-range2');
-        var input3 = document.getElementById('minAmount2');
-        var input4 = document.getElementById('maxAmount2');
-        var inputs2 = [input3, input4];
+        var stepsSlider2 = document.getElementById('slider-range2'); var input3 =
+            document.getElementById('minAmount2'); var input4 =
+                document.getElementById('maxAmount2'); var inputs2 = [input3, input4];
         noUiSlider.create(stepsSlider2, {
-            start: [149, 399],
-            connect: true,
-            step: 1,
-            range: {
-                'min': [0],
-                'max': 2000
-            },
-
+            start: [149, 399], connect: true, step:
+                1, range: { 'min': [0], 'max': 2000 },
         });
-
         stepsSlider2.noUiSlider.on('update', function (values, handle) {
             inputs2[handle].value = values[handle];
         });
+
     </script>
+
+    <script src="/admin/scripts/productList.js"></script>
 </body>
 
 </html>
