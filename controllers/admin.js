@@ -83,6 +83,7 @@ let addProductPage = async (req, res) => {
     res.status(200).render("admin/productAdd", {
       layout: "adminLayout",
       title: "Sidra Admin | Add Product",
+      pageHeader: "Add New Products",
     });
   } catch (error) {
     console.error("Error rendering the Product adding page: ", error);
@@ -167,17 +168,56 @@ let deleteProduct = async (req, res) => {
   }
 };
 
-let editProduct = async (req, res) => {
+let editProductPage = async (req, res) => {
   try {
-    
-  } catch (error) {
-    console.error("Error while editing the product: ", error);
-    res
-      .status(500)
-      .render("error", {
-        errorMessage: "Error while editing the product: ",
-        error,
+    const productId = req.params.id;
+    let product = await Product.findById(productId);
+
+    if (product) {
+      res.status(200).render("admin/productEdit", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Edit Product",
+        pageHeader: "Edit The Product",
+        productId: product._id,
+        productName: product.name,
+        price: product.price,
+        stock: product.stock,
+        description: product.description,
+        image1: product.images[0],
+        image2: product.images[1],
+        image3: product.images[2],
+        mainCategory: product.category,
+        subCategory: product.sub_category,
       });
+    } else {
+      res.render("admin/productAdd", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Edit Product",
+        pageHeader: "Edit The Product",
+        productAddError: "Product Doesn't exist",
+      });
+    }
+  } catch (error) {
+    console.error("Error while rendering the product editing page: ", error);
+    res.status(500).render("error", {
+      errorMessage: "Error while rendering the product editing page: ",
+      error,
+    });
+  }
+};
+
+let editProductPost = async (req, res) => {
+  try {
+    let productId = req.params.id
+    let updated = await helper.editProductHelper(req.body, req.files, productId);
+        
+  } catch (error) {
+    console.error("Error submitting the Product: ", error);
+    res.status(500).render("admin/productEdit", {
+      layout: "adminLayout",
+      title: "Sidra Admin | Edit Product",
+      productAddError: "Error submitting the Product",
+    });
   }
 };
 
@@ -191,5 +231,6 @@ module.exports = {
   addProductPost,
   productListPage,
   deleteProduct,
-  editProduct,
+  editProductPage,
+  editProductPost,
 };

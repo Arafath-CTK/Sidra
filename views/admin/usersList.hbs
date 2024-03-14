@@ -38,9 +38,9 @@
                       <form action="/admin/usersList/{{this._id}}/block" method="post">
                         <button type="submit" class="btn btn-outline-secondary">
                           {{#if this.isActive}}
-                          <i class="icofont-ui-lock text-danger"></i>
-                          {{else}}
                           <i class="icofont-ui-unlock text-success"></i>
+                          {{else}}
+                          <i class="icofont-ui-lock text-danger"></i>
                           {{/if}}
                         </button>
                       </form>

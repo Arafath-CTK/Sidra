@@ -15,7 +15,8 @@ router.post("/usersList/:userId/block", adminControllers.userAction)
 router.get("/addProduct", adminControllers.addProductPage)
 router.get("/listProduct", adminControllers.productListPage)
 router.post("/addProduct", upload.array('image', 3), adminControllers.addProductPost)
+router.get("/editProduct/:id", adminControllers.editProductPage)
+router.post("/editProduct/:id", upload.array('image', 3),adminControllers.editProductPost)
 router.delete("/products/:id", adminControllers.deleteProduct)
-router.put("/admin/products/:id", adminControllers.editProduct)
 
 module.exports = router;
