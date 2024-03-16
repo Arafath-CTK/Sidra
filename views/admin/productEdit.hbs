@@ -1,162 +1,150 @@
 <!-- Body: Body -->
 <div class="body d-flex py-3">
-  <div class="container-xxl">
+    <div class="container-xxl">
 
-    <div class="row align-items-center">
-      <div class="border-0 mb-4">
-        <div
-          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-          <h3 class="fw-bold mb-0">{{ pageHeader }}</h3>
-        </div>
-      </div>
-    </div> <!-- Row end  -->
-
-      <form id="addProduct" action="/admin/editProduct/{{productId}}" method="POST" enctype="multipart/form-data"
-        onsubmit="return validateForm()">
-       <div class="row g-3 mb-3">
-            <div class="col-xl-8 col-lg-8">
-              <div class="sticky-lg-top card mb-3">
-                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                  <h6 class="mb-0 fw-bold ">Product information</h6>
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">{{ pageHeader }}</h3>
                 </div>
-                <div class="card-header py-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                  <b><span class="text-danger text-uppercase" id="Errormessage">{{productAddError}}</span></b>
-                </div>
-                <div class="card-body">
-                  <div class="row g-3 align-items-center">
-                    <div class="col-md-12">
-                      <label for="ProductName" class="form-label">Product Name</label>
-                      <input type="text" id="productName" name="ProductName" value="{{productName}}"
-                        placeholder="Product Name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="Price" class="form-label">Price</label>
-                      <input name="Price" type="number" id="price" value="{{price}}" placeholder="Price"
-                        class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="Stock" class="form-label">Stock Quantity</label>
-                      <input type="number" name="Stock" id="stockQuantity" value="{{stock}}" placeholder="Total Stocks"
-                        class="form-control">
-                    </div>
-                    <div class="col-md-12">
-                      <label for="Description" class="form-label col-12">Product Description</label>
-                      <input name="Description" id="description" value="{{description}}"
-                        class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
-                    </div>
-                  </div>
-                  <div class="card my-3">
-                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                      <h6 class="mb-0 fw-bold ">Images</h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="row col-12 g-1 align-items-center">
+            </div>
+        </div> <!-- Row end  -->
 
-                        <div>
-                          <div
-                            style="display: flex; flex-direction: column; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: flex-start; margin-bottom: 10px">
-                              <img class="" style="max-height: 200px; max-width: 200px;" src="{{image1}}">
-                            </div>
-                            <div style="display: flex; align-items: flex-end;">
-                              <label class="form-label col-3" for="image1">Product Image-1 :</label>
-                              <input class="col-9" type="file" name="image">
-                            </div>
-                          </div>
-
-                          <div
-                            style="display: flex; flex-direction: column; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: flex-start; margin-bottom: 10px">
-                              <img class="" style="max-height: 200px; max-width: 200px;" src="{{image2}}">
-                            </div>
-                            <div style="display: flex; align-items: flex-end;">
-                              <label class="form-label col-3" for="image2">Product Image-2 :</label>
-                              <input class="col-9" type="file" name="image">
-                            </div>
-                          </div>
-
-                          <div style="display: flex; flex-direction: column;">
-                            <div style="display: flex; align-items: flex-start; margin-bottom: 10px">
-                              <img class="" style="max-height: 200px; max-width: 200px;" src="{{image3}}">
-                            </div>
-                            <div style="display: flex; align-items: flex-end;">
-                              <label class="form-label col-3" for="image3">Product Image-3 :</label>
-                              <input class="col-9" type="file" name="image">
-                            </div>
-                          </div>
+        <form id="editProduct" enctype="multipart/form-data" onsubmit="return validateForm()"
+            data-product-id="{{ productId }}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-8 col-lg-8">
+                    <div class="sticky-lg-top card mb-3">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold ">Product information</h6>
                         </div>
+                        <div class="card-header py-0 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <b><span class="text-danger text-uppercase" id="Errormessage">{{productAddError}}</span></b>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-12">
+                                    <label for="ProductName" class="form-label">Product Name</label>
+                                    <input type="text" id="productName" name="ProductName" value="{{productName}}"
+                                        placeholder="Product Name" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Price" class="form-label">Price</label>
+                                    <input name="Price" type="number" id="price" value="{{price}}" placeholder="Price"
+                                        class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Stock" class="form-label">Stock Quantity</label>
+                                    <input type="number" name="Stock" id="stockQuantity" value="{{stock}}"
+                                        placeholder="Total Stocks" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="Description" class="form-label col-12">Product Description</label>
+                                    <input name="Description" id="description" value="{{description}}"
+                                        class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
+                                </div>
+                            </div>
+                            <div class="card my-3">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Images</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row col-12 g-1 align-items-center">
+                                        {{#each images}}
+                                        <div style="display: flex; flex-direction: column; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                                            <img src="{{this}}" alt="Product Image" style="max-height: 200px; max-width: 200px;"><br>
+                                            <input type="file" name="image"><br>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4">
+                    <div class="sticky-lg-top mb-4">
+                        <input type="hidden" id="mainCategory" value="{{mainCategory}}" name="mainCategory">
+                        <input type="hidden" id="subCategory" value="{{subCategory}}" name="subCategory">
 
-                      </div>
+                        <!-- Your collapsible category list -->
+                        <div class="card mb-3">
+                            <div class="categories">
+                                <div class="filter-title">
+                                    <a class="title" data-bs-toggle="collapse" href="#category" role="button"
+                                        aria-expanded="true">Category</a>
+                                </div>
+                                <div class="collapse show" id="category">
+                                    <div class="filter-category">
+                                        <ul class="category-list">
+                                            <li value="plants">
+                                                <a href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" class="collapsed">Plants</a>
+                                                <ul id="collapseOne" class="sub-category collapse"
+                                                    data-parent="#category">
+                                                    <li value="indoor"><a
+                                                            onclick="selectCategory('plants', 'indoor')">Indoor</a></li>
+                                                    <li value="outdoor"><a
+                                                            onclick="selectCategory('plants', 'outdoor')">Outdoor</a>
+                                                    </li>
+                                                    <li value="flowering"><a
+                                                            onclick="selectCategory('plants', 'flowering')">Flowering</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li value="pots">
+                                                <a class="collapsed" href="#" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseTwo">Planters
+                                                    And Pots</a>
+                                                <ul id="collapseTwo" class="sub-category collapse"
+                                                    data-parent="#category">
+                                                    <li value="clay"><a
+                                                            onclick="selectCategory('pots', 'clay')">Clay</a></li>
+                                                    <li value="plastic"><a
+                                                            onclick="selectCategory('pots', 'plastic')">Plastic</a></li>
+                                                    <li value="ceramic"><a
+                                                            onclick="selectCategory('pots', 'ceramic')">Ceramic</a></li>
+                                                </ul>
+                                            </li>
+                                            <li value="supplies">
+                                                <a class="collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseThree">Gardening
+                                                    Supplies</a>
+                                                <ul id="collapseThree" class="sub-category collapse"
+                                                    data-parent="#category">
+                                                    <li value="fertilizers"><a
+                                                            onclick="selectCategory('supplies', 'fertilizers')">Fertilizers
+                                                            And
+                                                            Pesticides</a>
+                                                    </li>
+                                                    <li value="tools"><a
+                                                            onclick="selectCategory('supplies', 'tools')">Planting
+                                                            Tools</a>
+                                                    </li>
+                                                    <li value="accessories"><a
+                                                            onclick="selectCategory('supplies', 'accessories')">Accessories</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit">
+                            <button type="submit"
+                                class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Update
+                                Product</button>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-            <div class="col-xl-4 col-lg-4">
-              <div class="sticky-lg-top mb-4">
-                <input type="hidden" id="mainCategory" value="{{mainCategory}}" name="mainCategory">
-                <input type="hidden" id="subCategory" value="{{subCategory}}" name="subCategory">
-
-                <!-- Your collapsible category list -->
-                <div class="card mb-3">
-                  <div class="categories">
-                    <div class="filter-title">
-                      <a class="title" data-bs-toggle="collapse" href="#category" role="button"
-                        aria-expanded="true">Category</a>
-                    </div>
-                    <div class="collapse show" id="category">
-                      <div class="filter-category">
-                        <ul class="category-list">
-                          <li value="plants">
-                            <a href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
-                              class="collapsed">Plants</a>
-                            <ul id="collapseOne" class="sub-category collapse" data-parent="#category">
-                              <li value="indoor"><a onclick="selectCategory('plants', 'indoor')">Indoor</a></li>
-                              <li value="outdoor"><a onclick="selectCategory('plants', 'outdoor')">Outdoor</a></li>
-                              <li value="flowering"><a onclick="selectCategory('plants', 'flowering')">Flowering</a>
-                              </li>
-                            </ul>
-                          </li>
-                          <li value="pots">
-                            <a class="collapsed" href="#" data-bs-toggle="collapse"
-                              data-bs-target="#collapseTwo">Planters
-                              And Pots</a>
-                            <ul id="collapseTwo" class="sub-category collapse" data-parent="#category">
-                              <li value="clay"><a onclick="selectCategory('pots', 'clay')">Clay</a></li>
-                              <li value="plastic"><a onclick="selectCategory('pots', 'plastic')">Plastic</a></li>
-                              <li value="ceramic"><a onclick="selectCategory('pots', 'ceramic')">Ceramic</a></li>
-                            </ul>
-                          </li>
-                          <li value="supplies">
-                            <a class="collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">Gardening
-                              Supplies</a>
-                            <ul id="collapseThree" class="sub-category collapse" data-parent="#category">
-                              <li value="fertilizers"><a onclick="selectCategory('supplies', 'fertilizers')">Fertilizers
-                                  And
-                                  Pesticides</a>
-                              </li>
-                              <li value="tools"><a onclick="selectCategory('supplies', 'tools')">Planting Tools</a>
-                              </li>
-                              <li value="accessories"><a
-                                  onclick="selectCategory('supplies', 'accessories')">Accessories</a>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="submit">
-                  <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Update Product</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </form>
 
-  </div>
+    </div>
 </div>
 
 {{!-- Custom JS --}}
-<script src="/admin/scripts/productAdd.js"></script>
+<script src="/admin/scripts/productEdit.js"></script>

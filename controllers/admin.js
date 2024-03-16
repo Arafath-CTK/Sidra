@@ -156,10 +156,14 @@ let productListPage = async (req, res) => {
 let deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    // Your code to delete the product from the database
-    await Product.findByIdAndDelete(productId);
-    // Respond with success message or appropriate response
-    res.status(204).send();
+    const deleted = await helper.deleteProductHelper(productId);
+    if (deleted.productNotExist) {
+      console.log("Product not found in the database");
+      res.status(404).send();
+    } else {
+      console.log("Product deleted successfully");
+      res.status(204).send();
+    }
   } catch (error) {
     console.error("Error deleting product:", error);
     res
@@ -172,7 +176,7 @@ let editProductPage = async (req, res) => {
   try {
     const productId = req.params.id;
     let product = await Product.findById(productId);
-
+ 
     if (product) {
       res.status(200).render("admin/productEdit", {
         layout: "adminLayout",
@@ -183,14 +187,12 @@ let editProductPage = async (req, res) => {
         price: product.price,
         stock: product.stock,
         description: product.description,
-        image1: product.images[0],
-        image2: product.images[1],
-        image3: product.images[2],
+        images: product.images,
         mainCategory: product.category,
         subCategory: product.sub_category,
       });
     } else {
-      res.render("admin/productAdd", {
+      res.render("admin/productEdit", {
         layout: "adminLayout",
         title: "Sidra Admin | Edit Product",
         pageHeader: "Edit The Product",
@@ -208,16 +210,35 @@ let editProductPage = async (req, res) => {
 
 let editProductPost = async (req, res) => {
   try {
-    let productId = req.params.id
-    let updated = await helper.editProductHelper(req.body, req.files, productId);
-        
+    let productId = req.params.id;
+
+    let updated = await helper.editProductHelper(
+      req.body,
+      req.files,
+      productId,
+    );
+
+    // console.log(req.body);
+    // console.log(updated.existingProduct); 
+
+    if (updated.productNotExist) {
+      console.log("Product Not exists for updating the data");
+      return res.render("admin/productEdit", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Edit Product",
+        productAddError: "Product not exists for editing",
+      });
+    } else if (updated.success) {
+      console.log("Product updated successfully");
+      res
+        .status(200)
+        .json({ success: true, redirectUrl: "/admin/listProduct" });
+    }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
-    res.status(500).render("admin/productEdit", {
-      layout: "adminLayout",
-      title: "Sidra Admin | Edit Product",
-      productAddError: "Error submitting the Product",
-    });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to update product" });
   }
 };
 

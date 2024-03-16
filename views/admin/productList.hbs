@@ -95,6 +95,7 @@
                                             <thead>
                                                 <tr>
                                                     <h4><b>Your Products</b></h4>
+                                                    <b><span class="text-danger text-uppercase" id="Errormessage">{{productListError}}</span></b>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -108,7 +109,7 @@
                                                             </b></div>
                                                     </td>
                                                     <td class="col-6">
-                                                        <div class="mb-5" style="width:250px;">
+                                                        <div class="mb-5" style="width: 250px;">
                                                             <p class="mb-1 mt-2"><b>Description
                                                                     :</b><br /><span class="text-primary">
                                                                     {{this.description}}

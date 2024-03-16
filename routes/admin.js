@@ -16,7 +16,7 @@ router.get("/addProduct", adminControllers.addProductPage)
 router.get("/listProduct", adminControllers.productListPage)
 router.post("/addProduct", upload.array('image', 3), adminControllers.addProductPost)
 router.get("/editProduct/:id", adminControllers.editProductPage)
-router.post("/editProduct/:id", upload.array('image', 3),adminControllers.editProductPost)
+router.patch("/editProduct/:id", upload.array('image', 3),adminControllers.editProductPost)
 router.delete("/products/:id", adminControllers.deleteProduct)
 
 module.exports = router;
