@@ -15,16 +15,16 @@ function selectCategory(main, sub) {
   clickedLink.classList.add("active");
 }
 
-  // Function to update the value of the hidden input based on the image input
-  function updateImageIndex(input) {
-    const container = input.parentElement;
-    const hiddenInput = container.querySelector('input[name="imageIndexes[]"]');
-    if (hiddenInput) {
-      // Get the index of the image input relative to its container
-      const index = Array.from(container.parentNode.children).indexOf(container);
-      hiddenInput.value = index;
-    }
+// Function to update the value of the hidden input based on the image input
+function updateImageIndex(input) {
+  const container = input.parentElement;
+  const hiddenInput = container.querySelector('input[name="imageIndexes[]"]');
+  if (hiddenInput) {
+    // Get the index of the image input relative to its container
+    const index = Array.from(container.parentNode.children).indexOf(container);
+    hiddenInput.value = index;
   }
+}
 
 function validateForm() {
   let productName = document.getElementById("productName").value.trim();
@@ -51,30 +51,26 @@ function validateForm() {
     const formData = new FormData($("#editProduct")[0]);
     const productId = $("#editProduct").data("product-id");
 
-    $.ajax({
-      url: `/admin/editProduct/${productId}`,
-      type: "PATCH",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function (response) {
-        if (response.success) {
+    fetch(`/admin/editProduct/${productId}`, {
+      method: "PUT",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
           console.log("Product updated successfully");
           // Redirect to the specified URL
-          window.location.href = response.redirectUrl;
+          window.location.href = "/admin/listProduct";
         } else {
-          console.error("Failed to update product:", response.message);
+          console.error("Failed to update product:", data.message);
           document.getElementById("Errormessage").textContent =
             "Failed to update product. Please try again later.";
         }
-      },
-      error: function (xhr, status, error) {
-        console.log("Error status:", xhr.status);
-        console.log("Error message:", xhr.statusText);
-        console.log("Response text:", xhr.responseText);
+      })
+      .catch((error) => {
+        console.error("Error submitting the Product: ", error);
         document.getElementById("Errormessage").textContent =
           "Failed to update product. Please try again later.";
-      },
-    });
+      });
   }
 }

@@ -208,7 +208,7 @@ let editProductPage = async (req, res) => {
   }
 };
 
-let editProductPost = async (req, res) => {
+let editProductPut = async (req, res) => {
   try {
     let productId = req.params.id;
 
@@ -217,10 +217,7 @@ let editProductPost = async (req, res) => {
       req.files,
       productId,
     );
-
-    // console.log(req.body);
-    // console.log(updated.existingProduct); 
-
+    
     if (updated.productNotExist) {
       console.log("Product Not exists for updating the data");
       return res.render("admin/productEdit", {
@@ -232,7 +229,7 @@ let editProductPost = async (req, res) => {
       console.log("Product updated successfully");
       res
         .status(200)
-        .json({ success: true, redirectUrl: "/admin/listProduct" });
+        .json({ success: true });
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
@@ -253,5 +250,5 @@ module.exports = {
   productListPage,
   deleteProduct,
   editProductPage,
-  editProductPost,
+  editProductPut,
 };

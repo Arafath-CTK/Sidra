@@ -61,9 +61,6 @@ function editProductHelper(productData, imageData, productId) {
         subCategory,
       } = productData; 
 
-      // console.log(imageData); 
-      // const images = imageData
-
       const existingProduct = await Product.findById(productId);
       
       if (!existingProduct) {
@@ -94,7 +91,7 @@ function editProductHelper(productData, imageData, productId) {
         }
 
         await existingProduct.save();
-        resolve({ success: true, existingProduct });
+        resolve({ success: true});
       }
     } catch (error) {
       reject(error);
