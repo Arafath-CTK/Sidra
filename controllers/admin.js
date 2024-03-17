@@ -2,11 +2,12 @@ const helper = require("../helpers/admin");
 const Admin = require("../models/admin");
 const User = require("../models/user");
 const Product = require("../models/product");
+const JWT = require("../middlewares/jwt");
 // const Swal = require("sweetalert2").default;
 
 // Admin signup page
 let signInPage = (req, res) => {
-  res.render("admin/signin");
+  res.render("admin/signin", { layout: false });
 };
 
 let adminHome = (req, res) => {

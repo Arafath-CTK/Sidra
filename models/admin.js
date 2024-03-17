@@ -2,9 +2,10 @@ const mongoose = require("../config/database");
 
 const adminSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, unique: true, lowercase: true, required: true },
-    password: { type: String, required: true },
+    name: { type: String },
+    email: { type: String, unique: true, lowercase: true },
+    password: { type: String },
+    register_date: {type: String},
     banners: [
       {
         image: String,

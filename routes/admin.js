@@ -4,7 +4,6 @@ const router = express.Router();
 const adminControllers = require("../controllers/admin");
 const upload = require("../config/multer");
 
-// router.get("/", adminControllers.adminHome);
 router.get("/", adminControllers.signInPage);
 router.get("/home", adminControllers.adminHome);
 router.post("/signInPost", adminControllers.signInPost);

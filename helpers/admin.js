@@ -1,4 +1,6 @@
 const Product = require("../models/product");
+const Admin = require("../models/admin");
+const bcrypt = require("bcrypt");
 const cloudinary = require("../config/cloudinary");
 
 //Product adding helper
