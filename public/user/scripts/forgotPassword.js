@@ -1,7 +1,6 @@
 async function sendOTP() {
   try {
     const email = document.getElementById("email").value;
-    
 
     if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
       document.getElementById("emailError").innerHTML =
@@ -9,9 +8,7 @@ async function sendOTP() {
     } else {
       document.getElementById("emailError").innerHTML = "";
 
-      console.log("testingg");
       let response = await axios.post("/forgotPassword", { email });
-      console.log(response);
       if (response.data.userNotFound) {
         document.getElementById("emailError").innerHTML = "User doesn't exist";
       } else if (response.data.success) {
@@ -34,10 +31,7 @@ async function verifyOTP() {
 
     let response = await axios.post("/verifyOTP", { email, otp });
 
-    if (response.data.userNotFound) {
-      console.log("User not found");
-      document.getElementById("message").innerText = "User doesn't exist";
-    } else if (response.data.invalidOTP) {
+    if (response.data.invalidOTP) {
       console.log("Invalid or expired otp");
       document.getElementById("message").innerText = "Invalid or expired OTP";
     } else if (response.data.otpVerified) {

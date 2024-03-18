@@ -6,7 +6,7 @@
         <div class="account_form register">
           <h2>Sign Up</h2>
           <form action="signUp" method="post" onsubmit="return validateForm()">
-            <div style="display: block;">
+            <div id="input-section" style="display: block;">
               <p>
                 <label>Name</label>
                 <input type="text" name="name" id="name" value="{{enteredName}}" />
@@ -34,13 +34,14 @@
               </p>
               <div class="login_submit">
                 <div class="btn" style="font-size: 13px; color: white; background-color: #79a206; border-radius: 50px"
-                  onclick="verifyOTP()">Verify Email</div>
+                  onclick="sendOTP()">Verify Email</div>
               </div>
             </div>
 
             <div id="otp-section" style="display: none;">
               <p>
-                <input type="text" id="otp" name="otp" placeholder="Enter The OTP" />
+                <label>Enter The OTP</label>
+                <input type="text" id="otp" name="otp" />
               </p>
               <div class="login_submit">
                 <div class="btn" style="font-size: 13px; color: white; background-color: #79a206; border-radius: 50px"
@@ -48,6 +49,7 @@
               </div>
             </div>
 
+<div id="message"></div>
           </form>
         </div>
       </div>

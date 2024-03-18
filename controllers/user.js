@@ -66,11 +66,11 @@ let myAccountPage = async (req, res) => {
   }
 };
 
-let signUpPost = async (req, res) => {
+let signUpVerification = async (req, res) => {
   try {
-    console.log("User registration started");
-    let registered = await helper.signUpHelper(req.body);
-    if (registered.emailExist) {
+    const { email } = req.body;
+    let emailExistance = await helper.signUpVerificationHelper(email);
+    if (emailExistance.emailExist) {
       console.log("The entered email already exists");
       res.status(200).render("user/signUp", {
         emailError: "Email already exists",
@@ -79,6 +79,54 @@ let signUpPost = async (req, res) => {
         enteredPhoneNumber: phoneNumber,
       });
     } else {
+      const { otp, expiry } = await helper.generateAndSendOTP(email);
+      req.session.otp = { email, otp, expiry };
+      res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error initiating email verification: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
+let signUpVerifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    // Retrieve OTP from session
+    const sessionOTP = req.session?.otp;
+
+    if (
+      !sessionOTP ||
+      sessionOTP.email !== email ||
+      otp !== sessionOTP.otp ||
+      new Date() > sessionOTP.expiry
+    ) {
+      return res.status(400).json({ invalidOTP: true });
+    } else {
+      console.log("OTP verified, proceed with password reset");
+
+      // Clear OTP from session after successful verification
+      req.session.otp = null;
+      res.status(200).json({ otpVerified: true });
+    }
+  } catch (error) {
+    console.error("Error verifying OTP: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
+let signUpPost = async (req, res) => {
+  try {
+    console.log("User registration started");
+    let registered = await helper.signUpHelper(req.body);
+    if (registered.success) {
       console.log(registered.user, "User registration completed");
       return res.redirect("/signIn");
     }
@@ -150,9 +198,10 @@ let forgotPasswordPost = async (req, res) => {
     }
   } catch (error) {
     console.error("Error initiating password reset: ", error);
-    res
-      .status(500)
-      .render("error", { errorMessage: `internal server error: ${error}` });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
   }
 };
 
@@ -179,9 +228,10 @@ let verifyOTP = async (req, res) => {
     }
   } catch (error) {
     console.error("Error verifying OTP: ", error);
-    res
-      .status(500)
-      .render("error", { errorMessage: `internal server error: ${error}` });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
   }
 };
 
@@ -227,6 +277,8 @@ module.exports = {
   signUpPage,
   signInPage,
   myAccountPage,
+  signUpVerification,
+  signUpVerifyOTP,
   signUpPost,
   signInPost,
   logout,

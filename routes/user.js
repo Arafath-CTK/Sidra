@@ -8,6 +8,8 @@ const { authenticateUser } = require('../middlewares/jwt');
 router.get("/signIn", preventBack, userControllers.signInPage);
 router.post("/signIn", preventBack, userControllers.signInPost);
 router.get("/signUp", preventBack, userControllers.signUpPage);
+router.post("/signUpVerification", preventBack, userControllers.signUpVerification);
+router.post("/signUpVerifyOTP", preventBack, userControllers.signUpVerifyOTP)
 router.post("/signUp", preventBack, userControllers.signUpPost);
 router.get("/logout", preventBack, userControllers.logout);
 router.get("/forgotPassword", preventBack, userControllers.forgotPasswordPage);

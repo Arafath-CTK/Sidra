@@ -4,35 +4,45 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
 
+function signUpVerificationHelper(email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const existingUser = await User.findOne({ email: email });
+      if (existingUser) {
+        resolve({ emailExist: true });
+      } else {
+        resolve({ emailExist: false });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 // user signup helper
 function signUpHelper(userData) {
   let { name, email, phoneNumber, password } = userData;
   return new Promise(async (resolve, reject) => {
     try {
-      const existingUser = await User.findOne({ email: email });
-      if (!existingUser) {
-        const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-        const now = new Date();
-        const formattedDate = now.toLocaleDateString("en-US", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
+      const now = new Date();
+      const formattedDate = now.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
 
-        const user = new User({
-          name: name,
-          email: email,
-          phone_number: phoneNumber,
-          password: hashedPassword,
-          register_date: formattedDate,
-        });
-        user.save();
+      const user = new User({
+        name: name,
+        email: email,
+        phone_number: phoneNumber,
+        password: hashedPassword,
+        register_date: formattedDate,
+      });
+      user.save();
 
-        resolve({ success: true, user });
-      } else {
-        resolve({ emailExist: true });
-      }
+      resolve({ success: true, user });
     } catch (error) {
       reject(error);
     }
@@ -115,4 +125,4 @@ let generateAndSendOTP = async (email) => {
   }
 };
 
-module.exports = { signUpHelper, signInHelper, generateAndSendOTP };
+module.exports = { signUpHelper, signInHelper, generateAndSendOTP, signUpVerificationHelper };
