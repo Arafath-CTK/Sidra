@@ -10,14 +10,16 @@ let homePage = async (req, res) => {
     const containers = await Product.find({ category: "pots" });
     const supplies = await Product.find({ category: "supplies" });
 
-    if (req.cookies.jwt) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
-      return res.render("user/home", {
-        user: true,
-        plants,
-        containers,
-        supplies,
-      });
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.render("user/home", {
+          user: true,
+          plants,
+          containers,
+          supplies,
+        });
+      }
     }
     return res.render("user/home", {
       title: "Sidra | Home",
@@ -27,7 +29,7 @@ let homePage = async (req, res) => {
       supplies,
     });
   } catch (error) {
-    res.render("error", { errorMessage: error });
+    res.render("error", { layout: false, errorMessage: error });
   }
 };
 
@@ -36,8 +38,8 @@ let signUpPage = (req, res) => {
 };
 
 let signInPage = async (req, res) => {
-  if (req.cookies.jwt) {
-    let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
+  if (req.cookies.userToken) {
+    let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
     if (tokenExtracted.role === "user") {
       return res.redirect("/");
     }
@@ -47,11 +49,11 @@ let signInPage = async (req, res) => {
 
 let myAccountPage = async (req, res) => {
   try {
-    if (!req.cookies.jwt) {
+    if (!req.cookies.userToken) {
       return res.render("user/signIn");
     }
-    if (req.cookies.jwt) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.jwt);
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       role = tokenExtracted.role;
       if (role !== "user") {
         return res.render("user/signIn");
@@ -115,7 +117,7 @@ let signInPost = async (req, res) => {
     } else if (signedIn.verified) {
       console.log("User verified and Signed in successfully");
       const token = await JWT.signUser(signedIn.existingUser);
-      res.cookie("jwt", token, { htttpOnly: true, maxAge: 7200000 });
+      res.cookie("userToken", token, { htttpOnly: true, maxAge: 7200000 });
       return res.redirect("/myAccount");
     }
   } catch (error) {
@@ -124,7 +126,7 @@ let signInPost = async (req, res) => {
 };
 
 let logout = (req, res) => {
-  res.clearCookie("jwt");
+  res.clearCookie("userToken");
   console.log("Cookies are cleared and user logged out");
   return res.redirect("/");
 };

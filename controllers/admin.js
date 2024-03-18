@@ -3,43 +3,71 @@ const Admin = require("../models/admin");
 const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
+const bcrypt = require("bcrypt");
 // const Swal = require("sweetalert2").default;
 
 // Admin signup page
-let signInPage = (req, res) => {
-  res.render("admin/signin", { layout: false });
+let signInPage = async (req, res) => {
+  if (req.cookies.adminToken) {
+    let tokenExtracted = await JWT.verifyUser(req.cookies.adminToken);
+    if (tokenExtracted.role === "admin") {
+      return res.redirect("/admin");
+    }
+  }
+  res.render("admin/signIn", { layout: false });
 };
 
-let adminHome = (req, res) => {
-  res.render("admin/dashboard", {
-    layout: "adminLayout",
-    title: "Sidra Admin | Dashboard",
-  });
+let adminHome = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        return res.render("admin/dashboard", {
+          layout: "adminLayout",
+          title: "Sidra Admin | Dashboard",
+          adminName: tokenExtracted.adminName,
+        });
+      }
+    }
+    return res.redirect("/admin/signIn");
+  } catch (error) {
+    res.render("error", { layout: false, errorMessage: error });
+  }
 };
 
 let signInPost = async (req, res) => {
   try {
     const { signInEmail, signInPassword } = req.body;
-    const adminData = await Admin.findOne(signInEmail);
-    console.log(adminData);
+    const adminData = await Admin.findOne({ email: signInEmail });
+
     if (adminData === null) {
       return res.status(401).render("admin/signin", {
+        layout: false,
         replaceMail: "Wrong email id",
         enteredMail: signInEmail,
         enteredPassword: signInPassword,
       });
     }
-    if (adminData.password !== signInPassword) {
+
+    const passwordMatch = await bcrypt.compare(
+      signInPassword,
+      adminData.password
+    );
+    if (!passwordMatch) {
       return res.status(401).render("admin/signin", {
+        layout: false,
         replacePassword: "Wrong Password",
         enteredMail: signInEmail,
       });
     } else {
-      res.redirect("/admin/home");
+      console.log("Admin verified and signed in successfully");
+      const token = await JWT.signAdmin(adminData);
+      res.cookie("adminToken", token, { htttpOnly: true, maxAge: 7200000 });
+      res.redirect("/admin/");
     }
   } catch (error) {
     console.error("Error while logging in ", error);
-    res.render("error", { errorMessage: error });
+    res.render("error", { layout: false, errorMessage: error });
   }
 };
 
@@ -177,7 +205,7 @@ let editProductPage = async (req, res) => {
   try {
     const productId = req.params.id;
     let product = await Product.findById(productId);
- 
+
     if (product) {
       res.status(200).render("admin/productEdit", {
         layout: "adminLayout",
@@ -216,9 +244,9 @@ let editProductPut = async (req, res) => {
     let updated = await helper.editProductHelper(
       req.body,
       req.files,
-      productId,
+      productId
     );
-    
+
     if (updated.productNotExist) {
       console.log("Product Not exists for updating the data");
       return res.render("admin/productEdit", {
@@ -228,9 +256,7 @@ let editProductPut = async (req, res) => {
       });
     } else if (updated.success) {
       console.log("Product updated successfully");
-      res
-        .status(200)
-        .json({ success: true });
+      res.status(200).json({ success: true });
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
