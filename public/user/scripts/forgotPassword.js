@@ -9,7 +9,9 @@ async function sendOTP() {
     } else {
       document.getElementById("emailError").innerHTML = "";
 
+      console.log("testingg");
       let response = await axios.post("/forgotPassword", { email });
+      console.log(response);
       if (response.data.userNotFound) {
         document.getElementById("emailError").innerHTML = "User doesn't exist";
       } else if (response.data.success) {

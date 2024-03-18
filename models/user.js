@@ -8,13 +8,11 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     register_date: {type: String},
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
-    otp: { type: String },
-    otpExpiry: { type: Date },
     // addresses: [
     //   {
     //     name: String,
     //     phone_number: String,
-    //     pin_code: String,
+    //     pin_code: String, 
     //     property_name: String,
     //     street: String,
     //     city: String,

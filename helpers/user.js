@@ -44,16 +44,18 @@ let signInHelper = async (signInData) => {
     const { email, password } = signInData;
     let existingUser = await User.findOne({ email: email });
     if (existingUser) {
-      const passwordMatch = await bcrypt.compare( password, existingUser.password );
+      const passwordMatch = await bcrypt.compare(
+        password,
+        existingUser.password
+      );
 
       if (existingUser.status === "Blocked") {
-        return {blockedUser: true}
+        return { blockedUser: true };
       } else if (!passwordMatch) {
         return { passwordNotMatching: true };
       } else {
         return { verified: true, existingUser };
       }
-      
     } else {
       return { invalidEmail: true };
     }
@@ -76,7 +78,15 @@ const transporter = nodemailer.createTransport({
 
 // OTP generating functiion
 function generateOTP() {
-  return crypto.randomBytes(3).toString("hex").toUpperCase();
+  // Generate random bytes (ensuring enough for 6 digits)
+  const randomBytes = crypto.randomBytes(4);
+
+  // Convert to a numeric string and extract the first 6 digits
+  const otp = parseInt(randomBytes.toString("hex"), 16)
+    .toString(10)
+    .padStart(6, "0");
+
+  return otp.substring(0, 6);
 }
 
 let sendOTP = async (email, otp) => {

@@ -145,11 +145,7 @@ let forgotPasswordPost = async (req, res) => {
       res.status(404).json({ userNotFound: true });
     } else {
       const { otp, expiry } = await helper.generateAndSendOTP(email);
-
-      user.otp = otp;
-      user.otpExpiry = new Date(expiry);
-      await user.save();
-
+      req.session.otp = { email, otp, expiry };
       res.status(200).json({ success: true });
     }
   } catch (error) {
@@ -163,12 +159,22 @@ let forgotPasswordPost = async (req, res) => {
 let verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ userNotFound: true });
-    } else if (otp !== user.otp || new Date() > user.otpExpiry) {
+
+    // Retrieve OTP from session
+    const sessionOTP = req.session?.otp;
+
+    if (
+      !sessionOTP ||
+      sessionOTP.email !== email ||
+      otp !== sessionOTP.otp ||
+      new Date() > sessionOTP.expiry
+    ) {
       return res.status(400).json({ invalidOTP: true });
     } else {
+      console.log("OTP verified, proceed with password reset");
+
+      // Clear OTP from session after successful verification
+      req.session.otp = null;
       res.status(200).json({ otpVerified: true });
     }
   } catch (error) {
