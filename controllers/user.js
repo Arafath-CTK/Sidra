@@ -107,7 +107,7 @@ let signUpVerifyOTP = async (req, res) => {
     ) {
       return res.status(400).json({ invalidOTP: true });
     } else {
-      console.log("OTP verified, proceed with password reset");
+      console.log("OTP verified");
 
       // Clear OTP from session after successful verification
       req.session.otp = null;
@@ -128,7 +128,7 @@ let signUpPost = async (req, res) => {
     let registered = await helper.signUpHelper(req.body);
     if (registered.success) {
       console.log(registered.user, "User registration completed");
-      return res.redirect("/signIn");
+      return res.status(200).json({ success: true });
     }
   } catch (error) {
     res.render("error", { errorMessage: error });

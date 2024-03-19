@@ -87,7 +87,9 @@ async function verifyOTP() {
         phoneNumber,
         password,
       });
-      
+      if (userRegistered.data.success) {
+        window.location.href = "/signIn";
+      }
     }
   } catch (error) {
     console.error(error);
