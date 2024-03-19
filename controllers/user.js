@@ -55,14 +55,24 @@ let myAccountPage = async (req, res) => {
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       role = tokenExtracted.role;
+      email = tokenExtracted.userEmail;
       if (role !== "user") {
         return res.render("user/signIn");
       }
+      let userData = await User.findOne({ email: email });
+      let year = userData.register_date.split("/")[2];
+      return res.status(200).render("user/myAccount", {
+        userName: userData.name,
+        userPhone_number: userData.phone_number,
+        userEmail: userData.email,
+        memberSince: year,
+      });
     }
-    return res.render("user/myAccount", { user: true });
   } catch (error) {
     console.error("Unexpected error occured due to: ", error);
-    return res.status(404).render("error", { errorMessage: error });
+    return res
+      .status(404)
+      .render("error", { layout: false, errorMessage: error });
   }
 };
 

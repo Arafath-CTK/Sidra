@@ -46,7 +46,7 @@ body {
 }
 
 .signin-button {
-  background-color: #3498db;
+  background-color: #20c997;
   color: #fff;
   padding: 12px;
   border: none;
@@ -58,18 +58,18 @@ body {
 }
 
 .signin-button:hover {
-  background-color: #2980b9;
+  background-color: #1f9f78;
 }
 
 .signin-input:focus,
 .signin-button:focus {
   outline: none;
-  box-shadow: 0 0 5px #3498db;
+  box-shadow: 0 0 5px #20c997;
 }
 
 .signup-link {
   display: inline-block;
-  color: #3498db;
+  color: #20c997;
   text-decoration: none;
   margin-top: 15px;
   margin-left: 5px;

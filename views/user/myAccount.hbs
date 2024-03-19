@@ -1,21 +1,3 @@
-<!--breadcrumbs area start-->
-<div class="breadcrumbs_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb_content">
-                    <h3>My Account</h3>
-                    <ul>
-                        <li><a href="index.html">home</a></li>
-                        <li>My account</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--breadcrumbs area end-->
-
 <!-- my account start  -->
 <section class="main_content_area">
     <div class="container">
@@ -26,10 +8,9 @@
                     <div class="dashboard_tab_button">
                         <ul role="tablist" class="nav flex-column dashboard-list">
                             <li><a href="#dashboard" data-bs-toggle="tab" class="nav-link active">Dashboard</a></li>
-                            <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
-                            <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
                             <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a>
-                            </li>
+                            <li><a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
+                            <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
                             <li><a href="/logout" class="nav-link">logout</a></li>
                         </ul>
                     </div>
@@ -37,59 +18,23 @@
                 <div class="col-sm-12 col-md-9 col-lg-9">
                     <!-- Tab panes -->
                     <div class="tab-content dashboard_content">
+
                         <div class="tab-pane fade show active" id="dashboard">
-                            <h3>Dashboard </h3>
-                            <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent
-                                    orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a
-                                    href="#">Edit your password and account details.</a></p>
-                        </div>
-                        <div class="tab-pane fade" id="orders">
-                            <h3>Orders</h3>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Order</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="success">Completed</span></td>
-                                            <td>$25.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>May 10, 2018</td>
-                                            <td>Processing</td>
-                                            <td>$17.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div
+                                style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px;">
+                                <div style="text-align: center;">
+                                    <h2 style="margin-bottom: 10px; font-size: 24px; color: #333;">Hi, {{ userName }}!
+                                    </h2>
+                                    <p style="margin: 5px 0; font-size: 18px; color: #555;">{{ userPhone_number
+                                        }}</p>
+                                    <p style="margin: 5px 0; font-size: 18px; color: #555;">{{
+                                        userEmail }}</p>
+                                    <p style="margin: 5px 0; font-size: 18px; color: #555;">Member Since <strong>{{
+                                            memberSince }}</strong></p>
+                                </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="address">
-                            <p>The following addresses will be used on the checkout page by default.</p>
-                            <h4 class="billing-address">Billing address</h4>
-                            <a href="#" class="view">Edit</a>
-                            <p><strong>Bobby Jackson</strong></p>
-                            <address>
-                                <span><strong>City:</strong> Seattle</span>,
-                                <br>
-                                <span><strong>State:</strong> Washington(WA)</span>,
-                                <br>
-                                <span><strong>ZIP:</strong> 98101</span>,
-                                <br>
-                                <span><strong>Country:</strong> USA</span>
-                            </address>
-                        </div>
+
                         <div class="tab-pane fade" id="account-details">
                             <h3>Account details </h3>
                             <div class="login">
@@ -136,6 +81,110 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="tab-pane fade" id="orders">
+                            <h3>Orders</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>May 10, 2018</td>
+                                            <td><span class="success">Completed</span></td>
+                                            <td>$25.00 for 1 item </td>
+                                            <td><a href="cart.html" class="view">view</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>May 10, 2018</td>
+                                            <td>Processing</td>
+                                            <td>$17.00 for 1 item </td>
+                                            <td><a href="cart.html" class="view">view</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="address">
+
+                            <button
+                                style="margin-bottom: 10px; font-size: 16px; padding: 8px 16px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;"
+                                onclick="openModal()">Add New Address</button>
+                            <div
+                                style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4 style="margin: 0; font-size: 18px; color: #333;">{{addressName}} <span
+                                            style="font-size: 14px; color: #666; background-color: #f2f2f2; padding: 3px 8px; border-radius: 5px;">{{addressType}}</span>
+                                    </h4>
+                                    <div>
+                                        <button
+                                            style="margin-right: 5px; font-size: 14px; padding: 5px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;">Edit</button>
+                                        <button
+                                            style="font-size: 14px; padding: 5px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;">Remove</button>
+                                    </div>
+                                </div>
+                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{addressBuilding}},
+                                    {{addressStreet}}, {{addressArea}},</p>
+                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{addressCity}},
+                                    {{addressState}} - {{addressPIN}}</p>
+                                <p style="font-size: 16px; color: #555;">{{addressPhoneNumber}}</p>
+                            </div>
+
+                            <!-- Modal -->
+                            <div id="addressModal" class="modal"
+                                style="display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4);">
+
+                                <!-- Modal content -->
+                                <div class="modal-content"
+                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fefefe; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); max-width: 45%; max-height: 80%; overflow-y: auto;">
+                                    <span class="close"
+                                        style="position: absolute; top: 10px; right: 10px; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 1;">&times;</span>
+                                    <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px; color: #333;">Add
+                                        New Address</h2>
+
+                                    <!-- Input fields -->
+                                    <input type="text" placeholder="Name"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="House/Building Name"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="Street, Area Name"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="City"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="State"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="PIN Code"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" placeholder="Phone Number"
+                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+
+                                    <div style="margin-bottom: 20px;">
+                                        <button class="address-button"
+                                            style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px; margin-right: 8px;">Home</button>
+                                        <button class="address-button"
+                                            style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px;">Work</button>
+                                        <input type="hidden" id="addressType" name="addressType">
+                                    </div>
+
+                                    <!-- Add Address button -->
+                                    <button
+                                        style="background-color: #79a206; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Add
+                                        Address</button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,3 +192,53 @@
     </div>
 </section>
 <!-- my account end   -->
+
+<script>
+    // Function to open the modal
+    function openModal() {
+        var modal = document.getElementById('addressModal');
+        modal.style.display = "block";
+    }
+
+    // Function to close the modal when clicking on the close button
+    var closeButton = document.getElementsByClassName("close")[0];
+    closeButton.onclick = function (event) {
+        var modal = document.getElementById('addressModal');
+        modal.style.display = "none";
+        event.stopPropagation(); // Prevent event propagation
+    }
+
+    // Function to prevent closing the modal when clicking outside of it
+    var modalContent = document.getElementsByClassName("modal-content")[0];
+    modalContent.onclick = function (event) {
+        event.stopPropagation(); // Prevent event propagation
+    }
+
+    // Function to close the modal when pressing the Esc key
+    document.onkeydown = function (event) {
+        if (event.key === "Escape") {
+            var modal = document.getElementById('addressModal');
+            modal.style.display = "none";
+        }
+    }
+
+    // JavaScript code for modal functionality
+    document.querySelectorAll('.address-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Remove the active class from all buttons
+            document.querySelectorAll('.address-button').forEach(function (btn) {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = '#f2f2f2';
+                btn.style.borderColor = '#ccc';
+                btn.style.color = '#000';
+            });
+            // Add the active class to the clicked button
+            button.classList.add('active');
+            button.style.backgroundColor = '#79a206';
+            button.style.borderColor = '#79a206';
+            button.style.color = '#fff';
+            // Set the address type value
+            document.getElementById('addressType').value = button.textContent.trim();
+        });
+    });
+</script>

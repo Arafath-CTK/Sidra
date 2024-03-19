@@ -8,19 +8,19 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     register_date: {type: String},
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
-    // addresses: [
-    //   {
-    //     name: String,
-    //     phone_number: String,
-    //     pin_code: String, 
-    //     property_name: String,
-    //     street: String,
-    //     city: String,
-    //     state: String,
-    //     type: String,
-    //     primary: Boolean,
-    //   },
-    // ],
+    addresses: [
+      {
+        name: String,
+        phone_number: String,
+        property_name: String,
+        pin_code: String, 
+        street: String,
+        city: String,
+        state: String,
+        type: String,
+        primary: Boolean,
+      },
+    ],
     // wishlist: { type: Array },
     // cart: [
     //   {
