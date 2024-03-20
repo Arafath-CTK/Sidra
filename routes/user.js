@@ -22,5 +22,7 @@ router.get("/myAccount", preventBack, authenticateUser(), userControllers.myAcco
 router.post("/addAddress", preventBack,authenticateUser(), userControllers.addAddress)
 
 router.get("/shop", userControllers.shopPage);
+router.get("/singleProduct", userControllers.singleProductPage)
+router.get("/cart", userControllers.cartPage)
 
 module.exports = router;

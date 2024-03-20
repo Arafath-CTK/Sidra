@@ -80,6 +80,31 @@ let myAccountPage = async (req, res) => {
   }
 };
 
+let addAddress = async (req, res) => {
+  try {
+    console.log("address adding started");
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      let addedAddress = await helper.addAddressHelper(req.body, userId);
+
+      if (addedAddress.addressExist) {
+        console.log("address already exists");
+        return res.status(409).json({ addressExist: true });
+      } else if (addedAddress.success) {
+        console.log("address added successfully");
+        return res.status(200).json({ success: true });
+      }
+    }
+  } catch (error) {
+    console.error("Error while adding the error");
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
 let signUpVerification = async (req, res) => {
   try {
     const { email } = req.body;
@@ -281,36 +306,33 @@ let shopPage = async (req, res) => {
     res.status(200).render("user/shop", { user: true, products });
   } catch (error) {
     console.error("Error rendering the Shop page: ", error);
-    res
-      .status(500)
-      .render("error", {
-        layout: false,
-        errorMessage: "Error rendering the Shop page",
-      });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the Shop page",
+    });
   }
 };
 
-let addAddress = async (req, res) => {
+let singleProductPage = async (req, res) => {
   try {
-    console.log("address adding started");
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      let userId = tokenExtracted.userId;
-      let addedAddress = await helper.addAddressHelper(req.body, userId);
-
-      if (addedAddress.addressExist) {
-        console.log("address already exists");
-        return res.status(409).json({ addressExist: true });
-      } else if (addedAddress.success) {
-        console.log("address added successfully");
-        return res.status(200).json({ success: true });
-      }
-    }
+    res.status(200).render("user/singleProduct", { user: true });
   } catch (error) {
-    console.error("Error while adding the error");
+    console.error("Error rendering the product page: ", error);
     res.status(500).render("error", {
       layout: false,
-      errorMessage: `internal server error: ${error}`,
+      errorMessage: "Error rendering the product page",
+    });
+  }
+};
+
+let cartPage = async (req, res) => {
+  try {
+    res.status(200).render("user/cart", { user: true });
+  } catch (error) {
+    console.error("Error rendering the cart page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the cart page",
     });
   }
 };
@@ -320,6 +342,7 @@ module.exports = {
   signUpPage,
   signInPage,
   myAccountPage,
+  addAddress,
   signUpVerification,
   signUpVerifyOTP,
   signUpPost,
@@ -330,5 +353,6 @@ module.exports = {
   verifyOTP,
   resetPassword,
   shopPage,
-  addAddress,
+  singleProductPage,
+  cartPage,
 };
