@@ -120,12 +120,13 @@
                             <button
                                 style="margin-bottom: 10px; font-size: 16px; padding: 8px 16px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;"
                                 onclick="openModal()">Add New Address</button>
+                                {{#each addresses}}
                             <div
-                                style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+                                style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; margin-bottom: 5px;">
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <h4 style="margin: 0; font-size: 18px; color: #333;">{{addressName}} <span
-                                            style="font-size: 14px; color: #666; background-color: #f2f2f2; padding: 3px 8px; border-radius: 5px;">{{addressType}}</span>
+                                    <h4 style="margin: 0; font-size: 18px; color: #333;">{{this.name}} <span
+                                            style="font-size: 14px; color: #666; background-color: #f2f2f2; padding: 3px 8px; border-radius: 5px;">{{this.address_type}}</span>
                                     </h4>
                                     <div>
                                         <button
@@ -134,12 +135,13 @@
                                             style="font-size: 14px; padding: 5px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;">Remove</button>
                                     </div>
                                 </div>
-                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{addressBuilding}},
-                                    {{addressStreet}}, {{addressArea}},</p>
-                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{addressCity}},
-                                    {{addressState}} - {{addressPIN}}</p>
-                                <p style="font-size: 16px; color: #555;">{{addressPhoneNumber}}</p>
+                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{this.house_name}},
+                                    {{this.street}}</p>
+                                <p style="font-size: 16px; color: #555; margin-bottom: 5px;">{{this.city}},
+                                    {{this.state}} - {{this.pin_code}}</p>
+                                <p style="font-size: 16px; color: #555;">{{this.phone_number}}</p>
                             </div>
+                            {{/each}}
 
                             <!-- Modal -->
                             <div id="addressModal" class="modal"
@@ -154,20 +156,34 @@
                                         New Address</h2>
 
                                     <!-- Input fields -->
-                                    <input type="text" placeholder="Name"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="House/Building Name"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="Street, Area Name"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="City"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="State"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="PIN Code"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                                    <input type="text" placeholder="Phone Number"
-                                        style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <input type="text" class="error" id="name" name="name" placeholder="Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="nameError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="house" name="house" placeholder="House/Building Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="houseError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="street" name="street" placeholder="Street, Area Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="streetError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="city" name="city" placeholder="City"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="cityError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="state" name="state" placeholder="State"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="stateError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="number" class="error" id="pin" name="pin" placeholder="PIN Code"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="pinError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="number" class="error" id="phone" name="phone" placeholder="Phone Number"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="phoneError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
 
                                     <div style="margin-bottom: 20px;">
                                         <button class="address-button"
@@ -175,10 +191,12 @@
                                         <button class="address-button"
                                             style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px;">Work</button>
                                         <input type="hidden" id="addressType" name="addressType">
+                                        <small id="addressTypeError"
+                                        style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
                                     </div>
 
                                     <!-- Add Address button -->
-                                    <button
+                                    <button onclick="addAddress()"
                                         style="background-color: #79a206; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Add
                                         Address</button>
                                 </div>
@@ -194,6 +212,22 @@
 <!-- my account end   -->
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Retrieve the fragment identifier from the URL
+        const fragmentIdentifier = window.location.hash.substring(1);
+
+        // If the fragment identifier indicates the "Address" tab, activate it
+        if (fragmentIdentifier === 'address') {
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(tabContent => tabContent.classList.remove('show', 'active'));
+
+            // Activate the "Address" tab
+            document.querySelector('.nav-link[href="#address"]').classList.add('active');
+            document.getElementById('address').classList.add('show', 'active');
+        }
+    });
+
     // Function to open the modal
     function openModal() {
         var modal = document.getElementById('addressModal');
@@ -242,3 +276,4 @@
         });
     });
 </script>
+<script src="/user/scripts/myAccount.js"></script>

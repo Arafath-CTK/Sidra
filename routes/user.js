@@ -19,6 +19,8 @@ router.post("/resetPassword", userControllers.resetPassword);
 
 router.get("/", preventBack, userControllers.homePage);
 router.get("/myAccount", preventBack, authenticateUser(), userControllers.myAccountPage);
+router.post("/addAddress", preventBack,authenticateUser(), userControllers.addAddress)
+
 router.get("/shop", userControllers.shopPage);
 
 module.exports = router;

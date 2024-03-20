@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const { use } = require("../routes/user");
 require("dotenv").config();
 
 function signUpVerificationHelper(email) {
@@ -125,4 +126,51 @@ let generateAndSendOTP = async (email) => {
   }
 };
 
-module.exports = { signUpHelper, signInHelper, generateAndSendOTP, signUpVerificationHelper };
+let addAddressHelper = async (address, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { name, house, street, city, state, pin, phone, addressType } =
+        address;
+
+      let user = await User.findById(userId);
+
+      let existingAddress = await User.findOne({
+        _id: userId,
+        addresses: {
+          $elemMatch: { house_name: house, street: street, pin_code: pin },
+        },
+      });
+
+      if (existingAddress) {
+        resolve({ addressExist: true });
+      } else {
+        const newAddress = {
+          name: name,
+          house_name: house,
+          street: street,
+          city: city,
+          state: state,
+          pin_code: pin,
+          address_type: addressType,
+          phone_number: phone,
+        };
+
+        user.addresses.push(newAddress);
+        await user.save();
+
+        console.log("address added successfully");
+        resolve({ success: true });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = {
+  signUpHelper,
+  signInHelper,
+  generateAndSendOTP,
+  signUpVerificationHelper,
+  addAddressHelper,
+};

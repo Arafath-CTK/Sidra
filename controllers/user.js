@@ -61,11 +61,15 @@ let myAccountPage = async (req, res) => {
       }
       let userData = await User.findOne({ email: email });
       let year = userData.register_date.split("/")[2];
+      let addresses = userData.addresses;
+
       return res.status(200).render("user/myAccount", {
+        user: true,
         userName: userData.name,
         userPhone_number: userData.phone_number,
         userEmail: userData.email,
         memberSince: year,
+        addresses,
       });
     }
   } catch (error) {
@@ -264,20 +268,49 @@ let resetPassword = async (req, res) => {
     }
   } catch (error) {
     console.error("Error while resetting the password");
-    res
-      .status(500)
-      .render("error", { errorMessage: `internal server error: ${error}` });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
   }
 };
 
 let shopPage = async (req, res) => {
   try {
     let products = await Product.find();
-    res.status(200).render("user/shop", { products });
+    res.status(200).render("user/shop", { user: true, products });
   } catch (error) {
     console.error("Error rendering the Shop page: ", error);
+    res
+      .status(500)
+      .render("error", {
+        layout: false,
+        errorMessage: "Error rendering the Shop page",
+      });
+  }
+};
+
+let addAddress = async (req, res) => {
+  try {
+    console.log("address adding started");
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      let addedAddress = await helper.addAddressHelper(req.body, userId);
+
+      if (addedAddress.addressExist) {
+        console.log("address already exists");
+        return res.status(409).json({ addressExist: true });
+      } else if (addedAddress.success) {
+        console.log("address added successfully");
+        return res.status(200).json({ success: true });
+      }
+    }
+  } catch (error) {
+    console.error("Error while adding the error");
     res.status(500).render("error", {
-      errorMessage: "Error rendering the Shop page",
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
     });
   }
 };
@@ -297,4 +330,5 @@ module.exports = {
   verifyOTP,
   resetPassword,
   shopPage,
+  addAddress,
 };
