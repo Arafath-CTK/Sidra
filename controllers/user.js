@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
+const product = require("../models/product");
 
 let homePage = async (req, res) => {
   try {
@@ -315,7 +316,9 @@ let shopPage = async (req, res) => {
 
 let singleProductPage = async (req, res) => {
   try {
-    res.status(200).render("user/singleProduct", { user: true });
+    const productId = req.params.id;
+    let product = await Product.findById(productId);
+    res.status(200).render("user/singleProduct", { user: true, product });
   } catch (error) {
     console.error("Error rendering the product page: ", error);
     res.status(500).render("error", {
@@ -327,12 +330,53 @@ let singleProductPage = async (req, res) => {
 
 let cartPage = async (req, res) => {
   try {
-    res.status(200).render("user/cart", { user: true });
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let userData = await User.findById(userId);
+      let products = userData.cart;
+
+      res.status(200).render("user/cart", { user: true, products });
+    } else {
+      console.log("failed");
+    }
   } catch (error) {
     console.error("Error rendering the cart page: ", error);
     res.status(500).render("error", {
       layout: false,
       errorMessage: "Error rendering the cart page",
+    });
+  }
+};
+
+let addToCart = async (req, res) => {
+  try {
+    console.log("product adding to the cart started");
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let addedProduct = await helper.addToCartHelper(req.body, userId);
+
+      if (addedProduct.productExist) {
+        console.log("Product already exists in cart");
+        return res.status(409).render("error", {
+          layout: false,
+          errorMessage: "Product already exists in cart",
+        });
+      } else if (addedProduct.success) {
+        console.log("Product added to cart successfully");
+        return res.status(200).redirect("/cart");
+      }
+    } else {
+      console.log("failed");
+    }
+  } catch (error) {
+    console.error("Error adding product to the cart: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error adding product to the cart",
     });
   }
 };
@@ -355,4 +399,5 @@ module.exports = {
   shopPage,
   singleProductPage,
   cartPage,
+  addToCart,
 };

@@ -42,7 +42,7 @@
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
-                                    <a class="primary_img" href=""><img src="{{this.images.[0]}}" alt=""></a>
+                                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img src="{{this.images.[0]}}" alt=""></a>
                                     {{!-- <div class="label_product">
                                         <span class="label_sale">-7%</span>
                                     </div> --}}
@@ -52,18 +52,18 @@
                                                         class="icon-shopping-bag"></i></a></li>
                                             <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
                                                         class="icon-heart"></i></a></li>
-                                            <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                            {{!-- <li class="quick_button"><a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#modal_box" title="quick view"> <i
-                                                        class="icon-eye"></i></a></li>
+                                                        class="icon-eye"></i></a></li> --}}
                                         </ul>
                                     </div>
-                                    <div class="action_links list_action">
+                                    {{!-- <div class="action_links list_action">
                                         <ul>
                                             <li class="quick_button"><a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#modal_box" title="quick view"> <i
                                                         class="icon-eye"></i></a></li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="product_content grid_content">
                                     <div class="product_price_rating">
@@ -81,7 +81,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <h4 class="product_name"><a href="product-details.html">{{this.name}}</a>
+                                        <h4 class="product_name"><a href="/singleProduct/{{this._id}}">{{this.name}}</a>
                                         </h4>
                                         <div class="price_box">
                                             <span class="current_price">{{this.price}}</span>
@@ -114,8 +114,6 @@
                                                     cart</a></li>
                                             <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
                                                         class="icon-heart"></i></a></li>
-                                            <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-sliders"></i></a></li>
 
                                         </ul>
                                     </div>

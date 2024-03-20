@@ -101,7 +101,7 @@ async function addAddress() {
     }
   } catch (error) {
     console.error(error);
-    document.getElementById("message").innerText =
+    document.getElementById("addressTypeError").innerText =
       "Unexpected error occured while adding address";
   }
 }

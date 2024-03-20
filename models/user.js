@@ -21,14 +21,16 @@ const userSchema = new mongoose.Schema(
       },
     ],
     // wishlist: { type: Array },
-    // cart: [
-    //   {
-    //     product_id: String,
-    //     quantity: Number,
-    //     price: Number,
-    //     total_price: Number,
-    //   },
-    // ],
+    cart: [
+      {
+        product_id: String,
+        name: String,
+        image: String,
+        quantity: Number,
+        price: Number,
+        total_price: Number,
+      },
+    ],
     // orders: [
     //   {
     //     order_id: String,

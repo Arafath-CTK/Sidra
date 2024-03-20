@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Product = require("../models/product");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
@@ -167,10 +168,49 @@ let addAddressHelper = async (address, userId) => {
   });
 };
 
+let addToCartHelper = async (productData, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { productId, qty } = productData;
+      let product = await Product.findById(productId);
+      let user = await User.findById(userId);
+
+      let existingProduct = await User.findOne({
+        _id: userId,
+        cart: {
+          $elemMatch: { product_id: productId },
+        },
+      });
+
+      if (existingProduct) {
+        resolve({ productExist: true });
+      } else {
+        const newProduct = {
+          product_id: productId,
+          name: product.name,
+          image: product.images[0],
+          quantity: qty,
+          price: product.price,
+          total_price: qty * product.price,
+        };
+
+        user.cart.push(newProduct);
+        await user.save();
+
+        console.log("Product added to cart successfully");
+        resolve({ success: true });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   signUpHelper,
   signInHelper,
   generateAndSendOTP,
   signUpVerificationHelper,
   addAddressHelper,
+  addToCartHelper,
 };

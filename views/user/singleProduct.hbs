@@ -6,33 +6,29 @@
                 <div class="product-details-tab">
                     <div id="img-1" class="zoomWrapper single-zoom">
                         <a href="#">
-                            <img id="zoom1" src=""
-                                data-zoom-image="" alt="big-1">
+                            <img id="zoom1" src="{{ product.images.[0] }}" data-zoom-image="" alt="big-1">
                         </a>
                     </div>
                     <div class="single-zoom-thumb">
                         <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
                             <li>
-                                <a href="#" class="elevatezoom-gallery active" data-update=""
-                                    data-image="assets/img/product/productbig4.jpg"
-                                    data-zoom-image="assets/img/product/productbig4.jpg">
-                                    <img src="assets/img/product/productbig4.jpg" alt="zo-th-1" />
+                                <a class="elevatezoom-gallery active" data-update=""
+                                    data-image="{{ product.images.[0] }}" data-zoom-image="{{ product.images.[0] }}">
+                                    <img src="{{ product.images.[0] }}" alt="zo-th-1" />
                                 </a>
 
                             </li>
                             <li>
                                 <a href="#" class="elevatezoom-gallery active" data-update=""
-                                    data-image="assets/img/product/productbig1.jpg"
-                                    data-zoom-image="assets/img/product/productbig1.jpg">
-                                    <img src="assets/img/product/productbig1.jpg" alt="zo-th-1" />
+                                    data-image="{{ product.images.[1] }}" data-zoom-image="{{ product.images.[1] }}">
+                                    <img src="{{ product.images.[1] }}" alt="zo-th-1" />
                                 </a>
 
                             </li>
                             <li>
                                 <a href="#" class="elevatezoom-gallery active" data-update=""
-                                    data-image="assets/img/product/productbig2.jpg"
-                                    data-zoom-image="assets/img/product/productbig2.jpg">
-                                    <img src="assets/img/product/productbig2.jpg" alt="zo-th-1" />
+                                    data-image="{{ product.images.[2] }}" data-zoom-image="{{ product.images.[2] }}">
+                                    <img src="{{ product.images.[2] }}" alt="zo-th-1" />
                                 </a>
 
                             </li>
@@ -42,9 +38,9 @@
             </div>
             <div class="col-lg-6 col-md-6">
                 <div class="product_d_right">
-                    <form action="#">
-
-                        <h1><a href="#">commodo augue nisi</a></h1>
+                    <form action="/addtocart" method="post">
+                        <input type="hidden" id="productId" name="productId" value="{{product._id}}">
+                        <h1><a href="#">{{product.name}}</a></h1>
                         <div class=" product_ratting">
                             <ul>
                                 <li><a href="#"><i class="icon-star"></i></a></li>
@@ -57,15 +53,12 @@
 
                         </div>
                         <div class="price_box">
-                            <span class="current_price">£70.00</span>
+                            <span class="current_price">{{product.price}}</span>
                             {{!-- <span class="old_price">£80.00</span> --}}
 
                         </div>
                         <div class="product_desc">
-                            <p>eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus
-                                eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non
-                                neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et
-                                placerat vestibulum, metus nisi posuere nisl, in </p>
+                            <p>{{product.description}}</p>
                         </div>
 
                         {{!-- <div class="product_variant color">
@@ -81,7 +74,7 @@
 
                         <div class="product_variant quantity">
                             <label>quantity</label>
-                            <input min="1" max="100" value="1" type="number">
+                            <input min="1" max="100" value="1" type="number" name="qty" id="qty">
                             <button class="button" type="submit">add to cart</button>
 
                         </div>
@@ -94,7 +87,8 @@
                         </div> --}}
 
                         <div class="product_meta">
-                            <span>Category: <a href="#">Clothing</a></span>
+                            <span>Category: <a href="#">{{product.category}}</a></span> <br>
+                            <span>Sub Category: <a href="#">{{product.sub_category}}</a></span>
                         </div>
 
                     </form>
