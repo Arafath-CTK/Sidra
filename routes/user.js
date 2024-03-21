@@ -14,17 +14,17 @@ router.post("/signUp", preventBack, userControllers.signUpPost);
 router.get("/logout", preventBack, userControllers.logout);
 router.get("/forgotPassword", preventBack, userControllers.forgotPasswordPage);
 router.post("/forgotPassword", userControllers.forgotPasswordPost);
-router.post("/verifyOTP", userControllers.verifyOTP);
+router.post("/verifyOTP", preventBack, userControllers.verifyOTP);
 router.post("/resetPassword", userControllers.resetPassword);
 
 router.get("/", preventBack, userControllers.homePage);
 router.get("/myAccount", preventBack, authenticateUser(), userControllers.myAccountPage);
-router.post("/addAddress", preventBack,authenticateUser(), userControllers.addAddress)
+router.post("/addAddress", preventBack, authenticateUser(), userControllers.addAddress)
 
 router.get("/shop", userControllers.shopPage);
 router.get("/singleProduct/:id", userControllers.singleProductPage)
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage)
-router.post("/addtocart", userControllers.addToCart)
+router.post("/addtocart", preventBack, authenticateUser(),userControllers.addToCart)
 router.get("/wishlist")
 
 module.exports = router;

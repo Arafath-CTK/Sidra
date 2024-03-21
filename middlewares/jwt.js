@@ -10,7 +10,7 @@ let signUser = (user) => {
       userEmail: user.email,
       role: "user",
     };
-    jwt.sign(payLoad, jwtKey, { expiresIn: "2h" }, (error, token) => {
+    jwt.sign(payLoad, jwtKey, { expiresIn: "2d" }, (error, token) => {
       if (error) {
         reject(error);
       } else {
@@ -18,7 +18,7 @@ let signUser = (user) => {
       }
     });
   });
-}; 
+};
 
 let verifyUser = (token) => {
   return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ let signAdmin = (admin) => {
       adminEmail: admin.email,
       role: "admin",
     };
-    jwt.sign(payLoad, jwtKey, { expiresIn: "2h" }, (error, token) => {
+    jwt.sign(payLoad, jwtKey, { expiresIn: "1d" }, (error, token) => {
       if (error) {
         reject(error);
       } else {
@@ -74,16 +74,35 @@ let authenticateAdmin = () => async (req, res, next) => {
     const jwtKey = process.env.JWT_KEY;
     const baererToken = req.cookies.adminToken;
     if (!baererToken) {
-      return res.status(401).render("error", {layout: false, errorMessage: "Unauthorized access" });
+      return res
+        .status(401)
+        .render("error", {
+          layout: false,
+          errorMessage: "Unauthorized access",
+        });
     }
     jwt.verify(baererToken, jwtKey, (error, decodedToken) => {
       if (error) {
-        console.error("Unexpected error occured during JWT verification", error);
-        return res.status(403).render("error", {layout: false, errorMessage: "Unexpected error occured during JWT verification due to unauthorized access" });
+        console.error(
+          "Unexpected error occured during JWT verification",
+          error
+        );
+        return res
+          .status(403)
+          .render("error", {
+            layout: false,
+            errorMessage:
+              "Unexpected error occured during JWT verification due to unauthorized access",
+          });
       }
 
       if (decodedToken.role !== "admin") {
-        return res.status(403).render("error", {layout: false, errorMessage: "You are not authorized to access this page"});
+        return res
+          .status(403)
+          .render("error", {
+            layout: false,
+            errorMessage: "You are not authorized to access this page",
+          });
       }
 
       next();
@@ -105,8 +124,13 @@ let authenticateUser = () => async (req, res, next) => {
       //IF IT HAS JWT THEN VERIFY THE CORRECT ROLE AND STATUS
       if (error) {
         //IF UNEXPECTED ERROR
-        console.error("Unexpected error occured while authentication process", error);
-        return res.status(403).send("Unexpected error occured due to unauthorized access");
+        console.error(
+          "Unexpected error occured while authentication process",
+          error
+        );
+        return res
+          .status(403)
+          .send("Unexpected error occured due to unauthorized access");
       }
 
       if (decodedToken.role !== "user") {

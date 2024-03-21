@@ -3,7 +3,6 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
-const product = require("../models/product");
 
 let homePage = async (req, res) => {
   try {
@@ -16,36 +15,53 @@ let homePage = async (req, res) => {
       if (tokenExtracted.role === "user") {
         return res.render("user/home", {
           user: true,
-          plants,
-          containers,
-          supplies,
+          plants: plants.slice(-8).reverse(),
+          containers: containers.slice(-8).reverse(),
+          supplies: supplies.slice(-8).reverse(),
         });
       }
     }
     return res.render("user/home", {
       title: "Sidra | Home",
       user: false,
-      plants,
-      containers,
-      supplies,
+      plants: plants.slice(-8).reverse(),
+      containers: containers.slice(-8).reverse(),
+      supplies: supplies.slice(-8).reverse(),
     });
   } catch (error) {
     res.render("error", { layout: false, errorMessage: error });
   }
 };
 
-let signUpPage = (req, res) => {
-  res.render("user/signUp");
+let signUpPage = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.redirect("/");
+      }
+    }
+    console.log("sign up page rendered successfully");
+    res.status(200).render("user/signUp");
+  } catch (error) {
+    console.error("error getting the signup page");
+    res.status(404).render("error", { layout: false, errorMessage: error });
+  }
 };
 
 let signInPage = async (req, res) => {
-  if (req.cookies.userToken) {
-    let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-    if (tokenExtracted.role === "user") {
-      return res.redirect("/");
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.redirect("/");
+      }
     }
+    res.status(200).render("user/signIn");
+  } catch (error) {
+    console.error("error getting the signin page");
+    res.status(404).render("error", { layout: false, errorMessage: error });
   }
-  res.render("user/signIn");
 };
 
 let myAccountPage = async (req, res) => {

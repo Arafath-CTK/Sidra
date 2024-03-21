@@ -136,18 +136,18 @@
       <div class="col-12">
         <div class="product_header">
           <div class="section_title">
-            <h2>Our Products</h2>
+            <h2>Our Latest Products</h2>
           </div>
           <div class="product_tab_btn">
             <ul class="nav" role="tablist" id="nav-tab">
               <li>
-                <a class="active" data-bs-toggle="tab" href="#plants" role="tab" aria-controls="plant1"
+                <a class="active" data-bs-toggle="tab" href="#plants" role="tab" aria-controls="plants"
                   aria-selected="true">
                   Plants
                 </a>
               </li>
               <li>
-                <a data-bs-toggle="tab" href="#conainers" role="tab" aria-controls="conainers" aria-selected="false">
+                <a data-bs-toggle="tab" href="#pots" role="tab" aria-controls="pots" aria-selected="false">
                   Plant Containers
                 </a>
               </li>
@@ -161,260 +161,137 @@
         </div>
       </div>
     </div>
+
     <div class="tab-content">
 
-      {{#each plants}}
       <div class="tab-pane fade show active" id="plants" role="tabpanel">
-        <div class="row">
-          <div class="product_carousel product_column4 owl-carousel">
-            <div class="col-lg-3">
-              <div class="product_items">
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+        <div class="row row-cols-lg-4 row-cols-md-3"> {{#each plants}}
+          <div class="col">
+            <div class="product_items">
+              <article class="single_product">
+                <figure>
+                  <div class="product_thumb">
+                    <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
+                    <div class="action_links">
+                      <ul>
+                        <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
+                              class="icon-shopping-bag"></i></a></li>
+                        <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
+                              class="icon-heart"></i></a></li>
+                        <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
+                            title="quick view"> <i class="icon-eye"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+                  </div>
+                  <figcaption class="product_content">
+                    <div class="product_rating">
+                      <ul>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-              </div>
+                    <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
+                    <div class="price_box">
+                      <span class="current_price">{{this.price}}</span>
+                      {{!-- <span class="old_price">£74.00</span> --}}
+                    </div>
+                  </figcaption>
+                </figure>
+              </article>
             </div>
           </div>
+          {{/each}}
         </div>
       </div>
-      {{/each}}
 
-
-      {{#each containers}}
-      <div class="tab-pane fade show active" id="conainers" role="tabpanel">
-        <div class="row">
-          <div class="product_carousel product_column4 owl-carousel">
-            <div class="col-lg-3">
-              <div class="product_items">
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+      <div class="tab-pane fade" id="pots" role="tabpanel">
+        <div class="row row-cols-lg-4 row-cols-md-3"> {{#each containers}}
+          <div class="col">
+            <div class="product_items">
+              <article class="single_product">
+                <figure>
+                  <div class="product_thumb">
+                    <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
+                    <div class="action_links">
+                      <ul>
+                        <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
+                              class="icon-shopping-bag"></i></a></li>
+                        <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
+                              class="icon-heart"></i></a></li>
+                        <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
+                            title="quick view"> <i class="icon-eye"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+                  </div>
+                  <figcaption class="product_content">
+                    <div class="product_rating">
+                      <ul>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-              </div>
+                    <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
+                    <div class="price_box">
+                      <span class="current_price">{{this.price}}</span>
+                      {{!-- <span class="old_price">£74.00</span> --}}
+                    </div>
+                  </figcaption>
+                </figure>
+              </article>
             </div>
           </div>
+          {{/each}}
         </div>
       </div>
-      {{/each}}
 
-      {{#each supplies}}
-      <div class="tab-pane fade show active" id="supplies" role="tabpanel">
-        <div class="row">
-          <div class="product_carousel product_column4 owl-carousel">
-            <div class="col-lg-3">
-              <div class="product_items">
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+      <div class="tab-pane fade" id="supplies" role="tabpanel">
+        <div class="row row-cols-lg-4 row-cols-md-3"> {{#each supplies}}
+          <div class="col">
+            <div class="product_items">
+              <article class="single_product">
+                <figure>
+                  <div class="product_thumb">
+                    <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
+                    <div class="action_links">
+                      <ul>
+                        <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
+                              class="icon-shopping-bag"></i></a></li>
+                        <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
+                              class="icon-heart"></i></a></li>
+                        <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
+                            title="quick view"> <i class="icon-eye"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-                <article class="single_product">
-                  <figure>
-                    <div class="product_thumb">
-                      <a class="primary_img" href="#"><img src="{{this.images.[0]}}" alt="" /></a>
-                      <div class="action_links">
-                        <ul>
-                          <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
-                                class="icon-shopping-bag"></i></a></li>
-                          <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                class="icon-heart"></i></a>
-                          </li>
-                          <li class="quick_button"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_box"
-                              title="quick view"> <i class="icon-eye"></i></a></li>
-                        </ul>
-                      </div>
+                  </div>
+                  <figcaption class="product_content">
+                    <div class="product_rating">
+                      <ul>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                      </ul>
                     </div>
-                    <figcaption class="product_content">
-                      <div class="product_rating">
-                        <ul>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                          <li><a href="#"><i class="icon-star"></i></a></li>
-                        </ul>
-                      </div>
-                      <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
-                      <div class="price_box">
-                        <span class="current_price">{{this.price}}</span>
-                        {{!-- <span class="old_price">£74.00</span> --}}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </article>
-
-              </div>
+                    <h4 class="product_name"><a href="product-details.html">{{this.name}}</a></h4>
+                    <div class="price_box">
+                      <span class="current_price">{{this.price}}</span>
+                      {{!-- <span class="old_price">£74.00</span> --}}
+                    </div>
+                  </figcaption>
+                </figure>
+              </article>
             </div>
           </div>
+          {{/each}}
         </div>
       </div>
-      {{/each}}
 
     </div>
   </div>
