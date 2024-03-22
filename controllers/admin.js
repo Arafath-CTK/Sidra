@@ -4,17 +4,32 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
-// const Swal = require("sweetalert2").default;
 
 // Admin signup page
 let signInPage = async (req, res) => {
-  if (req.cookies.adminToken) {
-    let tokenExtracted = await JWT.verifyUser(req.cookies.adminToken);
-    if (tokenExtracted.role === "admin") {
-      return res.redirect("/admin");
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        return res.redirect("/admin");
+      }
     }
+    res.render("admin/signIn", { layout: false });
+  } catch (error) {
+    console.log("Error while rendering the signin page");
+    res.status(404).render("error", { layout: false, errorMessage: error });
   }
-  res.render("admin/signIn", { layout: false });
+};
+
+let signOut = async (req, res) => {
+  try {
+    res.clearCookie("adminToken");
+    console.log("Cookies are cleared and admin logged out");
+    return res.redirect("/admin");
+  } catch (error) {
+    console.log("Error while rendering the signing out");
+    res.status(404).render("error", { layout: false, errorMessage: error });
+  }
 };
 
 let adminHome = async (req, res) => {
@@ -26,6 +41,7 @@ let adminHome = async (req, res) => {
           layout: "adminLayout",
           title: "Sidra Admin | Dashboard",
           adminName: tokenExtracted.adminName,
+          adminMail: tokenExtracted.adminEmail,
         });
       }
     }
@@ -73,17 +89,23 @@ let signInPost = async (req, res) => {
 
 let usersListPage = async (req, res) => {
   try {
-    const users = await User.find();
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        const users = await User.find();
+        users.forEach((user) => {
+          user.isActive = user.status === "Active";
+        });
 
-    users.forEach((user) => {
-      user.isActive = user.status === "Active";
-    });
-
-    res.status(200).render("admin/usersList", {
-      users,
-      layout: "adminLayout",
-      title: "Sidra Admin | Users",
-    });
+        res.status(200).render("admin/usersList", {
+          users,
+          layout: "adminLayout",
+          title: "Sidra Admin | Users",
+          adminName: tokenExtracted.adminName,
+          adminMail: tokenExtracted.adminEmail,
+        });
+      }
+    }
   } catch (error) {
     console.error("Error rendering the users list page", error);
     res
@@ -109,11 +131,18 @@ let userAction = async (req, res) => {
 
 let addProductPage = async (req, res) => {
   try {
-    res.status(200).render("admin/productAdd", {
-      layout: "adminLayout",
-      title: "Sidra Admin | Add Product",
-      pageHeader: "Add New Products",
-    });
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        res.status(200).render("admin/productAdd", {
+          layout: "adminLayout",
+          title: "Sidra Admin | Add Product",
+          pageHeader: "Add New Products",
+          adminName: tokenExtracted.adminName,
+          adminMail: tokenExtracted.adminEmail,
+        });
+      }
+    }
   } catch (error) {
     console.error("Error rendering the Product adding page: ", error);
     res.status(500).render("error", {
@@ -124,43 +153,32 @@ let addProductPage = async (req, res) => {
 
 let addProductPost = async (req, res) => {
   try {
-    let uploaded = await helper.addProductHelper(req.body, req.files);
-
-    if (uploaded.productExist) {
-      console.log("Product already exists");
-      return res.render("admin/productAdd", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Add Product",
-        productAddError: "Product already exists",
-      });
-    } else if (uploaded.success) {
-      console.log("Product added successfully");
-      res.status(200).redirect("/admin/listproduct");
-
-      // const options = {
-      //   title: "Product Added!",
-      //   text: "What would you like to do next?",
-      //   icon: "success",
-      //   showCancelButton: true,
-      //   confirmButtonText: "View Products",
-      //   cancelButtonText: "Add New Product",
-      // };
-
-      // const result = await Swal.fire(options);
-
-      // if (result.isConfirmed) {
-      //   // If user clicks on "View Products" button
-      //   res.redirect("/listProduct");
-      // } else {
-      //   // If user clicks on "Add New Product" button or closes the modal
-      //   res.redirect("/addProduct");
-      // }
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        let uploaded = await helper.addProductHelper(req.body, req.files);
+        if (uploaded.productExist) {
+          console.log("Product already exists"); 
+          return res.render("admin/productAdd", {
+            layout: "adminLayout",
+            title: "Sidra Admin | Add Product",
+            adminName: tokenExtracted.adminName,
+            adminMail: tokenExtracted.adminEmail,
+            productAddError: "Product already exists",
+          });
+        } else if (uploaded.success) {
+          console.log("Product added successfully");
+          res.status(200).redirect("/admin/listproduct");
+        }
+      }
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
     res.status(500).render("admin/productAdd", {
       layout: "adminLayout",
       title: "Sidra Admin | Add Product",
+      adminName: tokenExtracted.adminName,
+      adminMail: tokenExtracted.adminEmail,
       productAddError: "Error submitting the Product",
     });
   }
@@ -168,15 +186,23 @@ let addProductPost = async (req, res) => {
 
 let productListPage = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.status(200).render("admin/productList", {
-      layout: "adminLayout",
-      title: "Sidra Admin | Product List",
-      products,
-    });
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        const products = await Product.find();
+        res.status(200).render("admin/productList", {
+          layout: "adminLayout",
+          title: "Sidra Admin | Product List",
+          adminName: tokenExtracted.adminName,
+          adminMail: tokenExtracted.adminEmail, 
+          products,
+        });
+      }
+    }
   } catch (error) {
     console.error("Error rendering the Product listing page: ", error);
     res.status(500).render("error", {
+      layout: false,
       errorMessage: "Error rendering the Product listing page",
     });
   }
@@ -207,26 +233,33 @@ let editProductPage = async (req, res) => {
     let product = await Product.findById(productId);
 
     if (product) {
-      res.status(200).render("admin/productEdit", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Edit Product",
-        pageHeader: "Edit The Product",
-        productId: product._id,
-        productName: product.name,
-        price: product.price,
-        stock: product.stock,
-        description: product.description,
-        images: product.images,
-        mainCategory: product.category,
-        subCategory: product.sub_category,
-      });
-    } else {
-      res.render("admin/productEdit", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Edit Product",
-        pageHeader: "Edit The Product",
-        productAddError: "Product Doesn't exist",
-      });
+      if (req.cookies.adminToken) {
+        let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+        if (tokenExtracted.role === "admin") {
+          res.status(200).render("admin/productEdit", {
+            layout: "adminLayout",
+            title: "Sidra Admin | Edit Product",
+            adminName: tokenExtracted.adminName,
+            adminMail: tokenExtracted.adminEmail,
+            pageHeader: "Edit The Product",
+            productId: product._id,
+            productName: product.name,
+            price: product.price,
+            stock: product.stock,
+            description: product.description,
+            images: product.images,
+            mainCategory: product.category,
+            subCategory: product.sub_category,
+          });
+        } else {
+          res.render("admin/productEdit", {
+            layout: "adminLayout",
+            title: "Sidra Admin | Edit Product",
+            pageHeader: "Edit The Product",
+            productAddError: "Product Doesn't exist",
+          });
+        }
+      }
     }
   } catch (error) {
     console.error("Error while rendering the product editing page: ", error);
@@ -239,24 +272,29 @@ let editProductPage = async (req, res) => {
 
 let editProductPut = async (req, res) => {
   try {
-    let productId = req.params.id;
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      if (tokenExtracted.role === "admin") {
+        let productId = req.params.id;
 
-    let updated = await helper.editProductHelper(
-      req.body,
-      req.files,
-      productId
-    );
+        let updated = await helper.editProductHelper(
+          req.body,
+          req.files,
+          productId
+        );
 
-    if (updated.productNotExist) {
-      console.log("Product Not exists for updating the data");
-      return res.render("admin/productEdit", {
-        layout: "adminLayout",
-        title: "Sidra Admin | Edit Product",
-        productAddError: "Product not exists for editing",
-      });
-    } else if (updated.success) {
-      console.log("Product updated successfully");
-      res.status(200).json({ success: true });
+        if (updated.productNotExist) {
+          console.log("Product Not exists for updating the data");
+          return res.render("admin/productEdit", {
+            layout: "adminLayout",
+            title: "Sidra Admin | Edit Product",
+            productAddError: "Product not exists for editing",
+          });
+        } else if (updated.success) {
+          console.log("Product updated successfully");
+          res.status(200).json({ success: true });
+        }
+      }
     }
   } catch (error) {
     console.error("Error submitting the Product: ", error);
@@ -268,6 +306,7 @@ let editProductPut = async (req, res) => {
 
 module.exports = {
   signInPage,
+  signOut,
   adminHome,
   signInPost,
   usersListPage,

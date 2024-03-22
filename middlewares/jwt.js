@@ -44,7 +44,7 @@ let signAdmin = (admin) => {
       adminEmail: admin.email,
       role: "admin",
     };
-    jwt.sign(payLoad, jwtKey, { expiresIn: "1d" }, (error, token) => {
+    jwt.sign(payLoad, jwtKey, { expiresIn: "2d" }, (error, token) => {
       if (error) {
         reject(error);
       } else {

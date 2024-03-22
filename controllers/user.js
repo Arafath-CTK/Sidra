@@ -229,10 +229,15 @@ let signInPost = async (req, res) => {
   }
 };
 
-let logout = (req, res) => {
+let logout = async (req, res) => {
+try {
   res.clearCookie("userToken");
   console.log("Cookies are cleared and user logged out");
   return res.redirect("/");
+} catch (error) {
+  console.log("Error while rendering the logging out");
+  res.status(404).render("error", { layout: false, errorMessage: error });
+}
 };
 
 // forgot password

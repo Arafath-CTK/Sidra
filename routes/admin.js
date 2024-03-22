@@ -8,6 +8,7 @@ const { authenticateAdmin } = require('../middlewares/jwt');
 
 router.get("/signIn", preventBack, adminControllers.signInPage);
 router.post("/signIn", adminControllers.signInPost);
+router.get("/signout", preventBack, adminControllers.signOut)
 
 router.get("/", preventBack, adminControllers.adminHome);
 
@@ -16,9 +17,9 @@ router.post("/usersList/:userId/block", authenticateAdmin(), adminControllers.us
 
 router.get("/addProduct", preventBack, authenticateAdmin(), adminControllers.addProductPage)
 router.get("/listProduct", preventBack, authenticateAdmin(), adminControllers.productListPage)
-router.post("/addProduct", authenticateAdmin(), upload.array('image', 3), adminControllers.addProductPost)
+router.post("/addProduct", preventBack, authenticateAdmin(), upload.array('image', 3), adminControllers.addProductPost)
 router.get("/editProduct/:id", preventBack, authenticateAdmin(), adminControllers.editProductPage)
-router.put("/editProduct/:id", authenticateAdmin(), upload.array('image', 3),adminControllers.editProductPut)
-router.delete("/products/:id", authenticateAdmin(), adminControllers.deleteProduct)
+router.put("/editProduct/:id", preventBack, authenticateAdmin(), upload.array('image', 3),adminControllers.editProductPut)
+router.delete("/products/:id", preventBack, authenticateAdmin(), adminControllers.deleteProduct)
 
 module.exports = router;

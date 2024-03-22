@@ -91,11 +91,14 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <table id="myDataTable" class="table align-middle mb-0" style="width: 100%;">
+
+                                        <table id="myDataTable" class="table-auto text-center ms-1 me-1 w-full"
+                                            style="width: 100%;">
                                             <thead>
                                                 <tr>
                                                     <h4><b>Your Products</b></h4>
-                                                    <b><span class="text-danger text-uppercase" id="Errormessage">{{productListError}}</span></b>
+                                                    <b><span class="text-danger text-uppercase"
+                                                            id="Errormessage">{{productListError}}</span></b>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -137,12 +140,19 @@
                                                 {{/each}}
                                             </tbody>
                                         </table>
+
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center">
+                                            </ul>
+                                        </nav>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!-- Row end  -->
