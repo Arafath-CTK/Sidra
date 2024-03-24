@@ -222,7 +222,7 @@ let signInPost = async (req, res) => {
       console.log("User verified and Signed in successfully");
       const token = await JWT.signUser(signedIn.existingUser);
       res.cookie("userToken", token, { htttpOnly: true, maxAge: 7200000 });
-      return res.redirect("/myAccount");
+      return res.redirect("/");
     }
   } catch (error) {
     return res.render("error", { errorMessage: error });
@@ -230,14 +230,14 @@ let signInPost = async (req, res) => {
 };
 
 let logout = async (req, res) => {
-try {
-  res.clearCookie("userToken");
-  console.log("Cookies are cleared and user logged out");
-  return res.redirect("/");
-} catch (error) {
-  console.log("Error while rendering the logging out");
-  res.status(404).render("error", { layout: false, errorMessage: error });
-}
+  try {
+    res.clearCookie("userToken");
+    console.log("Cookies are cleared and user logged out");
+    return res.redirect("/");
+  } catch (error) {
+    console.log("Error while rendering the logging out");
+    res.status(404).render("error", { layout: false, errorMessage: error });
+  }
 };
 
 // forgot password
@@ -335,6 +335,87 @@ let shopPage = async (req, res) => {
   }
 };
 
+let plantsPage = async (req, res) => {
+  try {
+    const plants = await Product.find({ category: "plants" });
+
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.status(200).render("user/shop", {
+          user: true,
+          products: plants,
+        });
+      }
+    }
+    return res.status(200).render("user/shop", {
+      title: "Sidra | Home",
+      user: false,
+      products: plants,
+    });
+  } catch (error) {
+    console.error("Error rendering the plants: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the plants",
+    });
+  }
+};
+
+let containersPage = async (req, res) => {
+  try {
+    const containers = await Product.find({ category: "pots" });
+
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.status(200).render("user/shop", {
+          user: true,
+          products: containers,
+        });
+      }
+    }
+    return res.status(200).render("user/shop", {
+      title: "Sidra | Home",
+      user: false,
+      products: containers,
+    });
+  } catch (error) {
+    console.error("Error rendering the plants: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the plants",
+    });
+  }
+};
+
+let suppliesPage = async (req, res) => {
+  try {
+    const supplies = await Product.find({ category: "supplies" });
+
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      if (tokenExtracted.role === "user") {
+        return res.status(200).render("user/shop", {
+          user: true,
+          products: supplies,
+        });
+      }
+    }
+    return res.status(200).render("user/shop", {
+      title: "Sidra | Home",
+      user: false,
+      products: supplies,
+    });
+  } catch (error) {
+    console.error("Error rendering the plants: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the plants",
+    });
+  }
+};
+
 let singleProductPage = async (req, res) => {
   try {
     const productId = req.params.id;
@@ -418,6 +499,9 @@ module.exports = {
   verifyOTP,
   resetPassword,
   shopPage,
+  plantsPage,
+  containersPage,
+  suppliesPage,
   singleProductPage,
   cartPage,
   addToCart,

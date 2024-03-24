@@ -22,6 +22,9 @@ router.get("/myAccount", preventBack, authenticateUser(), userControllers.myAcco
 router.post("/addAddress", preventBack, authenticateUser(), userControllers.addAddress)
 
 router.get("/shop", userControllers.shopPage);
+router.get("/shop/plants", userControllers.plantsPage);
+router.get("/shop/containers", userControllers.containersPage);
+router.get("/shop/supplies", userControllers.suppliesPage);
 router.get("/singleProduct/:id", userControllers.singleProductPage)
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage)
 router.post("/addtocart", preventBack, authenticateUser(),userControllers.addToCart)

@@ -1,3 +1,15 @@
+// Function to show the spinner and overlay
+function showSpinner() {
+  document.getElementById("spinner").style.display = "block";
+  document.getElementById("spinnerOverlay").style.display = "block";
+}
+
+// Function to hide the spinner and overlay
+function hideSpinner() {
+  document.getElementById("spinner").style.display = "none";
+  document.getElementById("spinnerOverlay").style.display = "none";
+}
+
 async function sendOTP() {
   try {
     const name = document.getElementById("name").value;
@@ -47,12 +59,14 @@ async function sendOTP() {
       document.getElementById("message").innerText =
         "Fill the input fields correctly";
     } else {
+      showSpinner();
       let response = await axios.post("/signUpVerification", { email });
       if (response.data.success) {
         document.getElementById("input-section").style.display = "none";
         document.getElementById("otp-section").style.display = "block";
         document.getElementById("message").innerText = "OTP sent to your email";
       }
+      hideSpinner();
     }
   } catch (error) {
     console.error(error);
@@ -66,6 +80,7 @@ async function verifyOTP() {
     const email = document.getElementById("email").value;
     const otp = document.getElementById("otp").value;
 
+    showSpinner();
     let response = await axios.post("/signUpVerifyOTP", { email, otp });
 
     if (response.data.invalidOTP) {
@@ -88,9 +103,16 @@ async function verifyOTP() {
         password,
       });
       if (userRegistered.data.success) {
-        window.location.href = "/signIn";
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Successfully completed Sign Up, Sign in now!",
+        }).then(() => {
+          window.location.href = "/signIn";
+        });
       }
     }
+    hideSpinner();
   } catch (error) {
     console.error(error);
     document.getElementById("message").innerText =
