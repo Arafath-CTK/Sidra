@@ -8,11 +8,11 @@ const { engine } = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access");
-
+ 
 const app = express();
 
 app.engine( 
-  "hbs",   
+  "hbs",
   engine({
     handlebars: allowInsecurePrototypeAccess(require("handlebars")),
     extname: "hbs",

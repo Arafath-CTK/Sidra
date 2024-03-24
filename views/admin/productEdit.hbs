@@ -1,4 +1,16 @@
 <!-- Body: Body -->
+<!-- Spinner background overlay -->
+<div id="spinnerOverlay"
+  style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
+</div>
+
+<div id="spinner" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
+  class=" text-center mt-3">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
 <div class="body d-flex py-3">
     <div class="container-xxl">
 
@@ -11,7 +23,7 @@
             </div>
         </div> <!-- Row end  -->
 
-        <form id="editProduct" enctype="multipart/form-data" onsubmit="return validateForm()"
+        <form id="editProduct" enctype="multipart/form-data"
             data-product-id="{{ productId }}">
             <div class="row g-3 mb-3">
                 <div class="col-xl-8 col-lg-8">
@@ -130,7 +142,7 @@
                         </div>
 
                         <div class="submit">
-                            <button type="submit"
+                            <button type="button" onclick="validateForm()"
                                 class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Update
                                 Product</button>
                         </div>
@@ -142,5 +154,7 @@
     </div>
 </div>
 
+{{!-- SweetAlert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{!-- Custom JS --}}
 <script src="/admin/scripts/productEdit.js"></script>

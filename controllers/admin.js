@@ -169,7 +169,7 @@ let addProductPost = async (req, res) => {
           });
         } else if (uploaded.success) {
           console.log("Product added successfully");
-          res.status(200).redirect("/admin/listproduct");
+          res.status(200).json({success: true})
         }
       }
     }

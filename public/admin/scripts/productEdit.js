@@ -1,3 +1,15 @@
+// Function to show the spinner and overlay
+function showSpinner() {
+  document.getElementById("spinner").style.display = "block";
+  document.getElementById("spinnerOverlay").style.display = "block";
+}
+
+// Function to hide the spinner and overlay
+function hideSpinner() {
+  document.getElementById("spinner").style.display = "none";
+  document.getElementById("spinnerOverlay").style.display = "none";
+}
+
 function selectCategory(category) {
   var subCategoryDiv = document.getElementById("subCategoryDiv");
   var subCategorySelect = document.getElementById("subCategorySelect");
@@ -74,6 +86,7 @@ function validateForm() {
     return false;
   } else {
     document.getElementById("Errormessage").textContent = "";
+    showSpinner();
 
     const formData = new FormData($("#editProduct")[0]);
     const productId = $("#editProduct").data("product-id");
@@ -82,21 +95,30 @@ function validateForm() {
       method: "PUT",
       body: formData,
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success && data.redirect) {
-          console.log("Product updated successfully client");
-          window.location.href = data.redirect;
+      .then((response) => {
+        if (response.ok) {
+          console.log("Product updated successfully");
+          // Show SweetAlert notification after successful form submission
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Product updated successfully!",
+          }).then(() => {
+            // Redirect to product list page after closing the SweetAlert notification
+            window.location.href = "/admin/listproduct";
+          });
         } else {
           console.error("Failed to update product:", data.message);
           document.getElementById("Errormessage").textContent =
             "Failed to update product. Please try again later.";
         }
+        hideSpinner();
       })
       .catch((error) => {
         console.error("Error submitting the Product: ", error);
         document.getElementById("Errormessage").textContent =
           "Failed to update product. Please try again later.";
+        hideSpinner();
       });
   }
 }
