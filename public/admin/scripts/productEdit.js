@@ -1,18 +1,45 @@
-function selectCategory(main, sub) {
-  document.getElementById("mainCategory").value = main;
-  document.getElementById("subCategory").value = sub;
+function selectCategory(category) {
+  var subCategoryDiv = document.getElementById("subCategoryDiv");
+  var subCategorySelect = document.getElementById("subCategorySelect");
+  subCategorySelect.innerHTML = ""; // Clearing previous options
 
-  // Remove 'active' class from all sub-category links
-  var allSubLinks = document.querySelectorAll(".category-list .sub-category a");
-  allSubLinks.forEach(function (link) {
-    link.classList.remove("active");
-  });
+  if (category === "") {
+    subCategoryDiv.style.display = "none";
+    return;
+  }
 
-  // Add 'active' class to the clicked sub-category link
-  var clickedLink = document.querySelector(
-    '.category-list li[value="' + main + '"] ul li[value="' + sub + '"] a'
-  );
-  clickedLink.classList.add("active");
+  subCategoryDiv.style.display = "block";
+
+  // Add a placeholder option for "Select Subcategory"
+  addOption(subCategorySelect, "", "Select Subcategory");
+  subCategorySelect.selectedIndex = 0; // Select the placeholder option
+
+  switch (category) {
+    case "plants":
+      addOption(subCategorySelect, "indoor", "Indoor");
+      addOption(subCategorySelect, "outdoor", "Outdoor");
+      addOption(subCategorySelect, "flowering", "Flowering");
+      break;
+    case "pots":
+      addOption(subCategorySelect, "clay", "Clay");
+      addOption(subCategorySelect, "plastic", "Plastic");
+      addOption(subCategorySelect, "ceramic", "Ceramic");
+      break;
+    case "supplies":
+      addOption(subCategorySelect, "fertilizers", "Fertilizers And Pesticides");
+      addOption(subCategorySelect, "tools", "Planting Tools");
+      addOption(subCategorySelect, "accessories", "Accessories");
+      break;
+    default:
+      subCategoryDiv.style.display = "none";
+  }
+}
+
+function addOption(select, value, text) {
+  var option = document.createElement("option");
+  option.value = value;
+  option.textContent = text;
+  select.appendChild(option);
 }
 
 // Function to update the value of the hidden input based on the image input
@@ -31,8 +58,8 @@ function validateForm() {
   let price = document.getElementById("price").value.trim();
   let stockQuantity = document.getElementById("stockQuantity").value.trim();
   let description = document.getElementById("description").value.trim();
-  let mainCategory = document.getElementById("mainCategory").value.trim();
-  let subCategory = document.getElementById("subCategory").value.trim();
+  let mainCategory = document.getElementById("categorySelect").value.trim();
+  let subCategory = document.getElementById("subCategorySelect").value.trim();
 
   if (
     productName === "" ||
@@ -57,10 +84,9 @@ function validateForm() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
-          console.log("Product updated successfully");
-          // Redirect to the specified URL
-          window.location.href = "/admin/listProduct";
+        if (data.success && data.redirect) {
+          console.log("Product updated successfully client");
+          window.location.href = data.redirect;
         } else {
           console.error("Failed to update product:", data.message);
           document.getElementById("Errormessage").textContent =

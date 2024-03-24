@@ -96,44 +96,47 @@
                                             style="width: 100%;">
                                             <thead>
                                                 <tr>
-                                                    <h4><b>Your Products</b></h4>
-                                                    <b><span class="text-danger text-uppercase"
-                                                            id="Errormessage">{{productListError}}</span></b>
+                                                    <th colspan="3" style="text-align: center;">
+                                                        <b><span class="text-danger text-uppercase"
+                                                                id="Errormessage">{{productListError}}</span></b>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="text-align: center;">Product</th>
+                                                    <th style="text-align: center;">Details</th>
+                                                    <th style="text-align: center;">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{#each products}}
                                                 <tr class="col-12 g-0">
-                                                    <td class="col-4">
+                                                    <td class="col-4"
+                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <img class="w120 rounded img-fluid mb-2"
                                                             src="{{this.images.[0]}}" alt="" />
-                                                        <div class="ms-2"><b>
-                                                                {{this.name}}
-                                                            </b></div>
+                                                        <div class="ms-2"><b>{{this.name}}</b></div>
                                                     </td>
-                                                    <td class="col-6">
+                                                    <td class="col-6"
+                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <div class="mb-5" style="width: 250px;">
-                                                            <p class="mb-1 mt-2"><b>Description
-                                                                    :</b><br /><span class="text-primary">
-                                                                    {{this.description}}
-                                                                </span></p>
-                                                            <div class="mt-1"><b>Price:
-                                                                    <span class="text-primary">
-                                                                        {{this.price}}
-                                                                    </span></b></div>
+                                                            <p class="mb-1 mt-2"><b>Description :</b><br /><span
+                                                                    class="text-primary">{{this.description}}</span></p>
+                                                            <div class="mt-1"><b>Price: <span
+                                                                        class="text-primary">{{this.price}}</span></b>
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    <td class="col-2">
+                                                    <td class="col-2"
+                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <div class="d-flex">
                                                             <button type="button" class="btn btn-outline-secondary me-2"
-                                                                onclick="editProduct('{{this._id}}')"><i
-                                                                    class="icofont-edit text-success"></i></button>
-
+                                                                onclick="editProduct('{{this._id}}')">
+                                                                <i class="icofont-edit text-success"></i>
+                                                            </button>
                                                             <button type="button" class="btn btn-outline-secondary"
                                                                 onclick="deleteProduct('{{this._id}}')">
                                                                 <i class="icofont-ui-delete text-danger"></i>
                                                             </button>
-
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -141,10 +144,7 @@
                                             </tbody>
                                         </table>
 
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination justify-content-center">
-                                            </ul>
-                                        </nav>
+
 
                                     </div>
                                 </div>

@@ -131,3 +131,14 @@
     </button>
   </div>
 </div>
+
+<script>
+const navLinks = document.querySelectorAll('.m-link');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.forEach(otherLink => otherLink.classList.remove('active'));
+        link.classList.add('active');
+    });
+});
+</script>

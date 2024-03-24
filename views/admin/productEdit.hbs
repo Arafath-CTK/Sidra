@@ -53,8 +53,10 @@
                                 <div class="card-body">
                                     <div class="row col-12 g-1 align-items-center">
                                         {{#each images}}
-                                        <div style="display: flex; flex-direction: column; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                                            <img src="{{this}}" alt="Product Image" style="max-height: 200px; max-width: 200px;"><br>
+                                        <div
+                                            style="display: flex; flex-direction: column; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                                            <img src="{{this}}" alt="Product Image"
+                                                style="max-height: 200px; max-width: 200px;"><br>
                                             <input type="file" name="image"><br>
                                         </div>
                                         {{/each}}
@@ -66,73 +68,67 @@
                 </div>
                 <div class="col-xl-4 col-lg-4">
                     <div class="sticky-lg-top mb-4">
-                        <input type="hidden" id="mainCategory" value="{{mainCategory}}" name="mainCategory">
-                        <input type="hidden" id="subCategory" value="{{subCategory}}" name="subCategory">
+
+                        {{!-- <input type="hidden" id="mainCategory" value="{{mainCategory}}" name="mainCategory">
+                        <input type="hidden" id="subCategory" value="{{subCategory}}" name="subCategory"> --}}
+
+                        <script>
+                            window.onload = function () {
+                                const mainCategory = '{{mainCategory}}'; // Access mainCategory from context
+                                const selectElement = document.getElementById('categorySelect');
+
+                                // Find the option with a matching value
+                                const matchingOption = selectElement.querySelector(`option[value="${mainCategory}"]`);
+
+                                if (matchingOption) {
+                                    matchingOption.selected = true;
+                                }
+
+                                selectCategory(mainCategory);
+
+                                const subCategory = '{{subCategory}}';
+                                const subCategorySelect = document.getElementById('subCategorySelect');
+                                const matchingSubCategoryOption = subCategorySelect.querySelector(`option[value="${subCategory}"]`);
+
+                                if (matchingSubCategoryOption) {
+                                    matchingSubCategoryOption.selected = true;
+                                }
+                            }
+                        </script>
 
                         <!-- Your collapsible category list -->
-                        <div class="card mb-3">
-                            <div class="categories">
-                                <div class="filter-title">
-                                    <a class="title" data-bs-toggle="collapse" href="#category" role="button"
-                                        aria-expanded="true">Category</a>
+                        <div class="card mb-3"
+                            style="border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <div class="categories" style="padding: 20px;">
+                                <div class="title" style="margin-bottom: 12px;">
+                                    <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: bold;">Category
+                                    </h4>
                                 </div>
-                                <div class="collapse show" id="category">
+                                <div class="filter-category">
+                                    <select id="categorySelect" name="mainCategory"
+                                        onchange="selectCategory(this.value)"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; background-color: #f9f9f9; font-size: 14px; color: #666;">
+                                        <option value="">Select Category</option>
+                                        <option value="plants">Plants</option>
+                                        <option value="pots">Planters and Pots</option>
+                                        <option value="supplies">Gardening Supplies</option>
+                                    </select>
+                                </div>
+                                <div id="subCategoryDiv" style="display:none; margin-top: 20px;">
+                                    <div class="title" style="margin-bottom: 12px;">
+                                        <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: bold;">
+                                            Subcategory</h4>
+                                    </div>
                                     <div class="filter-category">
-                                        <ul class="category-list">
-                                            <li value="plants">
-                                                <a href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                                    aria-expanded="false" class="collapsed">Plants</a>
-                                                <ul id="collapseOne" class="sub-category collapse"
-                                                    data-parent="#category">
-                                                    <li value="indoor"><a
-                                                            onclick="selectCategory('plants', 'indoor')">Indoor</a></li>
-                                                    <li value="outdoor"><a
-                                                            onclick="selectCategory('plants', 'outdoor')">Outdoor</a>
-                                                    </li>
-                                                    <li value="flowering"><a
-                                                            onclick="selectCategory('plants', 'flowering')">Flowering</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li value="pots">
-                                                <a class="collapsed" href="#" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseTwo">Planters
-                                                    And Pots</a>
-                                                <ul id="collapseTwo" class="sub-category collapse"
-                                                    data-parent="#category">
-                                                    <li value="clay"><a
-                                                            onclick="selectCategory('pots', 'clay')">Clay</a></li>
-                                                    <li value="plastic"><a
-                                                            onclick="selectCategory('pots', 'plastic')">Plastic</a></li>
-                                                    <li value="ceramic"><a
-                                                            onclick="selectCategory('pots', 'ceramic')">Ceramic</a></li>
-                                                </ul>
-                                            </li>
-                                            <li value="supplies">
-                                                <a class="collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseThree">Gardening
-                                                    Supplies</a>
-                                                <ul id="collapseThree" class="sub-category collapse"
-                                                    data-parent="#category">
-                                                    <li value="fertilizers"><a
-                                                            onclick="selectCategory('supplies', 'fertilizers')">Fertilizers
-                                                            And
-                                                            Pesticides</a>
-                                                    </li>
-                                                    <li value="tools"><a
-                                                            onclick="selectCategory('supplies', 'tools')">Planting
-                                                            Tools</a>
-                                                    </li>
-                                                    <li value="accessories"><a
-                                                            onclick="selectCategory('supplies', 'accessories')">Accessories</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
+                                        <select id="subCategorySelect" name="subCategory"
+                                            onchange="selectSubCategory(this.value)"
+                                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; background-color: #f9f9f9; font-size: 14px; color: #666;">
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="submit">
                             <button type="submit"
                                 class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Update

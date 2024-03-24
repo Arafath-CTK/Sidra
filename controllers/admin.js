@@ -108,9 +108,10 @@ let usersListPage = async (req, res) => {
     }
   } catch (error) {
     console.error("Error rendering the users list page", error);
-    res
-      .status(500)
-      .render("error", { errorMessage: "Error rendering the users list" });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the users list",
+    });
   }
 };
 
@@ -158,7 +159,7 @@ let addProductPost = async (req, res) => {
       if (tokenExtracted.role === "admin") {
         let uploaded = await helper.addProductHelper(req.body, req.files);
         if (uploaded.productExist) {
-          console.log("Product already exists"); 
+          console.log("Product already exists");
           return res.render("admin/productAdd", {
             layout: "adminLayout",
             title: "Sidra Admin | Add Product",
@@ -194,7 +195,7 @@ let productListPage = async (req, res) => {
           layout: "adminLayout",
           title: "Sidra Admin | Product List",
           adminName: tokenExtracted.adminName,
-          adminMail: tokenExtracted.adminEmail, 
+          adminMail: tokenExtracted.adminEmail,
           products,
         });
       }
@@ -263,10 +264,13 @@ let editProductPage = async (req, res) => {
     }
   } catch (error) {
     console.error("Error while rendering the product editing page: ", error);
-    res.status(500).render("error", {
-      errorMessage: "Error while rendering the product editing page: ",
-      error,
-    });
+    res
+      .status(500)
+      .render("error", {
+        layout: false,
+        errorMessage: "Error while rendering the product editing page: ",
+        error,
+      });
   }
 };
 

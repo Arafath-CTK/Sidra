@@ -107,8 +107,6 @@
         </div>
         <div class="col-xl-4 col-lg-4">
           <div class="sticky-lg-top mb-4">
-            <input type="hidden" id="mainCategory" name="mainCategory">
-            <input type="hidden" id="subCategory" name="subCategory">
 
             <!-- Your collapsible category list -->
             <div class="card mb-3"
@@ -118,7 +116,7 @@
                   <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: bold;">Category</h4>
                 </div>
                 <div class="filter-category">
-                  <select id="categorySelect" onchange="selectCategory(this.value)"
+                  <select id="categorySelect" name="mainCategory" onchange="selectCategory(this.value)"
                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; background-color: #f9f9f9; font-size: 14px; color: #666;">
                     <option value="">Select Category</option>
                     <option value="plants">Plants</option>
@@ -131,7 +129,7 @@
                     <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: bold;">Subcategory</h4>
                   </div>
                   <div class="filter-category">
-                    <select id="subCategorySelect" onchange="selectSubCategory(this.value)"
+                    <select id="subCategorySelect" name="subCategory" onchange="selectSubCategory(this.value)"
                       style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; background-color: #f9f9f9; font-size: 14px; color: #666;">
                     </select>
                   </div>

@@ -11,8 +11,8 @@ const {
 
 const app = express();
 
-app.engine(
-  "hbs",
+app.engine( 
+  "hbs",   
   engine({
     handlebars: allowInsecurePrototypeAccess(require("handlebars")),
     extname: "hbs",
