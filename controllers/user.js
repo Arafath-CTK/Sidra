@@ -15,6 +15,7 @@ let homePage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       if (tokenExtracted.role === "user") {
         return res.render("user/home", {
+          title: "Sidra | Home",
           user: true,
           plants: plants.slice(-8).reverse(),
           containers: containers.slice(-8).reverse(),
@@ -43,7 +44,7 @@ let signUpPage = async (req, res) => {
       }
     }
     console.log("sign up page rendered successfully");
-    res.status(200).render("user/signUp");
+    res.status(200).render("user/signUp", { title: "Sidra | SignUp" });
   } catch (error) {
     console.error("error getting the signup page");
     res.status(404).render("error", { layout: false, errorMessage: error });
@@ -58,7 +59,7 @@ let signInPage = async (req, res) => {
         return res.redirect("/");
       }
     }
-    res.status(200).render("user/signIn");
+    res.status(200).render("user/signIn", { title: "Sidra | SignIn" });
   } catch (error) {
     console.error("error getting the signin page");
     res.status(404).render("error", { layout: false, errorMessage: error });
@@ -72,6 +73,7 @@ let signUpVerification = async (req, res) => {
     if (emailExistance.emailExist) {
       console.log("The entered email already exists");
       res.status(200).render("user/signUp", {
+        title: "Sidra | SignUp",
         emailError: "Email already exists",
         enteredName: req.body.name,
         enteredEmail: req.body.email,
@@ -142,6 +144,7 @@ let signInPost = async (req, res) => {
     if (signedIn.invalidEmail) {
       console.log("invalid email id");
       return res.render("user/signIn", {
+        title: "Sidra | SignIn",
         emailError: "Invalid email id",
         email: req.body.email,
         password: req.body.password,
@@ -149,6 +152,7 @@ let signInPost = async (req, res) => {
     } else if (signedIn.passwordNotMatching) {
       console.log("Incorrect Password");
       return res.render("user/signIn", {
+        title: "Sidra | SignIn",
         passwordError: "Incorrect Password",
         email: req.body.email,
         password: req.body.password,
@@ -156,6 +160,7 @@ let signInPost = async (req, res) => {
     } else if (signedIn.blockedUser) {
       console.log("The user is blocked");
       return res.render("user/signIn", {
+        title: "Sidra | SignIn",
         emailError:
           "Access Denied: Your account has been temporarily suspended",
         email: req.body.email,
@@ -184,7 +189,7 @@ let logout = async (req, res) => {
 };
 
 let forgotPasswordPage = (req, res) => {
-  res.render("user/forgotPassword");
+  res.render("user/forgotPassword", { title: "Sidra | Forgot Password" });
 };
 
 let forgotPasswordPost = async (req, res) => {
@@ -267,20 +272,21 @@ let resetPassword = async (req, res) => {
 let myAccountPage = async (req, res) => {
   try {
     if (!req.cookies.userToken) {
-      return res.render("user/signIn");
+      return res.render("user/signIn", { title: "Sidra | SignIn" });
     }
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       role = tokenExtracted.role;
       email = tokenExtracted.userEmail;
       if (role !== "user") {
-        return res.render("user/signIn");
+        return res.render("user/signIn", { title: "Sidra | SignIn" });
       }
       let userData = await User.findOne({ email: email });
       let year = userData.register_date.split("/")[2];
       let addresses = userData.addresses;
 
       return res.status(200).render("user/myAccount", {
+        title: "Sidra | My Account",
         user: true,
         userName: userData.name,
         userPhone_number: userData.phone_number,
@@ -391,7 +397,9 @@ let deleteAddress = async (req, res) => {
 let shopPage = async (req, res) => {
   try {
     let products = await Product.find();
-    res.status(200).render("user/shop", { user: true, products });
+    res
+      .status(200)
+      .render("user/shop", { title: "Sidra | Shop", user: true, products });
   } catch (error) {
     console.error("Error rendering the Shop page: ", error);
     res.status(500).render("error", {
@@ -409,13 +417,14 @@ let plantsPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       if (tokenExtracted.role === "user") {
         return res.status(200).render("user/shop", {
+          title: "Sidra | Shop",
           user: true,
           products: plants,
         });
       }
     }
     return res.status(200).render("user/shop", {
-      title: "Sidra | Home",
+      title: "Sidra | Shop",
       user: false,
       products: plants,
     });
@@ -436,13 +445,14 @@ let containersPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       if (tokenExtracted.role === "user") {
         return res.status(200).render("user/shop", {
+          title: "Sidra | Shop",
           user: true,
           products: containers,
         });
       }
     }
     return res.status(200).render("user/shop", {
-      title: "Sidra | Home",
+      title: "Sidra | Shop",
       user: false,
       products: containers,
     });
@@ -463,13 +473,14 @@ let suppliesPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       if (tokenExtracted.role === "user") {
         return res.status(200).render("user/shop", {
+          title: "Sidra | Shop", 
           user: true,
           products: supplies,
         });
       }
     }
     return res.status(200).render("user/shop", {
-      title: "Sidra | Home",
+      title: "Sidra | Shop",
       user: false,
       products: supplies,
     });
@@ -486,7 +497,7 @@ let singleProductPage = async (req, res) => {
   try {
     const productId = req.params.id;
     let product = await Product.findById(productId);
-    res.status(200).render("user/singleProduct", { user: true, product });
+    res.status(200).render("user/singleProduct", {  title: "Sidra | Product", user: true, product });
   } catch (error) {
     console.error("Error rendering the product page: ", error);
     res.status(500).render("error", {
@@ -505,7 +516,7 @@ let cartPage = async (req, res) => {
       let userData = await User.findById(userId);
       let products = userData.cart;
 
-      res.status(200).render("user/cart", { user: true, products });
+      res.status(200).render("user/cart", {  title: "Sidra | Cart", user: true, products });
     } else {
       console.log("failed");
     }
