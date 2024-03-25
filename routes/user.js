@@ -30,7 +30,9 @@ router.get("/shop/containers", userControllers.containersPage);
 router.get("/shop/supplies", userControllers.suppliesPage);
 router.get("/singleProduct/:id", userControllers.singleProductPage)
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage)
-router.post("/addtocart", preventBack, authenticateUser(),userControllers.addToCart)
-router.get("/wishlist")
+router.post("/addtocart", preventBack, authenticateUser(), userControllers.addToCart)
+router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
+router.post("/addtowishlist/:id", authenticateUser(), userControllers.addToWishlist)
+router.delete("/removeFromWishlist/:id", authenticateUser(), userControllers.removeFromWishlist)
 
 module.exports = router;

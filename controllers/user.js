@@ -473,7 +473,7 @@ let suppliesPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       if (tokenExtracted.role === "user") {
         return res.status(200).render("user/shop", {
-          title: "Sidra | Shop", 
+          title: "Sidra | Shop",
           user: true,
           products: supplies,
         });
@@ -497,7 +497,11 @@ let singleProductPage = async (req, res) => {
   try {
     const productId = req.params.id;
     let product = await Product.findById(productId);
-    res.status(200).render("user/singleProduct", {  title: "Sidra | Product", user: true, product });
+    res.status(200).render("user/singleProduct", {
+      title: "Sidra | Product",
+      user: true,
+      product,
+    });
   } catch (error) {
     console.error("Error rendering the product page: ", error);
     res.status(500).render("error", {
@@ -516,7 +520,9 @@ let cartPage = async (req, res) => {
       let userData = await User.findById(userId);
       let products = userData.cart;
 
-      res.status(200).render("user/cart", {  title: "Sidra | Cart", user: true, products });
+      res
+        .status(200)
+        .render("user/cart", { title: "Sidra | Cart", user: true, products });
     } else {
       console.log("failed");
     }
@@ -560,6 +566,77 @@ let addToCart = async (req, res) => {
   }
 };
 
+let wishlistPage = async (req, res) => {
+  try {
+    if (req.user.role === "user") {
+      let userId = req.user.id;
+
+      let user = await User.findById(userId);
+      let wishlist = user.wishlist;
+
+      res.status(200).render("user/wishlist", {
+        user: true,
+        title: "Sidra | Wishlist",
+        wishlist,
+      });
+    } else {
+      res.status(302).redirect("/signIn");
+    }
+  } catch (error) {
+    console.error("Error rendering wishlist: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering wishlist",
+    });
+  }
+};
+
+let addToWishlist = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const productId = req.params.id;
+
+    let addedProduct = await helper.addToWishlistHelper(userId, productId);
+
+    if (addedProduct.productExist) {
+      console.log("Product already exists in wishlist");
+      return res.status(200).json({ productExist: true });
+    } else if (addedProduct.success) {
+      console.log("Product added to wishlist successfully");
+      return res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error adding product to wishlist: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error adding product to wishlist",
+    });
+  }
+};
+
+let removeFromWishlist = async (req, res) => {
+  try {
+    let userId = req.user.id;
+    let productId = req.params.id;
+
+    const deleted = await helper.removeFromWishlistHelper(userId, productId);
+    if (deleted.userNotExist) {
+      return res.status(200).json({ userNotExist: true });
+    } else {
+      return res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error(
+      "Error occured while removing the product from wishlist: ",
+      error
+    );
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error occured while removing the product from wishlist",
+    });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -583,6 +660,9 @@ module.exports = {
   containersPage,
   suppliesPage,
   singleProductPage,
+  wishlistPage,
+  addToWishlist,
+  removeFromWishlist,
   cartPage,
   addToCart,
 };

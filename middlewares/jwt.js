@@ -118,6 +118,7 @@ let authenticateUser = () => async (req, res, next) => {
     const jwtKey = process.env.JWT_KEY;
     const baererToken = req.cookies.userToken;
     if (!baererToken) {
+      console.log("no beaerera");
       return res.redirect("/signIn");
     }
 
@@ -129,9 +130,7 @@ let authenticateUser = () => async (req, res, next) => {
           "Unexpected error occured while authentication process",
           error
         );
-        return res
-          .status(403)
-          .send("Unexpected error occured due to unauthorized access");
+        return res.redirect("/signIn");
       }
 
       if (decodedToken.role !== "user") {

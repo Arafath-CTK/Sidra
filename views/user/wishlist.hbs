@@ -1,0 +1,40 @@
+<!--wishlist area start -->
+<div class="wishlist_area mt-100">
+  <div class="container">
+    <form>
+      <div class="row">
+        <div class="col-12">
+          <div class="table_desc wishlist">
+            <div class="cart_page table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="product_thumb">Image</th>
+                    <th class="product_name">Product</th>
+                    <th class="product-price">Price</th>
+                    <th class="product_remove">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each wishlist}}
+                  <tr>
+                    <td class="product_thumb">
+                      <a href="/singleProduct/{{this.product_id}}"><img src="{{this.image}}" alt="" /></a>
+                    </td>
+                    <td class="product_name">
+                      <a href="/singleProduct/{{this.product_id}}">{{this.name}}</a>
+                    </td>
+                    <td class="product-price">{{this.price}}</td>
+                    <td class="product_remove"><a onclick="removeFromWishlist(`{{this.product_id}}`)">X</a></td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!--wishlist area end -->

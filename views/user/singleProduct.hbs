@@ -40,7 +40,15 @@
                 <div class="product_d_right">
                     <form action="/addtocart" method="post">
                         <input type="hidden" id="productId" name="productId" value="{{product._id}}">
-                        <h1><a href="#">{{product.name}}</a></h1>
+                        <div style="display:flex; justify-content:space-between">
+                            <h1>{{product.name}}</h1>
+                            <h1 id="addWishlist" style="display:block; font-size: 25px; margin-right:10%"><a><i
+                                        onclick="addToWishlist(`{{product._id}}`)" class="fa-regular fa-heart"></i></a>
+                            </h1>
+                            <h1 id="removeWishlist" style="display:none; font-size: 25px; margin-right:10%"><a><i
+                                        onclick="removeFromWishlist(`{{product._id}}`)" class="fa-solid fa-heart"
+                                        style="color: #79a206;"></i></a></h1>
+                        </div>
                         <div class=" product_ratting">
                             <ul>
                                 <li><a href="#"><i class="icon-star"></i></a></li>
@@ -76,7 +84,6 @@
                             <label>quantity</label>
                             <input min="1" max="100" value="1" type="number" name="qty" id="qty">
                             <button class="button" type="submit">add to cart</button>
-
                         </div>
 
                         {{!-- <div class=" product_d_action">
@@ -90,7 +97,6 @@
                             <span>Category: <a href="#">{{product.category}}</a></span> <br>
                             <span>Sub Category: <a href="#">{{product.sub_category}}</a></span>
                         </div>
-
                     </form>
 
                 </div>
@@ -778,3 +784,5 @@
     </div>
 </section>
 <!--product area end--> --}}
+
+<script src="/user/scripts/singleProduct.js"></script>

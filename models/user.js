@@ -20,7 +20,14 @@ const userSchema = new mongoose.Schema(
         phone_number: String,
       },
     ],
-    // wishlist: { type: Array },
+    wishlist: [
+      {
+        product_id: String,
+        name: String,
+        image: String,
+        price: Number,
+      },
+    ],
     cart: [
       {
         product_id: String,

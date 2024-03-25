@@ -281,6 +281,57 @@ let addToCartHelper = async (productData, userId) => {
   });
 };
 
+let addToWishlistHelper = async (userId, productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let product = await Product.findById(productId);
+      let user = await User.findById(userId);
+
+      let existingProduct = user.wishlist.find(
+        (item) => item.product_id === productId
+      );
+
+      if (existingProduct) {
+        resolve({ productExist: true });
+      } else {
+        const newProduct = {
+          product_id: productId,
+          name: product.name,
+          price: product.price,
+          image: product.images[0],
+        };
+
+        user.wishlist.push(newProduct);
+        await user.save();
+
+        console.log("Product added to wishlist successfully");
+        resolve({ success: true });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let removeFromWishlistHelper = async (userId, productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await User.findByIdAndUpdate(userId, {
+        $pull: { wishlist: { product_id: productId } },
+      });
+
+      if (!user) {
+        resolve({ success: false, userNotExist: true });
+      }
+
+      console.log("Product removed from wishlist");
+      resolve({ success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   signUpHelper,
   signInHelper,
@@ -290,4 +341,6 @@ module.exports = {
   editAddressHelper,
   deleteAddressHelper,
   addToCartHelper,
+  addToWishlistHelper,
+  removeFromWishlistHelper,
 };
