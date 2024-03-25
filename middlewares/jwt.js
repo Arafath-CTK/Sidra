@@ -74,12 +74,10 @@ let authenticateAdmin = () => async (req, res, next) => {
     const jwtKey = process.env.JWT_KEY;
     const baererToken = req.cookies.adminToken;
     if (!baererToken) {
-      return res
-        .status(401)
-        .render("error", {
-          layout: false,
-          errorMessage: "Unauthorized access",
-        });
+      return res.status(401).render("error", {
+        layout: false,
+        errorMessage: "Unauthorized access",
+      });
     }
     jwt.verify(baererToken, jwtKey, (error, decodedToken) => {
       if (error) {
@@ -87,23 +85,26 @@ let authenticateAdmin = () => async (req, res, next) => {
           "Unexpected error occured during JWT verification",
           error
         );
-        return res
-          .status(403)
-          .render("error", {
-            layout: false,
-            errorMessage:
-              "Unexpected error occured during JWT verification due to unauthorized access",
-          });
+        return res.status(403).render("error", {
+          layout: false,
+          errorMessage:
+            "Unexpected error occured during JWT verification due to unauthorized access",
+        });
       }
 
       if (decodedToken.role !== "admin") {
-        return res
-          .status(403)
-          .render("error", {
-            layout: false,
-            errorMessage: "You are not authorized to access this page",
-          });
+        return res.status(403).render("error", {
+          layout: false,
+          errorMessage: "You are not authorized to access this page",
+        });
       }
+
+      req.admin = {
+        id: decodedToken.adminId,
+        name: decodedToken.adminName,
+        email: decodedToken.adminEmail,
+        role: decodedToken.role,
+      };
 
       next();
     });
@@ -139,6 +140,15 @@ let authenticateUser = () => async (req, res, next) => {
       }
 
       console.log("user role matched");
+
+      // Set req.user with decoded token information
+      req.user = {
+        id: decodedToken.userId,
+        name: decodedToken.userName,
+        email: decodedToken.userEmail,
+        role: decodedToken.role,
+      };
+
       next();
     });
   } catch (error) {

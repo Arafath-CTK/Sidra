@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { use } = require("../routes/user");
+const user = require("../models/user");
 require("dotenv").config();
 
 function signUpVerificationHelper(email) {
@@ -21,7 +22,6 @@ function signUpVerificationHelper(email) {
   });
 }
 
-// user signup helper
 function signUpHelper(userData) {
   let { name, email, phoneNumber, password } = userData;
   return new Promise(async (resolve, reject) => {
@@ -168,6 +168,81 @@ let addAddressHelper = async (address, userId) => {
   });
 };
 
+let editAddressHelper = async (address, userId, addressId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { name, house, street, city, state, pin, phone, addressType } =
+        address;
+
+      // Check if the edited address already exists in the database
+      const existingAddress = await User.findOne({
+        _id: userId,
+        addresses: {
+          $elemMatch: {
+            _id: { $ne: addressId }, // Exclude the current address being edited
+            house_name: house,
+            street: street,
+            city: city,
+            state: state,
+            pin_code: pin,
+            phone_number: phone,
+            address_type: addressType,
+          },
+        },
+      });
+
+      if (existingAddress) {
+        resolve({ addressExist: true });
+      }
+
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId, "addresses._id": addressId },
+        {
+          $set: {
+            "addresses.$.name": name,
+            "addresses.$.house_name": house,
+            "addresses.$.street": street,
+            "addresses.$.city": city,
+            "addresses.$.state": state,
+            "addresses.$.pin_code": pin,
+            "addresses.$.phone_number": phone,
+            "addresses.$.address_type": addressType,
+          },
+        },
+        { new: true }
+      );
+
+      // Check if the user was found and updated
+      if (!updatedUser) {
+        return reject("User or address not found");
+      }
+
+      resolve({ success: true, updatedUser });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let deleteAddressHelper = async (addressId, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await User.findByIdAndUpdate(userId, {
+        $pull: { addresses: { _id: addressId } },
+      });
+
+      if (!user) {
+        return resolve({ success: false, userNotExist: true });
+      }
+
+      console.log("Address deleted successfully");
+      resolve({ success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 let addToCartHelper = async (productData, userId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -212,5 +287,7 @@ module.exports = {
   generateAndSendOTP,
   signUpVerificationHelper,
   addAddressHelper,
+  editAddressHelper,
+  deleteAddressHelper,
   addToCartHelper,
 };

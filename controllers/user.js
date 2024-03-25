@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
+const { use } = require("../routes/user");
 
 let homePage = async (req, res) => {
   try {
@@ -61,64 +62,6 @@ let signInPage = async (req, res) => {
   } catch (error) {
     console.error("error getting the signin page");
     res.status(404).render("error", { layout: false, errorMessage: error });
-  }
-};
-
-let myAccountPage = async (req, res) => {
-  try {
-    if (!req.cookies.userToken) {
-      return res.render("user/signIn");
-    }
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      role = tokenExtracted.role;
-      email = tokenExtracted.userEmail;
-      if (role !== "user") {
-        return res.render("user/signIn");
-      }
-      let userData = await User.findOne({ email: email });
-      let year = userData.register_date.split("/")[2];
-      let addresses = userData.addresses;
-
-      return res.status(200).render("user/myAccount", {
-        user: true,
-        userName: userData.name,
-        userPhone_number: userData.phone_number,
-        userEmail: userData.email,
-        memberSince: year,
-        addresses,
-      });
-    }
-  } catch (error) {
-    console.error("Unexpected error occured due to: ", error);
-    return res
-      .status(404)
-      .render("error", { layout: false, errorMessage: error });
-  }
-};
-
-let addAddress = async (req, res) => {
-  try {
-    console.log("address adding started");
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      let userId = tokenExtracted.userId;
-      let addedAddress = await helper.addAddressHelper(req.body, userId);
-
-      if (addedAddress.addressExist) {
-        console.log("address already exists");
-        return res.status(409).json({ addressExist: true });
-      } else if (addedAddress.success) {
-        console.log("address added successfully");
-        return res.status(200).json({ success: true });
-      }
-    }
-  } catch (error) {
-    console.error("Error while adding the error");
-    res.status(500).render("error", {
-      layout: false,
-      errorMessage: `internal server error: ${error}`,
-    });
   }
 };
 
@@ -240,7 +183,6 @@ let logout = async (req, res) => {
   }
 };
 
-// forgot password
 let forgotPasswordPage = (req, res) => {
   res.render("user/forgotPassword");
 };
@@ -318,6 +260,130 @@ let resetPassword = async (req, res) => {
     res.status(500).render("error", {
       layout: false,
       errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
+let myAccountPage = async (req, res) => {
+  try {
+    if (!req.cookies.userToken) {
+      return res.render("user/signIn");
+    }
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      role = tokenExtracted.role;
+      email = tokenExtracted.userEmail;
+      if (role !== "user") {
+        return res.render("user/signIn");
+      }
+      let userData = await User.findOne({ email: email });
+      let year = userData.register_date.split("/")[2];
+      let addresses = userData.addresses;
+
+      return res.status(200).render("user/myAccount", {
+        user: true,
+        userName: userData.name,
+        userPhone_number: userData.phone_number,
+        userEmail: userData.email,
+        memberSince: year,
+        addresses,
+      });
+    }
+  } catch (error) {
+    console.error("Unexpected error occured due to: ", error);
+    return res
+      .status(404)
+      .render("error", { layout: false, errorMessage: error });
+  }
+};
+
+let addAddress = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      let addedAddress = await helper.addAddressHelper(req.body, userId);
+
+      if (addedAddress.addressExist) {
+        console.log("address already exists");
+        return res.status(409).json({ addressExist: true });
+      } else if (addedAddress.success) {
+        console.log("address added successfully");
+        return res.status(200).json({ success: true });
+      }
+    }
+  } catch (error) {
+    console.error("Error while adding the error");
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
+let editAddressPage = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const addressId = req.params.id;
+
+    const user = await User.findById(userId);
+    const address = user.addresses.find((addr) => addr._id == addressId);
+
+    res.status(200).json(address);
+  } catch (error) {
+    console.error("Error occured while getting the address: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error occured while getting the address",
+    });
+  }
+};
+
+let editAddressPut = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const addressId = req.params.id;
+
+    let editedAddress = await helper.editAddressHelper(
+      req.body,
+      userId,
+      addressId
+    );
+
+    if (editedAddress.addressExist) {
+      console.log("address already exists");
+      return res.status(409).json({ addressExist: true });
+    } else if (editedAddress.success) {
+      console.log("address added successfully");
+      return res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error occured while editing the address: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error occured while editing the address",
+    });
+  }
+};
+
+let deleteAddress = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      const addressId = req.params.id;
+      const deleted = await helper.deleteAddressHelper(addressId, userId);
+      if (deleted.userNotExist) {
+        return res.status(409).json({ userNotExist: true });
+      } else {
+        return res.status(200).json({ success: true });
+      }
+    }
+  } catch (error) {
+    console.error("Error occured while deleting the address: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error occured while deleting the address",
     });
   }
 };
@@ -489,6 +555,9 @@ module.exports = {
   signInPage,
   myAccountPage,
   addAddress,
+  editAddressPage,
+  editAddressPut,
+  deleteAddress,
   signUpVerification,
   signUpVerifyOTP,
   signUpPost,

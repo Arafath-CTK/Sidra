@@ -19,7 +19,10 @@ router.post("/resetPassword", userControllers.resetPassword);
 
 router.get("/", preventBack, userControllers.homePage);
 router.get("/myAccount", preventBack, authenticateUser(), userControllers.myAccountPage);
-router.post("/addAddress", preventBack, authenticateUser(), userControllers.addAddress)
+router.post("/address", preventBack, authenticateUser(), userControllers.addAddress);
+router.get("/address/:id", preventBack, authenticateUser(), userControllers.editAddressPage)
+router.put("/address/:id", preventBack, authenticateUser(), userControllers.editAddressPut)
+router.delete("/address/:id", preventBack, authenticateUser(), userControllers.deleteAddress);
 
 router.get("/shop", userControllers.shopPage);
 router.get("/shop/plants", userControllers.plantsPage);

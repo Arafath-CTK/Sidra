@@ -1,4 +1,17 @@
 <!-- my account start  -->
+<!-- Spinner background overlay -->
+<div id="spinnerOverlay"
+    style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
+</div>
+
+<div id="spinner"
+    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
+    class=" text-center mt-3">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <section class="main_content_area">
     <div class="container">
         <div class="account_dashboard">
@@ -120,7 +133,7 @@
                             <button
                                 style="margin-bottom: 10px; font-size: 16px; padding: 8px 16px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;"
                                 onclick="openModal()">Add New Address</button>
-                                {{#each addresses}}
+                            {{#each addresses}}
                             <div
                                 style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; margin-bottom: 5px;">
                                 <div
@@ -129,9 +142,9 @@
                                             style="font-size: 14px; color: #666; background-color: #f2f2f2; padding: 3px 8px; border-radius: 5px;">{{this.address_type}}</span>
                                     </h4>
                                     <div>
-                                        <button
+                                        <button type="button" onclick="editAddressPage('{{this._id}}')"
                                             style="margin-right: 5px; font-size: 14px; padding: 5px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;">Edit</button>
-                                        <button
+                                        <button type="button" onclick="deleteAddress('{{this._id}}')"
                                             style="font-size: 14px; padding: 5px; border: none; background-color: #79a206; color: #fff; border-radius: 5px;">Remove</button>
                                     </div>
                                 </div>
@@ -160,11 +173,13 @@
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="nameError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
-                                    <input type="text" class="error" id="house" name="house" placeholder="House/Building Name"
+                                    <input type="text" class="error" id="house" name="house"
+                                        placeholder="House/Building Name"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="houseError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
-                                    <input type="text" class="error" id="street" name="street" placeholder="Street, Area Name"
+                                    <input type="text" class="error" id="street" name="street"
+                                        placeholder="Street, Area Name"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="streetError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
@@ -180,7 +195,8 @@
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="pinError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
-                                    <input type="number" class="error" id="phone" name="phone" placeholder="Phone Number"
+                                    <input type="number" class="error" id="phone" name="phone"
+                                        placeholder="Phone Number"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="phoneError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
@@ -192,12 +208,80 @@
                                             style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px;">Work</button>
                                         <input type="hidden" id="addressType" name="addressType">
                                         <small id="addressTypeError"
-                                        style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
+                                            style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
                                     </div>
 
                                     <!-- Add Address button -->
                                     <button onclick="addAddress()"
                                         style="background-color: #79a206; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Add
+                                        Address</button>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+                            <div id="addressEditModal" class="modal"
+                                style="display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4);">
+
+                                <!-- Modal content -->
+                                <div class="modal-content"
+                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fefefe; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); max-width: 45%; max-height: 80%; overflow-y: auto;">
+                                    <span class="close"
+                                        style="position: absolute; top: 10px; right: 10px; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 1;">&times;</span>
+                                    <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 24px; color: #333;">Modify
+                                        Address</h2>
+
+                                    <!-- Input fields -->
+                                    <input type="text" class="error" id="editName" name="editName" placeholder="Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editNameError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="editHouse" name="editHouse"
+                                        placeholder="House/Building Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editHouseError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="editStreet" name="editStreet"
+                                        placeholder="Street, Area Name"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editStreetError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="editCity" name="editCity" placeholder="City"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editCityError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="text" class="error" id="editState" name="editState" placeholder="State"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editStateError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="number" class="error" id="editPin" name="editPin"
+                                        placeholder="PIN Code"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editPinError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+                                    <input type="number" class="error" id="editPhone" name="editPhone"
+                                        placeholder="Phone Number"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <small id="editPhoneError"
+                                        style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
+                                    <div style="margin-bottom: 20px;">
+
+                                        <button class="editAddress-button"
+                                            style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px; margin-right: 8px;">Home</button>
+
+                                        <button class="editAddress-button"
+                                            style="font-size: 14px; background-color: #f2f2f2; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px;">Work</button>
+
+                                        <input type="hidden" id="editAddressType" name="editAddressType">
+                                        <small id="editAddressTypeError"
+                                            style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
+                                    </div>
+
+                                    <input type="hidden" id="addressId" name="addressId">
+
+                                    <!-- Add Address button -->
+                                    <button onclick="editAddress()"
+                                        style="background-color: #79a206; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Update
                                         Address</button>
                                 </div>
                             </div>
@@ -211,8 +295,12 @@
 </section>
 <!-- my account end   -->
 
+
+{{!-- axios --}}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Retrieve the fragment identifier from the URL
         const fragmentIdentifier = window.location.hash.substring(1);
 
@@ -242,9 +330,21 @@
         event.stopPropagation(); // Prevent event propagation
     }
 
+    var editCloseButton = document.getElementsByClassName("close")[1];
+    editCloseButton.onclick = function (event) {
+        var modal = document.getElementById('addressEditModal');
+        modal.style.display = "none";
+        event.stopPropagation(); // Prevent event propagation
+    }
+
     // Function to prevent closing the modal when clicking outside of it
     var modalContent = document.getElementsByClassName("modal-content")[0];
     modalContent.onclick = function (event) {
+        event.stopPropagation(); // Prevent event propagation
+    }
+
+    var editModalContent = document.getElementsByClassName("modal-content")[1];
+    editModalContent.onclick = function (event) {
         event.stopPropagation(); // Prevent event propagation
     }
 
@@ -252,6 +352,13 @@
     document.onkeydown = function (event) {
         if (event.key === "Escape") {
             var modal = document.getElementById('addressModal');
+            modal.style.display = "none";
+        }
+    }
+
+    document.onkeydown = function (event) {
+        if (event.key === "Escape") {
+            var modal = document.getElementById('addressEditModal');
             modal.style.display = "none";
         }
     }
@@ -275,5 +382,29 @@
             document.getElementById('addressType').value = button.textContent.trim();
         });
     });
+
+    // Event listener to handle button clicks
+    document.querySelectorAll('.editAddress-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Remove the active class from all buttons
+            document.querySelectorAll('.editAddress-button').forEach(function (btn) {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = '#f2f2f2';
+                btn.style.borderColor = '#ccc';
+                btn.style.color = '#000';
+            });
+            // Add the active class to the clicked button
+            button.classList.add('active');
+            button.style.backgroundColor = '#79a206';
+            button.style.borderColor = '#79a206';
+            button.style.color = '#fff';
+            // Set the address type value
+            document.getElementById('editAddressType').value = button.textContent.trim();
+        });
+    });
+
 </script>
+
+{{!-- SweetAlert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/user/scripts/myAccount.js"></script>
