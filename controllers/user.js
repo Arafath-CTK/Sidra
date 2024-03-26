@@ -396,10 +396,17 @@ let deleteAddress = async (req, res) => {
 
 let shopPage = async (req, res) => {
   try {
-    let products = await Product.find();
-    res
-      .status(200)
-      .render("user/shop", { title: "Sidra | Shop", user: true, products });
+    if (req.cookies.userToken) {
+      let products = await Product.find();
+      res
+        .status(200)
+        .render("user/shop", { title: "Sidra | Shop", user: true, products });
+    } else {
+      let products = await Product.find();
+      res
+        .status(200)
+        .render("user/shop", { title: "Sidra | Shop", user: false, products });
+    }
   } catch (error) {
     console.error("Error rendering the Shop page: ", error);
     res.status(500).render("error", {
@@ -593,17 +600,21 @@ let wishlistPage = async (req, res) => {
 
 let addToWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const productId = req.params.id;
+    if (req.user.role === "user") {
+      const userId = req.user.id;
+      const productId = req.params.id;
 
-    let addedProduct = await helper.addToWishlistHelper(userId, productId);
+      let addedProduct = await helper.addToWishlistHelper(userId, productId);
 
-    if (addedProduct.productExist) {
-      console.log("Product already exists in wishlist");
-      return res.status(200).json({ productExist: true });
-    } else if (addedProduct.success) {
-      console.log("Product added to wishlist successfully");
-      return res.status(200).json({ success: true });
+      if (addedProduct.productExist) {
+        console.log("Product already exists in wishlist");
+        return res.status(200).json({ productExist: true });
+      } else if (addedProduct.success) {
+        console.log("Product added to wishlist successfully");
+        return res.status(200).json({ success: true });
+      }
+    } else {
+      return res.status(302).redirect("/signIn");
     }
   } catch (error) {
     console.error("Error adding product to wishlist: ", error);
@@ -616,14 +627,18 @@ let addToWishlist = async (req, res) => {
 
 let removeFromWishlist = async (req, res) => {
   try {
-    let userId = req.user.id;
-    let productId = req.params.id;
+    if (req.cookies.userToken) {
+      let userId = req.user.id;
+      let productId = req.params.id;
 
-    const deleted = await helper.removeFromWishlistHelper(userId, productId);
-    if (deleted.userNotExist) {
-      return res.status(200).json({ userNotExist: true });
+      const deleted = await helper.removeFromWishlistHelper(userId, productId);
+      if (deleted.userNotExist) {
+        return res.status(200).json({ userNotExist: true });
+      } else {
+        return res.status(200).json({ success: true });
+      }
     } else {
-      return res.status(200).json({ success: true });
+      res.status(302).redirect("/signIn");
     }
   } catch (error) {
     console.error(
@@ -633,6 +648,30 @@ let removeFromWishlist = async (req, res) => {
     res.status(500).render("error", {
       layout: false,
       errorMessage: "Error occured while removing the product from wishlist",
+    });
+  }
+};
+
+let checkwishlist = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const productId = req.params.id;
+
+    const user = await User.findById(userId);
+    const wishlisted = user.wishlist.find(
+      (prod) => prod.product_id === productId
+    );
+
+    if (wishlisted) {
+      res.status(200).json({ wishlisted: true });
+    } else {
+      res.status(200).json({ wishlisted: false });
+    }
+  } catch (error) {
+    console.error("Error occured while getting the address: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error occured while getting the address",
     });
   }
 };
@@ -663,6 +702,7 @@ module.exports = {
   wishlistPage,
   addToWishlist,
   removeFromWishlist,
+  checkwishlist,
   cartPage,
   addToCart,
 };

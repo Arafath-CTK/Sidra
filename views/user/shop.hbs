@@ -41,8 +41,11 @@
                     <div class="col-lg-3 col-md-4 col-12 ">
                         <article class="single_product">
                             <figure>
+                                <input type="hidden" id="productId" name="productId" value="{{this._id}}">
+
                                 <div class="product_thumb">
-                                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img src="{{this.images.[0]}}" alt=""></a>
+                                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img
+                                            src="{{this.images.[0]}}" alt=""></a>
                                     {{!-- <div class="label_product">
                                         <span class="label_sale">-7%</span>
                                     </div> --}}
@@ -50,8 +53,14 @@
                                         <ul>
                                             <li class="add_to_cart"><a href="cart" title="Add to cart"><i
                                                         class="icon-shopping-bag"></i></a></li>
-                                            <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i
-                                                        class="icon-heart"></i></a></li>
+
+                                            <li class="wishlistAdd"><a><i onclick="addToWishlist(this, `{{this._id}}`)"
+                                                        class="fa-regular fa-heart"></i></a></li>
+                                            <li class="wishlistRemove d-none"><a><i
+                                                        onclick="removeFromWishlist(this, `{{this._id}}`)"
+                                                        class="fa-solid fa-heart" style="color: #79a206;"></i></a></li>
+
+
                                             {{!-- <li class="quick_button"><a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#modal_box" title="quick view"> <i
                                                         class="icon-eye"></i></a></li> --}}
@@ -142,3 +151,5 @@
     </div>
 </div>
 <!--shop  area end-->
+
+<script src="/user/scripts/shop.js"></script>

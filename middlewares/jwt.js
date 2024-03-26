@@ -117,30 +117,28 @@ let authenticateUser = () => async (req, res, next) => {
   try {
     const jwtKey = process.env.JWT_KEY;
     const baererToken = req.cookies.userToken;
+
     if (!baererToken) {
-      console.log("no beaerera");
-      return res.redirect("/signIn");
+      console.log("not logged in");
+      return res.status(302).redirect("/signIn");
     }
 
     jwt.verify(baererToken, jwtKey, (error, decodedToken) => {
-      //IF IT HAS JWT THEN VERIFY THE CORRECT ROLE AND STATUS
       if (error) {
-        //IF UNEXPECTED ERROR
         console.error(
           "Unexpected error occured while authentication process",
           error
         );
-        return res.redirect("/signIn");
+        return res.status(302).redirect("/signIn");
       }
 
       if (decodedToken.role !== "user") {
         console.log("You are unauthorized to access this page");
-        return res.redirect("/signIn");
+        return res.status(302).redirect("/signIn");
       }
 
       console.log("user role matched");
 
-      // Set req.user with decoded token information
       req.user = {
         id: decodedToken.userId,
         name: decodedToken.userName,
@@ -152,6 +150,7 @@ let authenticateUser = () => async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).send("Internal Server Error");
   }
 };
 
