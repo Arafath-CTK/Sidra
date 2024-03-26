@@ -29,11 +29,13 @@ router.get("/shop/plants", userControllers.plantsPage);
 router.get("/shop/containers", userControllers.containersPage);
 router.get("/shop/supplies", userControllers.suppliesPage);
 router.get("/singleProduct/:id", preventBack, userControllers.singleProductPage)
+
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage)
 router.post("/addtocart", preventBack, authenticateUser(), userControllers.addToCart)
+
 router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
 router.post("/addtowishlist/:id", authenticateUser(), userControllers.addToWishlist)
 router.delete("/removeFromWishlist/:id", authenticateUser(), userControllers.removeFromWishlist)
-router.get("/checkwishlist/:id", authenticateUser(), userControllers.checkwishlist)
+router.get("/checkwishlist/:id", authenticateUser(), userControllers.checkWishlist)
 
 module.exports = router;

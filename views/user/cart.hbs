@@ -20,23 +20,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                {{#each products}}
+                  {{#each products}}
                   <tr>
                     <td class="product_select" style="width: 10px;"><input type="checkbox" /></td>
-                    <td class="product_thumb"><a href="#"><img
-                          src="{{this.image}}"
-                          alt=""
-                        /></a></td>
+                    <td class="product_thumb"><a href="#"><img src="{{this.image}}" alt="" /></a></td>
                     <td class="product_name"><a href="#">{{this.name}}</a></td>
                     <td class="product-price">{{this.price}}</td>
-                    <td class="product_quantity"><label>Quantity</label>
-                      <input min="1" max="100" value="{{this.quantity}}" type="number" /></td>
+
+                    <td class="product_quantity">
+                      <label>Quantity</label>
+                      <div class="quantity-wrapper">
+                        <button class="quantity-minus">-</button>
+                        <input min="1" max="100" value="{{this.quantity}}" type="number" inputmode="numeric" />
+                        <button class="quantity-plus">+</button>
+                      </div>
+                    </td>
+
                     <td class="product_total">{{this.total_price}}</td>
-                    <td class="product_remove"><a href="#"><i
-                          class="fa fa-trash-o"
-                        ></i></a></td>
+                    <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
                   </tr>
-                {{/each}}
+                  {{/each}}
                 </tbody>
               </table>
             </div>

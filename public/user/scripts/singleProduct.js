@@ -1,3 +1,14 @@
+function showToast(message) {
+  // Display toast message using Toastify library
+  Toastify({
+    text: message,
+    duration: 3000, // Duration in milliseconds
+    gravity: "bottom", // Position of the toast message
+    position: "center",
+    backgroundColor: "black", // Background color of the toast
+  }).showToast();
+}
+
 window.onload = async function () {
   let productId = document.getElementById("productId").value;
   try {
@@ -64,13 +75,30 @@ async function removeFromWishlist(productId) {
   }
 }
 
-function showToast(message) {
-  // Display toast message using Toastify library
-  Toastify({
-    text: message,
-    duration: 3000, // Duration in milliseconds
-    gravity: "bottom", // Position of the toast message
-    position: "center",
-    backgroundColor: "black", // Background color of the toast
-  }).showToast();
+async function addToCart(productId) {
+  try {
+    let productId = document.getElementById("productId").value;
+    let quantity = document.getElementById("qty").value;
+
+    const response = await axios.post("/addtocart/", {
+      productId,
+      quantity,
+    });
+    if (response.status === 200) {
+      const data = response.data;
+
+      if (data.productExist) {
+        showToast("Product exists in the Cart");
+      } else if (data.success) {
+        showToast("Product added to the Cart");
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        window.location.href = "/cart";
+      } else {
+        console.error("Unexpected response:", response);
+      }
+    } else {
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
 }

@@ -518,61 +518,6 @@ let singleProductPage = async (req, res) => {
   }
 };
 
-let cartPage = async (req, res) => {
-  try {
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      let userId = tokenExtracted.userId;
-
-      let userData = await User.findById(userId);
-      let products = userData.cart;
-
-      res
-        .status(200)
-        .render("user/cart", { title: "Sidra | Cart", user: true, products });
-    } else {
-      console.log("failed");
-    }
-  } catch (error) {
-    console.error("Error rendering the cart page: ", error);
-    res.status(500).render("error", {
-      layout: false,
-      errorMessage: "Error rendering the cart page",
-    });
-  }
-};
-
-let addToCart = async (req, res) => {
-  try {
-    console.log("product adding to the cart started");
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      let userId = tokenExtracted.userId;
-
-      let addedProduct = await helper.addToCartHelper(req.body, userId);
-
-      if (addedProduct.productExist) {
-        console.log("Product already exists in cart");
-        return res.status(409).render("error", {
-          layout: false,
-          errorMessage: "Product already exists in cart",
-        });
-      } else if (addedProduct.success) {
-        console.log("Product added to cart successfully");
-        return res.status(200).redirect("/cart");
-      }
-    } else {
-      console.log("failed");
-    }
-  } catch (error) {
-    console.error("Error adding product to the cart: ", error);
-    res.status(500).render("error", {
-      layout: false,
-      errorMessage: "Error adding product to the cart",
-    });
-  }
-};
-
 let wishlistPage = async (req, res) => {
   try {
     if (req.user.role === "user") {
@@ -652,7 +597,7 @@ let removeFromWishlist = async (req, res) => {
   }
 };
 
-let checkwishlist = async (req, res) => {
+let checkWishlist = async (req, res) => {
   try {
     const userId = req.user.id;
     const productId = req.params.id;
@@ -672,6 +617,57 @@ let checkwishlist = async (req, res) => {
     res.status(500).render("error", {
       layout: false,
       errorMessage: "Error occured while getting the address",
+    });
+  }
+};
+
+let cartPage = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let userData = await User.findById(userId);
+      let products = userData.cart;
+
+      res
+        .status(200)
+        .render("user/cart", { title: "Sidra | Cart", user: true, products });
+    } else {
+      console.log("failed");
+    }
+  } catch (error) {
+    console.error("Error rendering the cart page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the cart page",
+    });
+  }
+};
+
+let addToCart = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let userId = req.user.id;
+
+      let addedProduct = await helper.addToCartHelper(req.body, userId);
+
+      if (addedProduct.productExist) {
+        console.log("Product already exists in cart");
+        return res.status(200).json({ productExist: true });
+      } else {
+        console.log("Product added to cart successfully");
+        return res.status(200).json({ success: true });
+      }
+    } else {
+      console.log("user not logged in");
+      return res.redirect("/signIn");
+    }
+  } catch (error) {
+    console.error("Error adding product to the cart: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error adding product to the cart",
     });
   }
 };
@@ -702,7 +698,7 @@ module.exports = {
   wishlistPage,
   addToWishlist,
   removeFromWishlist,
-  checkwishlist,
+  checkWishlist,
   cartPage,
   addToCart,
 };

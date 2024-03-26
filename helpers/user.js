@@ -246,9 +246,10 @@ let deleteAddressHelper = async (addressId, userId) => {
 let addToCartHelper = async (productData, userId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let { productId, qty } = productData;
-      let product = await Product.findById(productId);
+      let { productId, quantity } = productData;
+      
       let user = await User.findById(userId);
+      let product = await Product.findById(productId);
 
       let existingProduct = await User.findOne({
         _id: userId,
@@ -264,9 +265,9 @@ let addToCartHelper = async (productData, userId) => {
           product_id: productId,
           name: product.name,
           image: product.images[0],
-          quantity: qty,
+          quantity: quantity,
           price: product.price,
-          total_price: qty * product.price,
+          total_price: quantity * product.price,
         };
 
         user.cart.push(newProduct);
