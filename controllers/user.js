@@ -502,13 +502,23 @@ let suppliesPage = async (req, res) => {
 
 let singleProductPage = async (req, res) => {
   try {
-    const productId = req.params.id;
-    let product = await Product.findById(productId);
-    res.status(200).render("user/singleProduct", {
-      title: "Sidra | Product",
-      user: true,
-      product,
-    });
+    if (req.cookies.userToken) {
+      const productId = req.params.id;
+      let product = await Product.findById(productId);
+      res.status(200).render("user/singleProduct", {
+        title: "Sidra | Product",
+        user: true,
+        product,
+      });
+    } else {
+      const productId = req.params.id;
+      let product = await Product.findById(productId);
+      res.status(200).render("user/singleProduct", {
+        title: "Sidra | Product",
+        user: false,
+        product,
+      });
+    }
   } catch (error) {
     console.error("Error rendering the product page: ", error);
     res.status(500).render("error", {
@@ -545,8 +555,9 @@ let wishlistPage = async (req, res) => {
 
 let addToWishlist = async (req, res) => {
   try {
-    if (req.user.role === "user") {
-      const userId = req.user.id;
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      const userId = tokenExtracted.userId;
       const productId = req.params.id;
 
       let addedProduct = await helper.addToWishlistHelper(userId, productId);
@@ -559,7 +570,7 @@ let addToWishlist = async (req, res) => {
         return res.status(200).json({ success: true });
       }
     } else {
-      return res.status(302).redirect("/signIn");
+      return res.status(200).json({ notLogged: true });
     }
   } catch (error) {
     console.error("Error adding product to wishlist: ", error);
@@ -583,7 +594,7 @@ let removeFromWishlist = async (req, res) => {
         return res.status(200).json({ success: true });
       }
     } else {
-      res.status(302).redirect("/signIn");
+      res.status(200).json({ notLogged: true });
     }
   } catch (error) {
     console.error(
@@ -648,7 +659,8 @@ let cartPage = async (req, res) => {
 let addToCart = async (req, res) => {
   try {
     if (req.cookies.userToken) {
-      let userId = req.user.id;
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
 
       let addedProduct = await helper.addToCartHelper(req.body, userId);
 
@@ -661,13 +673,39 @@ let addToCart = async (req, res) => {
       }
     } else {
       console.log("user not logged in");
-      return res.redirect("/signIn");
+      return res.status(200).json({ notLogged: true });
     }
   } catch (error) {
     console.error("Error adding product to the cart: ", error);
     res.status(500).render("error", {
       layout: false,
       errorMessage: "Error adding product to the cart",
+    });
+  }
+};
+
+let removeFromCart = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      let cartId = req.params.id;
+
+      let removed = await helper.removeFromCartHelper(userId, cartId);
+
+      if (removed.userNotExist) {
+        return res.status(200).json({ userNotExist: true });
+      } else {
+        return res.status(200).json({ success: true });
+      }
+    } else {
+      res.status(200).json({ notLogged: true });
+    }
+  } catch (error) {
+    console.error("Error removing product from the cart: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error removing product from the cart",
     });
   }
 };
@@ -701,4 +739,5 @@ module.exports = {
   checkWishlist,
   cartPage,
   addToCart,
+  removeFromCart,
 };

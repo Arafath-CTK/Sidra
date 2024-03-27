@@ -247,7 +247,7 @@ let addToCartHelper = async (productData, userId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let { productId, quantity } = productData;
-      
+
       let user = await User.findById(userId);
       let product = await Product.findById(productId);
 
@@ -333,6 +333,24 @@ let removeFromWishlistHelper = async (userId, productId) => {
   });
 };
 
+let removeFromCartHelper = async (userId, cartId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await User.findByIdAndUpdate(userId, {
+        $pull: { cart: { _id: cartId } },
+      });
+
+      if (!user) {
+        resolve({ success: false, userNotExist: true });
+      }
+
+      resolve({ success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   signUpHelper,
   signInHelper,
@@ -344,4 +362,5 @@ module.exports = {
   addToCartHelper,
   addToWishlistHelper,
   removeFromWishlistHelper,
+  removeFromCartHelper,
 };

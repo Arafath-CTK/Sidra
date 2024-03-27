@@ -37,6 +37,10 @@ async function addToWishlist(productId) {
         document.getElementById("addWishlist").style.display = "none";
         document.getElementById("removeWishlist").style.display = "block";
         showToast("Product added to the wishlist");
+      } else if (data.notLogged) {
+        showToast("You are not logged in");
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        window.location.href = "/signin";
       } else {
         // Unexpected response from server
         console.error("Unexpected response:", response);
@@ -88,15 +92,18 @@ async function addToCart(productId) {
       const data = response.data;
 
       if (data.productExist) {
-        showToast("Product exists in the Cart");
+        showToast("Product already exists in the Cart");
       } else if (data.success) {
         showToast("Product added to the Cart");
         await new Promise((resolve) => setTimeout(resolve, 1500));
         window.location.href = "/cart";
+      } else if (data.notLogged) {
+        showToast("You are not logged in");
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        window.location.href = "/signin";
       } else {
         console.error("Unexpected response:", response);
       }
-    } else {
     }
   } catch (error) {
     console.error("Error:", error.message);

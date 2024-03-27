@@ -30,14 +30,19 @@
                     <td class="product_quantity">
                       <label>Quantity</label>
                       <div class="quantity-wrapper">
-                        <button class="quantity-minus">-</button>
-                        <input min="1" max="100" value="{{this.quantity}}" type="number" inputmode="numeric" />
-                        <button class="quantity-plus">+</button>
+                        <button class="quantity-minus"
+                          style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">-</button>
+                        <input min="1" max="100" value="{{this.quantity}}" type="number" inputmode="numeric"
+                          style="width: 50px; padding: 5px; text-align: center; border: 1px solid #ccc;">
+                        <button class="quantity-plus"
+                          style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">+</button>
                       </div>
                     </td>
 
                     <td class="product_total">{{this.total_price}}</td>
-                    <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                    <td class="product_remove"><a onclick="removeProduct(`{{this._id}}`)"><i
+                          class="fa fa-trash-o"></i></a>
+                    </td>
                   </tr>
                   {{/each}}
                 </tbody>
@@ -52,8 +57,8 @@
       </div>
       <!--coupon code area start-->
       <div class="coupon_area">
-        <div class="row">
-          <div class="col-lg-6 col-md-6">
+        <div class="row justify-content-end">
+          {{!-- <div class="col-lg-6 col-md-6">
             <div class="coupon_code left">
               <h3>Coupon</h3>
               <div class="coupon_inner">
@@ -62,7 +67,7 @@
                 <button type="submit">Apply coupon</button>
               </div>
             </div>
-          </div>
+          </div> --}}
           <div class="col-lg-6 col-md-6">
             <div class="coupon_code right">
               <h3>Cart Totals</h3>
@@ -89,8 +94,11 @@
           </div>
         </div>
       </div>
+
       <!--coupon code area end-->
     </form>
   </div>
 </div>
 <!--shopping cart area end -->
+
+<script src="/user/scripts/cart.js"></script>
