@@ -705,3 +705,16 @@
     }
   });
 })(jQuery);
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await axios.get("/cart/count");
+    if (response.status === 200) {
+      document.querySelector(".item_count").textContent = response.data.cartCount
+    } else {
+      console.error("Unexpected response from the server: ", response);
+    }
+  } catch (error) {
+    console.error("Error fetching cart data:", error);
+  }
+});

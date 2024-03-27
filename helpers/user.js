@@ -3,8 +3,6 @@ const Product = require("../models/product");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const { use } = require("../routes/user");
-const user = require("../models/user");
 require("dotenv").config();
 
 function signUpVerificationHelper(email) {
@@ -351,6 +349,28 @@ let removeFromCartHelper = async (userId, cartId) => {
   });
 };
 
+let updateQuantityHelper = async (userId, cartData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { cartId, newQuantity } = cartData;
+
+      const updatedCart = await User.findOneAndUpdate(
+        { _id: userId, "cart._id": cartId }, // Criteria to find the user and the cart object
+        { $set: { "cart.$.quantity": newQuantity } }, // Update operation
+        { new: true } // Return the updated document
+      );
+
+      if (!updatedCart) {
+        reject({ productNotExist: true });
+      }
+
+      resolve({ success: true, updatedCart });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   signUpHelper,
   signInHelper,
@@ -363,4 +383,5 @@ module.exports = {
   addToWishlistHelper,
   removeFromWishlistHelper,
   removeFromCartHelper,
+  updateQuantityHelper,
 };

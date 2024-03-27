@@ -33,6 +33,8 @@ router.get("/singleProduct/:id", preventBack, userControllers.singleProductPage)
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage)
 router.post("/addtocart", preventBack, userControllers.addToCart)
 router.delete("/cart/remove/:id", preventBack, userControllers.removeFromCart)
+router.post("/cart/updateQuantity", userControllers.updateQuantity)
+router.get("/cart/count", userControllers.cartCount)
 
 router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
 router.post("/addtowishlist/:id", userControllers.addToWishlist)

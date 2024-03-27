@@ -584,7 +584,8 @@ let addToWishlist = async (req, res) => {
 let removeFromWishlist = async (req, res) => {
   try {
     if (req.cookies.userToken) {
-      let userId = req.user.id;
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
       let productId = req.params.id;
 
       const deleted = await helper.removeFromWishlistHelper(userId, productId);
@@ -710,6 +711,58 @@ let removeFromCart = async (req, res) => {
   }
 };
 
+let updateQuantity = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let updated = await helper.updateQuantityHelper(userId, req.body);
+
+      if (updated.productNotExist) {
+        return res.status(200).json({ productNotExist: true });
+      } else if (updated.success) {
+        console.log("Cart updated successfully", updated.updatedCart);
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(200).json({ failed: true });
+      }
+    } else {
+      res.status(200).json({ notLogged: true });
+    }
+  } catch (error) {
+    console.error("Error updating the quantity of the cart: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error updating the quantity of the cart",
+    });
+  }
+};
+
+let cartCount = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(302).json({ userNotFound: true });
+      }
+
+      let cartCount = user.cart.length;
+
+      return res.status(200).json({ success: true, cartCount: cartCount });
+    } else {
+      res.status(302).json({ notLogged: true });
+    }
+  } catch (error) {
+    console.error("Error getting the cart count");
+    res.status(500).json({ failed: true });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -740,4 +793,6 @@ module.exports = {
   cartPage,
   addToCart,
   removeFromCart,
+  updateQuantity,
+  cartCount,
 };

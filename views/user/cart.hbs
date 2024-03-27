@@ -23,18 +23,18 @@
                   {{#each products}}
                   <tr>
                     <td class="product_select" style="width: 10px;"><input type="checkbox" /></td>
-                    <td class="product_thumb"><a href="#"><img src="{{this.image}}" alt="" /></a></td>
-                    <td class="product_name"><a href="#">{{this.name}}</a></td>
+                    <td class="product_thumb"><a><img src="{{this.image}}" alt="" /></a></td>
+                    <td class="product_name"><a>{{this.name}}</a></td>
                     <td class="product-price">{{this.price}}</td>
 
                     <td class="product_quantity">
-                      <label>Quantity</label>
                       <div class="quantity-wrapper">
-                        <button class="quantity-minus"
+                        <button class="quantity-minus" type="button"
                           style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">-</button>
-                        <input min="1" max="100" value="{{this.quantity}}" type="number" inputmode="numeric"
+                        <input type="hidden" class="cartId" value="{{this._id}}">
+                        <input min="1" max="100" value="{{this.quantity}}" type="number"
                           style="width: 50px; padding: 5px; text-align: center; border: 1px solid #ccc;">
-                        <button class="quantity-plus"
+                        <button class="quantity-plus" type="button"
                           style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">+</button>
                       </div>
                     </td>
