@@ -241,66 +241,15 @@ let deleteAddressHelper = async (addressId, userId) => {
   });
 };
 
-let addToCartHelper = async (productData, userId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let { productId, quantity } = productData;
-
-      let user = await User.findById(userId);
-      let product = await Product.findById(productId);
-
-      let existingProduct = await User.findOne({
-        _id: userId,
-        cart: {
-          $elemMatch: { product_id: productId },
-        },
-      });
-
-      if (existingProduct) {
-        resolve({ productExist: true });
-      } else {
-        const newProduct = {
-          product_id: productId,
-          name: product.name,
-          image: product.images[0],
-          quantity: quantity,
-          price: product.price,
-          total_price: quantity * product.price,
-        };
-
-        user.cart.push(newProduct);
-        await user.save();
-
-        console.log("Product added to cart successfully");
-        resolve({ success: true });
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 let addToWishlistHelper = async (userId, productId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let product = await Product.findById(productId);
       let user = await User.findById(userId);
 
-      let existingProduct = user.wishlist.find(
-        (item) => item.product_id === productId
-      );
-
-      if (existingProduct) {
+      if (user.wishlist.includes(productId)) {
         resolve({ productExist: true });
       } else {
-        const newProduct = {
-          product_id: productId,
-          name: product.name,
-          price: product.price,
-          image: product.images[0],
-        };
-
-        user.wishlist.push(newProduct);
+        user.wishlist.push(productId);
         await user.save();
 
         console.log("Product added to wishlist successfully");
@@ -316,15 +265,39 @@ let removeFromWishlistHelper = async (userId, productId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let user = await User.findByIdAndUpdate(userId, {
-        $pull: { wishlist: { product_id: productId } },
+        $pull: { wishlist: productId },
       });
 
       if (!user) {
-        resolve({ success: false, userNotExist: true });
+        resolve({ userNotExist: true });
       }
 
       console.log("Product removed from wishlist");
       resolve({ success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let addToCartHelper = async (productData, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { productId, quantity } = productData;
+
+      let user = await User.findById(userId);
+
+      let existingCart = user.cart.findIndex(item => item.product.equals(productId))
+
+      if (existingCart) {
+        resolve({ productExist: true });
+      } else {
+        user.cart.push({product: productId, quantity: quantity});
+        await user.save();
+
+        console.log("Product added to cart successfully");
+        resolve({ success: true });
+      }
     } catch (error) {
       reject(error);
     }

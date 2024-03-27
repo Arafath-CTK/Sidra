@@ -23,7 +23,7 @@
                   {{#each products}}
                   <tr>
                     <td class="product_select" style="width: 10px;"><input type="checkbox" /></td>
-                    <td class="product_thumb"><a><img src="{{this.image}}" alt="" /></a></td>
+                    <td class="product_thumb"><a><img src="{{this.product.images.[0]}}" alt="" /></a></td>
                     <td class="product_name"><a>{{this.name}}</a></td>
                     <td class="product-price">{{this.price}}</td>
 

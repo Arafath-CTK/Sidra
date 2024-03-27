@@ -533,13 +533,12 @@ let wishlistPage = async (req, res) => {
     if (req.user.role === "user") {
       let userId = req.user.id;
 
-      let user = await User.findById(userId);
-      let wishlist = user.wishlist;
+      let user = await User.findById(userId).populate("wishlist");
 
       res.status(200).render("user/wishlist", {
         user: true,
         title: "Sidra | Wishlist",
-        wishlist,
+        wishlist: user.wishlist,
       });
     } else {
       res.status(302).redirect("/signIn");
@@ -614,10 +613,9 @@ let checkWishlist = async (req, res) => {
     const userId = req.user.id;
     const productId = req.params.id;
 
-    const user = await User.findById(userId);
-    const wishlisted = user.wishlist.find(
-      (prod) => prod.product_id === productId
-    );
+    const user = await User.findById(userId).populate("wishlist");
+
+    const wishlisted = user.wishlist.some((prod) => prod._id.equals(productId));
 
     if (wishlisted) {
       res.status(200).json({ wishlisted: true });
@@ -639,7 +637,7 @@ let cartPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
 
-      let userData = await User.findById(userId);
+      let userData = await User.findById(userId).populate("cart.product");
       let products = userData.cart;
 
       res
@@ -748,14 +746,14 @@ let cartCount = async (req, res) => {
       let user = await User.findById(userId);
 
       if (!user) {
-        return res.status(302).json({ userNotFound: true });
+        return res.status(200).json({ userNotFound: true });
       }
 
       let cartCount = user.cart.length;
 
       return res.status(200).json({ success: true, cartCount: cartCount });
     } else {
-      res.status(302).json({ notLogged: true });
+      res.status(200).json({ notLogged: true });
     }
   } catch (error) {
     console.error("Error getting the cart count");

@@ -20,22 +20,11 @@ const userSchema = new mongoose.Schema(
         phone_number: String,
       },
     ],
-    wishlist: [
-      {
-        product_id: String,
-        name: String,
-        image: String,
-        price: Number,
-      },
-    ],
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
     cart: [
       {
-        product_id: String,
-        name: String,
-        image: String,
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
         quantity: Number,
-        price: Number,
-        total_price: Number,
       },
     ],
     // orders: [

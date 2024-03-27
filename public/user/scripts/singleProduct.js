@@ -49,6 +49,7 @@ async function addToWishlist(productId) {
       console.error("Failed to add product to wishlist");
     }
   } catch (error) {
+    console.log("erer");
     console.error("Error:", error.message);
   }
 }

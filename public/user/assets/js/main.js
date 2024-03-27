@@ -710,9 +710,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await axios.get("/cart/count");
     if (response.status === 200) {
-      document.querySelector(".item_count").textContent = response.data.cartCount
-    } else {
-      console.error("Unexpected response from the server: ", response);
+      let data = response.data;
+
+      if (data.success) {
+        document.querySelector(".item_count").textContent = data.cartCount;
+      } else if (data.userNotFound || data.notLogged) {
+        console.error("Unexpected response from the server: ", response);
+        document.querySelector(".item_count").style.display = "none";
+      }
     }
   } catch (error) {
     console.error("Error fetching cart data:", error);
