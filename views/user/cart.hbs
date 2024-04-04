@@ -1,7 +1,7 @@
 <!--shopping cart area start -->
 <div class="shopping_cart_area mt-100">
   <div class="container">
-    <form action="#">
+    <form>
       <div class="row">
         <div class="col-12">
           <div class="table_desc">
@@ -22,36 +22,41 @@
                 <tbody>
                   {{#each products}}
                   <tr>
-                    <td class="product_select" style="width: 10px;"><input type="checkbox" /></td>
-                    <td class="product_thumb"><a><img src="{{this.product.images.[0]}}" alt="" /></a></td>
-                    <td class="product_name"><a>{{this.name}}</a></td>
-                    <td class="product-price">{{this.price}}</td>
+                    <td class="product_select" style="width: 10px;">
+                      <input class="product_checkbox" type="checkbox" {{#if isSelected}}checked{{/if}} />
+                      <input type="hidden" class="cartId" value="{{this._id}}">
+                    </td>
+                    <td class="product_thumb"><a href="/singleProduct/{{this.product._id}}"><img
+                          src="{{this.product.images.[0]}}" alt="" /></a></td>
+                    <td class="product_name"><a href="/singleProduct/{{this.product._id}}">{{this.product.name}}</a>
+                    </td>
+                    <td class="product-price">{{this.product.price}}</td>
 
                     <td class="product_quantity">
                       <div class="quantity-wrapper">
                         <button class="quantity-minus" type="button"
                           style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">-</button>
                         <input type="hidden" class="cartId" value="{{this._id}}">
-                        <input min="1" max="100" value="{{this.quantity}}" type="number"
+                        <input min="1" max="100" value="{{this.quantity}}" type="text" disabled
                           style="width: 50px; padding: 5px; text-align: center; border: 1px solid #ccc;">
                         <button class="quantity-plus" type="button"
                           style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">+</button>
                       </div>
                     </td>
 
-                    <td class="product_total">{{this.total_price}}</td>
+                    <td class="product_total">{{this.totalPrice}}</td>
                     <td class="product_remove"><a onclick="removeProduct(`{{this._id}}`)"><i
-                          class="fa fa-trash-o"></i></a>
-                    </td>
+                          class="fa fa-trash-o"></i></a></td>
                   </tr>
                   {{/each}}
                 </tbody>
+
               </table>
             </div>
 
-            <div class="cart_submit">
+            {{!-- <div class="cart_submit">
               <button type="submit">update cart</button>
-            </div>
+            </div> --}}
           </div>
         </div>
       </div>
@@ -70,24 +75,27 @@
           </div> --}}
           <div class="col-lg-6 col-md-6">
             <div class="coupon_code right">
-              <h3>Cart Totals</h3>
+              <h3>Cart Summary</h3>
               <div class="coupon_inner">
                 <div class="cart_subtotal">
                   <p>Subtotal</p>
-                  <p class="cart_amount">£215.00</p>
+                  <p class="cart_amount" id="subTotal">0</p>
                 </div>
-                <div class="cart_subtotal">
-                  <p>After Discounts</p>
-                  <p class="cart_amount"><span>Flat Rate:</span> 255.00</p>
-                </div>
-                <a href="#">Calculate shipping</a>
+                {{!-- <div class="cart_subtotal">
+                  <p>Discounts</p>
+                  <p class="cart_amount" id="discounts" style="color: #79a206;">0</p>
+                </div> --}}
+                {{!-- <div class="cart_subtotal">
+                  <p>Shipping Charge</p>
+                  <p class="cart_amount" id="shipping">0</p>
+                </div> --}}
 
                 <div class="cart_subtotal">
-                  <p>Total</p>
-                  <p class="cart_amount">£215.00</p>
+                  <p style="font-size: 18px;">Total</p>
+                  <p class="cart_amount" id="total" style="font-size: 19px;">0</p>
                 </div>
                 <div class="checkout_btn">
-                  <a href="#">Proceed to Checkout</a>
+                  <a href="/checkout">Proceed to Checkout</a>
                 </div>
               </div>
             </div>

@@ -1,5 +1,4 @@
 function showToast(message) {
-  // Display toast message using Toastify library
   Toastify({
     text: message,
     duration: 3000, // Duration in milliseconds

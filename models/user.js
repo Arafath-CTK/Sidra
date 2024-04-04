@@ -18,42 +18,43 @@ const userSchema = new mongoose.Schema(
         pin_code: String,
         address_type: String,
         phone_number: String,
+        isPrimary: Boolean,
       },
     ],
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
     cart: [
       {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
         quantity: Number,
+        isSelected: Boolean,
       },
     ],
-    // orders: [
-    //   {
-    //     order_id: String,
-    //     products: [
-    //       {
-    //         product_id: String,
-    //         quantity: Number,
-    //         price: Number,
-    //         total_price: Number,
-    //       },
-    //     ],
-    //     total_amount: Number,
-    //     status: String,
-    //     invoice_details: {
-    //       invoice_number: String,
-    //       billing_address: {
-    //         property_name: String,
-    //         street: String,
-    //         city: String,
-    //         state: String,
-    //         pin_code: String,
-    //       },
-    //     },
-    //     payment_status: String,
-    //     created_at: Date,
-    //   },
-    // ],
+    orders: [
+      {
+        products: [
+          {
+            product_id: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "product",
+            },
+            quantity: Number,
+            price: Number,
+            total_price: Number,
+          },
+        ],
+        total_amount: Number,
+        status: String,
+        address: {
+          property_name: String,
+          street: String,
+          city: String,
+          state: String,
+          pin_code: String,
+        },
+        payment_status: String,
+        created_at: Date,
+      },
+    ],
   },
   { versionKey: false }
 );

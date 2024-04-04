@@ -1,3 +1,101 @@
+<style>
+    .ordersTable {
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .ordersTable th,
+    .ordersTable td {
+        border: none;
+        padding: 15px;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .ordersTable th {
+        background-color: #343a40;
+        color: #fff;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .ordersTable td {
+        background-color: #fff;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .ordersTable img {
+        max-width: 60px;
+        height: auto;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .product-info img {
+        margin-right: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-info p {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .cancel-text {
+        color: #dc3545 !important;
+        text-decoration: none !important;
+        transition: color 0.3s ease !important;
+    }
+
+    .cancel-text:hover {
+        color: #c82333 !important;
+    }
+
+    /* Adjust column widths */
+    .ordersTable th:nth-child(1),
+    .ordersTable td:nth-child(1) {
+        width: 20% !important;
+    }
+
+    .ordersTable th:nth-child(2),
+    .ordersTable td:nth-child(2) {
+        width: 27% !important;
+    }
+
+    .ordersTable th:nth-child(3),
+    .ordersTable td:nth-child(3),
+    .ordersTable th:nth-child(4),
+    .ordersTable td:nth-child(4) {
+        width: 15% !important;
+    }
+
+    .ordersTable th:nth-child(5),
+    .ordersTable td:nth-child(5) {
+        width: 10% !important;
+    }
+
+    .ordersTable th:nth-child(6),
+    .ordersTable td:nth-child(6) {
+        width: 20% !important;
+    }
+
+    .ordersTable th:nth-child(7),
+    .ordersTable td:nth-child(7) {
+        width: 10% !important;
+    }
+</style>
+
 <!-- my account start  -->
 <!-- Spinner background overlay -->
 <div id="spinnerOverlay"
@@ -16,7 +114,7 @@
     <div class="container">
         <div class="account_dashboard">
             <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="col-sm-12 col-md-2 col-lg-2">
                     <!-- Nav tabs -->
                     <div class="dashboard_tab_button">
                         <ul role="tablist" class="nav flex-column dashboard-list">
@@ -28,7 +126,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-9 col-lg-9">
+                <div class="col-sm-12 col-md-10 col-lg-10">
                     <!-- Tab panes -->
                     <div class="tab-content dashboard_content">
 
@@ -96,36 +194,31 @@
                         </div>
 
                         <div class="tab-pane fade" id="orders">
-                            <h3>Orders</h3>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Order</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="success">Completed</span></td>
-                                            <td>$25.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>May 10, 2018</td>
-                                            <td>Processing</td>
-                                            <td>$17.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="ordersTable table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Product</th>
+                                        <th>Total Price</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>65f90fac657721f0333069ff</td>
+                                        <td class="product-info">
+                                            <img src="https://via.placeholder.com/150" alt="Product Image">
+                                            <p>Aglaonema Lipstick</p>
+                                        </td>
+                                        <td>&#x20B9; 100.00</td>
+                                        <td>January 1, 2024</td>
+                                        <td>Shipped</td>
+                                        <td><a href="#" class="cancel-text">Cancel Order</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <div class="tab-pane" id="address">
@@ -211,6 +304,18 @@
                                             style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
                                     </div>
 
+                                    <div style="margin-bottom: 20px;">
+                                        <input type="checkbox" id="primaryAddress" name="primaryAddress"
+                                            style="display: none;">
+                                        <label for="primaryAddress"
+                                            style="cursor: pointer; font-size: 16px; display: flex; align-items: center;">
+                                            <div id="primaryAddressIndicator"
+                                                style="width: 20px; height: 20px; border: 2px solid #79a206; border-radius: 3px; margin-right: 10px;">
+                                            </div>
+                                            Primary Address
+                                        </label>
+                                    </div>
+
                                     <!-- Add Address button -->
                                     <button onclick="addAddress()"
                                         style="background-color: #79a206; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Add
@@ -277,6 +382,18 @@
                                             style="margin-bottom: 15px; margin-left: 10px; color: red;"></small>
                                     </div>
 
+                                    <div style="margin-bottom: 20px;">
+                                        <input type="checkbox" id="editPrimaryAddress" name="primaryAddress"
+                                            style="display: none;">
+                                        <label for="editPrimaryAddress"
+                                            style="cursor: pointer; font-size: 16px; display: flex; align-items: center;">
+                                            <div id="editPrimaryAddressIndicator"
+                                                style="width: 20px; height: 20px; border: 2px solid #79a206; border-radius: 3px; margin-right: 10px;">
+                                            </div>
+                                            Primary Address
+                                        </label>
+                                    </div>
+
                                     <input type="hidden" id="addressId" name="addressId">
 
                                     <!-- Add Address button -->
@@ -300,6 +417,30 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+    // Function to handle the checkbox state change
+    document.getElementById("primaryAddress").addEventListener("change", function () {
+        let indicator = document.getElementById("primaryAddressIndicator");
+        if (this.checked) {
+            indicator.style.backgroundColor = "#79a206"; // Change color when checked
+        } else {
+            indicator.style.backgroundColor = "transparent"; // Reset color when unchecked
+        }
+    });
+
+    document.getElementById('editPrimaryAddressIndicator').addEventListener('click', function () {
+        let checkbox = document.getElementById('editPrimaryAddress');
+        checkbox.checked = !checkbox.checked; // Toggle checkbox state
+    });
+
+    document.getElementById("editPrimaryAddress").addEventListener("change", function () {
+        let indicatorEdit = document.getElementById("editPrimaryAddressIndicator");
+        if (this.checked) {
+            indicatorEdit.style.backgroundColor = "#79a206"; // Change color when checked
+        } else {
+            indicatorEdit.style.backgroundColor = "transparent"; // Reset color when unchecked
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         // Retrieve the fragment identifier from the URL
         const fragmentIdentifier = window.location.hash.substring(1);

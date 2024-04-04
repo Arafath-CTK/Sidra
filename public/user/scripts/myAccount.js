@@ -20,6 +20,7 @@ async function addAddress() {
     const pin = document.getElementById("pin").value;
     const phone = document.getElementById("phone").value;
     const addressType = document.getElementById("addressType").value;
+    const isPrimary = document.getElementById("primaryAddress").checked;
 
     let errorCount = 0;
 
@@ -102,6 +103,7 @@ async function addAddress() {
           pin,
           phone,
           addressType,
+          isPrimary,
         });
         if (response.data.addressExist) {
           hideSpinner();
@@ -201,6 +203,19 @@ async function editAddressPage(addressId) {
       }
     });
 
+    // Set the checkbox state for primary address
+    document.getElementById("editPrimaryAddress").checked = data.isPrimary;
+
+    // Update primary address indicator based on checkbox state
+    const primaryAddressIndicator = document.getElementById(
+      "editPrimaryAddressIndicator"
+    );
+    if (data.isPrimary) {
+      primaryAddressIndicator.style.backgroundColor = "#79a206";
+    } else {
+      primaryAddressIndicator.style.backgroundColor = "#ffffff";
+    }
+
     // Show the modal
     document.getElementById("addressEditModal").style.display = "block";
   } catch (error) {
@@ -219,6 +234,7 @@ async function editAddress() {
     const phone = document.getElementById("editPhone").value;
     const addressType = document.getElementById("editAddressType").value;
     let addressId = document.getElementById("addressId").value;
+    const isPrimary = document.getElementById("editPrimaryAddress").checked;
 
     let errorCount = 0;
 
@@ -303,6 +319,7 @@ async function editAddress() {
           pin,
           phone,
           addressType,
+          isPrimary,
         });
         if (response.data.addressExist) {
           hideSpinner();

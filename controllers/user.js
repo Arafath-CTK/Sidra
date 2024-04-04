@@ -284,6 +284,7 @@ let myAccountPage = async (req, res) => {
       let userData = await User.findOne({ email: email });
       let year = userData.register_date.split("/")[2];
       let addresses = userData.addresses;
+      let orders = userData.orders;
 
       return res.status(200).render("user/myAccount", {
         title: "Sidra | My Account",
@@ -293,6 +294,7 @@ let myAccountPage = async (req, res) => {
         userEmail: userData.email,
         memberSince: year,
         addresses,
+        orders,
       });
     }
   } catch (error) {
@@ -396,17 +398,46 @@ let deleteAddress = async (req, res) => {
 
 let shopPage = async (req, res) => {
   try {
-    if (req.cookies.userToken) {
-      let products = await Product.find();
-      res
-        .status(200)
-        .render("user/shop", { title: "Sidra | Shop", user: true, products });
-    } else {
-      let products = await Product.find();
-      res
-        .status(200)
-        .render("user/shop", { title: "Sidra | Shop", user: false, products });
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const PAGE_SIZE = 24;
+
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    const currentPageMinusOne = Math.max(1, page - 1);
+    const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+    // Calculate pages array
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({
+        pageNumber: i,
+        isCurrent: i === page,
+      });
     }
+
+    let products = await Product.find().skip(skip).limit(PAGE_SIZE);
+
+    const user = req.cookies.userToken ? true : false;
+
+    // Determine whether to disable "Prev" and "Next" buttons
+    const disablePrev = page === 1;
+    const disableNext = page === totalPages;
+
+    res.status(200).render("user/shop", {
+      title: "Sidra | Shop",
+      user,
+      products,
+      currentPage: page,
+      currentPageMinusOne,
+      currentPagePlusOne,
+      totalPages,
+      pages,
+      disablePrev,
+      disableNext,
+    });
   } catch (error) {
     console.error("Error rendering the Shop page: ", error);
     res.status(500).render("error", {
@@ -418,22 +449,47 @@ let shopPage = async (req, res) => {
 
 let plantsPage = async (req, res) => {
   try {
-    const plants = await Product.find({ category: "plants" });
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const PAGE_SIZE = 24;
 
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      if (tokenExtracted.role === "user") {
-        return res.status(200).render("user/shop", {
-          title: "Sidra | Shop",
-          user: true,
-          products: plants,
-        });
-      }
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    const currentPageMinusOne = Math.max(1, page - 1);
+    const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+    // Calculate pages array
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({
+        pageNumber: i,
+        isCurrent: i === page,
+      });
     }
-    return res.status(200).render("user/shop", {
+
+    const plants = await Product.find({ category: "plants" })
+      .skip(skip)
+      .limit(PAGE_SIZE);
+
+    const user = req.cookies.userToken ? true : false;
+
+    // Determine whether to disable "Prev" and "Next" buttons
+    const disablePrev = page === 1;
+    const disableNext = page === totalPages;
+
+    res.status(200).render("user/shop", {
       title: "Sidra | Shop",
-      user: false,
+      user,
       products: plants,
+      currentPage: page,
+      currentPageMinusOne,
+      currentPagePlusOne,
+      totalPages,
+      pages,
+      disablePrev,
+      disableNext,
     });
   } catch (error) {
     console.error("Error rendering the plants: ", error);
@@ -446,22 +502,47 @@ let plantsPage = async (req, res) => {
 
 let containersPage = async (req, res) => {
   try {
-    const containers = await Product.find({ category: "pots" });
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const PAGE_SIZE = 24;
 
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      if (tokenExtracted.role === "user") {
-        return res.status(200).render("user/shop", {
-          title: "Sidra | Shop",
-          user: true,
-          products: containers,
-        });
-      }
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    const currentPageMinusOne = Math.max(1, page - 1);
+    const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+    // Calculate pages array
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({
+        pageNumber: i,
+        isCurrent: i === page,
+      });
     }
-    return res.status(200).render("user/shop", {
+
+    const containers = await Product.find({ category: "pots" })
+      .skip(skip)
+      .limit(PAGE_SIZE);
+
+    const user = req.cookies.userToken ? true : false;
+
+    // Determine whether to disable "Prev" and "Next" buttons
+    const disablePrev = page === 1;
+    const disableNext = page === totalPages;
+
+    res.status(200).render("user/shop", {
       title: "Sidra | Shop",
-      user: false,
+      user,
       products: containers,
+      currentPage: page,
+      currentPageMinusOne,
+      currentPagePlusOne,
+      totalPages,
+      pages,
+      disablePrev,
+      disableNext,
     });
   } catch (error) {
     console.error("Error rendering the plants: ", error);
@@ -474,22 +555,41 @@ let containersPage = async (req, res) => {
 
 let suppliesPage = async (req, res) => {
   try {
-    const supplies = await Product.find({ category: "supplies" });
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const PAGE_SIZE = 24;
 
-    if (req.cookies.userToken) {
-      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      if (tokenExtracted.role === "user") {
-        return res.status(200).render("user/shop", {
-          title: "Sidra | Shop",
-          user: true,
-          products: supplies,
-        });
-      }
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    const currentPageMinusOne = Math.max(1, page - 1);
+    const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+    // Calculate pages array
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({
+        pageNumber: i,
+        isCurrent: i === page,
+      });
     }
-    return res.status(200).render("user/shop", {
+
+    const supplies = await Product.find({ category: "supplies" })
+      .skip(skip)
+      .limit(PAGE_SIZE);
+
+    const user = req.cookies.userToken ? true : false;
+
+    res.status(200).render("user/shop", {
       title: "Sidra | Shop",
-      user: false,
+      user,
       products: supplies,
+      currentPage: page,
+      currentPageMinusOne,
+      currentPagePlusOne,
+      totalPages,
+      pages,
     });
   } catch (error) {
     console.error("Error rendering the plants: ", error);
@@ -638,7 +738,15 @@ let cartPage = async (req, res) => {
       let userId = tokenExtracted.userId;
 
       let userData = await User.findById(userId).populate("cart.product");
-      let products = userData.cart;
+      let products = userData.cart.map((item) => {
+        return {
+          product: item.product,
+          quantity: item.quantity,
+          isSelected: item.isSelected,
+          totalPrice: item.product.price * item.quantity,
+          _id: item._id,
+        };
+      });
 
       res
         .status(200)
@@ -663,10 +771,7 @@ let addToCart = async (req, res) => {
 
       let addedProduct = await helper.addToCartHelper(req.body, userId);
 
-      if (addedProduct.productExist) {
-        console.log("Product already exists in cart");
-        return res.status(200).json({ productExist: true });
-      } else {
+      if (addedProduct.success) {
         console.log("Product added to cart successfully");
         return res.status(200).json({ success: true });
       }
@@ -720,7 +825,36 @@ let updateQuantity = async (req, res) => {
       if (updated.productNotExist) {
         return res.status(200).json({ productNotExist: true });
       } else if (updated.success) {
-        console.log("Cart updated successfully", updated.updatedCart);
+        console.log("Cart updated successfully");
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(200).json({ failed: true });
+      }
+    } else {
+      res.status(200).json({ notLogged: true });
+    }
+  } catch (error) {
+    console.error("Error updating the quantity of the cart: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error updating the quantity of the cart",
+    });
+  }
+};
+
+let updateSelected = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+      let cartId = req.params.id;
+
+      let updated = await helper.updateSelectedHelper(userId, cartId, req.body);
+
+      if (updated.productNotExist) {
+        return res.status(200).json({ productNotExist: true });
+      } else if (updated.success) {
+        console.log("Cart item selected successfully");
         return res.status(200).json({ success: true });
       } else {
         return res.status(200).json({ failed: true });
@@ -761,6 +895,142 @@ let cartCount = async (req, res) => {
   }
 };
 
+let checkoutPage = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let userData = await User.findById(userId).populate("cart.product");
+
+      let allAddresses = userData.addresses;
+      // Filter out the primary address
+      let primaryAddress = allAddresses.find(
+        (address) => address.isPrimary === true
+      );
+
+      // Filter out all other addresses except the primary one
+      let addresses = allAddresses.filter(
+        (address) => address.isPrimary !== true
+      );
+
+      let products = userData.cart
+        .map((item) => {
+          return {
+            product: item.product,
+            quantity: item.quantity,
+            isSelected: item.isSelected,
+            totalPrice: item.product.price * item.quantity,
+            _id: item._id,
+          };
+        })
+        .filter((product) => product.isSelected === true);
+
+      let subTotal = products.reduce((total, item) => {
+        return total + item.product.price * item.quantity;
+      }, 0);
+
+      let shipping = 50;
+      if (subTotal > 500) {
+        shipping = 0;
+      }
+
+      let totalPrice = subTotal + shipping;
+
+      res.status(200).render("user/checkout", {
+        title: "Sidra | Checkout",
+        user: true,
+        products,
+        primaryAddress,
+        addresses,
+        subTotal,
+        shipping,
+        totalPrice,
+      });
+    } else {
+      console.log("failed");
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.error("Error rendering the checkout page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the checkout page",
+    });
+  }
+};
+
+let placeOrder = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      const { addressId, totalPrice } = req.body;
+
+      // Find the user by ID
+      const user = await User.findById(userId).populate("cart.product");
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Find the selected address in the user's addresses array
+      const selectedAddress = user.addresses.find(
+        (address) => address._id == addressId
+      );
+
+      if (!selectedAddress) {
+        return res.status(404).json({ message: "Selected address not found" });
+      }
+
+      // Filter the cart to get only the selected products
+      const selectedProducts = user.cart.filter((item) => item.isSelected);
+
+      if (selectedProducts.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "No products selected for order" });
+      }
+
+      // Create a new order object
+      const newOrder = {
+        products: selectedProducts.map((item) => ({
+          product_id: item.product._id,
+          quantity: item.quantity,
+        })),
+        total_amount: totalPrice,
+        address: selectedAddress,
+        status: "Pending", // Set initial status
+        created_at: new Date(),
+      };
+
+      // Push the new order to the user's orders array
+      user.orders.push(newOrder);
+
+      // Remove selected products from the cart
+      user.cart = user.cart.filter((item) => !item.isSelected);
+
+      // Save the updated user document
+      await user.save();
+
+      // Respond with success message
+      res
+        .status(200)
+        .json({ message: "Order placed successfully", order: newOrder });
+    } else {
+      console.log("failed");
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.error("Error rendering the checkout page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the checkout page",
+    });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -792,5 +1062,8 @@ module.exports = {
   addToCart,
   removeFromCart,
   updateQuantity,
+  updateSelected,
   cartCount,
+  checkoutPage,
+  placeOrder,
 };

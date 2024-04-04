@@ -128,8 +128,17 @@ let generateAndSendOTP = async (email) => {
 let addAddressHelper = async (address, userId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let { name, house, street, city, state, pin, phone, addressType } =
-        address;
+      let {
+        name,
+        house,
+        street,
+        city,
+        state,
+        pin,
+        phone,
+        addressType,
+        isPrimary,
+      } = address;
 
       let user = await User.findById(userId);
 
@@ -154,6 +163,15 @@ let addAddressHelper = async (address, userId) => {
           phone_number: phone,
         };
 
+        // Add isPrimary flag to the new address
+        if (isPrimary) {
+          newAddress.isPrimary = true;
+          // Unset isPrimary flag for existing addresses if this address is set as primary
+          user.addresses.forEach((addr) => {
+            addr.isPrimary = false;
+          });
+        }
+
         user.addresses.push(newAddress);
         await user.save();
 
@@ -169,8 +187,17 @@ let addAddressHelper = async (address, userId) => {
 let editAddressHelper = async (address, userId, addressId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let { name, house, street, city, state, pin, phone, addressType } =
-        address;
+      let {
+        name,
+        house,
+        street,
+        city,
+        state,
+        pin,
+        phone,
+        addressType,
+        isPrimary,
+      } = address;
 
       // Check if the edited address already exists in the database
       const existingAddress = await User.findOne({
@@ -213,6 +240,18 @@ let editAddressHelper = async (address, userId, addressId) => {
       // Check if the user was found and updated
       if (!updatedUser) {
         return reject("User or address not found");
+      }
+
+      // If the edited address is set as primary, update other addresses accordingly
+      if (isPrimary) {
+        updatedUser.addresses.forEach((addr) => {
+          if (addr._id.toString() !== addressId.toString()) {
+            addr.isPrimary = false;
+          } else {
+            addr.isPrimary = true;
+          }
+        });
+        await updatedUser.save();
       }
 
       resolve({ success: true, updatedUser });
@@ -287,17 +326,21 @@ let addToCartHelper = async (productData, userId) => {
 
       let user = await User.findById(userId);
 
-      let existingCart = user.cart.findIndex(item => item.product.equals(productId))
+      let existingCartIndex = user.cart.findIndex((item) =>
+        item.product.equals(productId)
+      );
 
-      if (existingCart) {
-        resolve({ productExist: true });
+      if (existingCartIndex !== -1) {
+        user.cart[existingCartIndex].quantity =
+          parseInt(user.cart[existingCartIndex].quantity) + parseInt(quantity);
       } else {
-        user.cart.push({product: productId, quantity: quantity});
-        await user.save();
-
-        console.log("Product added to cart successfully");
-        resolve({ success: true });
+        user.cart.push({ product: productId, quantity: quantity });
       }
+
+      await user.save();
+
+      console.log("Product added to cart successfully");
+      resolve({ success: true });
     } catch (error) {
       reject(error);
     }
@@ -344,6 +387,27 @@ let updateQuantityHelper = async (userId, cartData) => {
   });
 };
 
+let updateSelectedHelper = async (userId, cartId, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let {isSelected} = data
+      const updatedCart = await User.findOneAndUpdate(
+        {_id: userId, "cart._id": cartId},
+        {$set: {"cart.$.isSelected": isSelected}},
+        {new: true}
+      )
+
+      if (!updatedCart) {
+        reject({ productNotExist: true });
+      }
+
+      resolve({ success: true, updatedCart });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
 module.exports = {
   signUpHelper,
   signInHelper,
@@ -357,4 +421,5 @@ module.exports = {
   removeFromWishlistHelper,
   removeFromCartHelper,
   updateQuantityHelper,
+  updateSelectedHelper
 };

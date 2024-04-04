@@ -34,7 +34,10 @@ router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage);
 router.post("/addtocart", preventBack, userControllers.addToCart);
 router.delete("/cart/remove/:id", preventBack, userControllers.removeFromCart);
 router.post("/cart/updateQuantity", userControllers.updateQuantity);
+router.put("/cart/updateSelected/:id", userControllers.updateSelected)
 router.get("/cart/count", userControllers.cartCount);
+router.get("/checkout", userControllers.checkoutPage);
+router.post("/placeOrder", userControllers.placeOrder)
 
 router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
 router.post("/addtowishlist/:id", userControllers.addToWishlist)

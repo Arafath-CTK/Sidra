@@ -1,0 +1,302 @@
+<!--Checkout page section-->
+<div class="Checkout_section mt-100" id="accordion">
+  <div class="container">
+    <div class="checkout_form">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+
+          <form action="#">
+            <h3>Billing Details</h3>
+            <div class="row">
+              <div class="col-12 mb-20">
+                <label>Select Address <span>*</span></label>
+                <select class="select_option" name="address" id="addressDropdown">
+                  <!-- Display primary address as selected by default -->
+                  <option value="{{primaryAddress._id}}" selected>
+                    {{primaryAddress.name}} -
+                    {{primaryAddress.street}}, {{primaryAddress.city}},
+                    {{primaryAddress.state}} - {{primaryAddress.pin_code}} - {{primaryAddress.phone_number}}
+                  </option>
+                  <!-- Iterate over user's saved addresses and populate the options -->
+                  {{#each addresses}}
+                  <option value="{{this._id}}">
+                    {{this.name}} - {{this.street}}, {{this.city}}, {{this.state}} -
+                    {{this.pin_code}} - {{this.phone_number}}
+                  </option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+          </form>
+
+          {{!-- <form action="#">
+            <h3>Billing Details</h3>
+            <div class="row">
+              <div class="col-lg-6 mb-20">
+                <label>First Name <span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-lg-6 mb-20">
+                <label>Last Name <span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <label>Company Name</label>
+                <input type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <label for="country">country <span>*</span></label>
+                <select class="select_option" name="cuntry" id="country">
+                  <option value="2">bangladesh</option>
+                  <option value="3">Algeria</option>
+                  <option value="4">Afghanistan</option>
+                  <option value="5">Ghana</option>
+                  <option value="6">Albania</option>
+                  <option value="7">Bahrain</option>
+                  <option value="8">Colombia</option>
+                  <option value="9">Dominican Republic</option>
+                </select>
+              </div>
+
+              <div class="col-12 mb-20">
+                <label>Street address <span>*</span></label>
+                <input placeholder="House number and street name" type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <label>Town / City <span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <label>State / County <span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-lg-6 mb-20">
+                <label>Phone<span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-lg-6 mb-20">
+                <label> Email Address <span>*</span></label>
+                <input type="text" />
+              </div>
+              <div class="col-12 mb-20">
+                <input id="account" type="checkbox" data-bs-target="createp_account" />
+                <label for="account" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                  aria-controls="collapseOne">Create an account?</label>
+
+                <div id="collapseOne" class="collapse one" data-parent="#accordion">
+                  <div class="card-body1">
+                    <label> Account password <span>*</span></label>
+                    <input placeholder="password" type="password" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-20">
+                <input id="address" type="checkbox" data-bs-target="createp_account" />
+                <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
+                  aria-controls="collapseOne">Ship to a different address?</label>
+
+                <div id="collapsetwo" class="collapse one" data-parent="#accordion">
+                  <div class="row">
+                    <div class="col-lg-6 mb-20">
+                      <label>First Name <span>*</span></label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-lg-6 mb-20">
+                      <label>Last Name <span>*</span></label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>Company Name</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <div class="select_form_select">
+                        <label for="countru_name">country <span>*</span></label>
+                        <select class="select_option" name="cuntry" id="countru_name">
+                          <option value="2">bangladesh</option>
+                          <option value="3">Algeria</option>
+                          <option value="4">Afghanistan</option>
+                          <option value="5">Ghana</option>
+                          <option value="6">Albania</option>
+                          <option value="7">Bahrain</option>
+                          <option value="8">Colombia</option>
+                          <option value="9">Dominican Republic</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-20">
+                      <label>Street address <span>*</span></label>
+                      <input placeholder="House number and street name" type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>Town / City <span>*</span></label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>State / County <span>*</span></label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-lg-6 mb-20">
+                      <label>Phone<span>*</span></label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-lg-6">
+                      <label> Email Address <span>*</span></label>
+                      <input type="text" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="order-notes">
+                  <label for="order_note">Order Notes</label>
+                  <textarea id="order_note"
+                    placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                </div>
+              </div>
+            </div>
+          </form> --}}
+
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+          <div class="coupon_code">
+            <h3>Coupon</h3>
+            <div class="coupon_inner">
+              <p>Enter the coupon code if you have one.</p>
+              <div class="d-flex justify-content-center">
+                <input placeholder=" Coupon code" type="text" />
+                <button type="submit">Apply</button>
+              </div>
+            </div>
+          </div>
+          <form action="#" class="mt-5">
+            <h3>Your order</h3>
+            <div class="order_table table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each products}}
+                  <tr>
+                    <td>{{this.product.name}}<strong> × {{this.quantity}}</strong></td>
+                    <td>{{this.product.price}}</td>
+                  </tr>
+                  {{/each}}
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Cart Subtotal</th>
+                    <td>{{subTotal}}</td>
+                  </tr>
+                  <tr>
+                    <th>Shipping</th>
+                    <td><strong>{{shipping}}</strong></td>
+                  </tr>
+                  <tr class="order_total">
+                    <th>Order Total</th>
+                    <td><strong id="totalPrice">{{totalPrice}}</strong></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="payment_method">
+              <div class="panel-default">
+                <input id="cashOnDelivery" name="paymentMethod" type="radio" value="cashOnDelivery" />
+                <label for="cashOnDelivery">Cash on Delivery</label>
+              </div>
+              <div class="panel-default">
+                <input id="prepaid" name="paymentMethod" type="radio" value="prepaid" checked />
+                <label for="prepaid">Prepaid</label>
+              </div>
+              <div class="order_button">
+                <button id="orderButton" type="button">Proceed to Payment</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!--Checkout page section end-->
+
+{{!-- SweetAlert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const cashOnDeliveryRadio = document.getElementById("cashOnDelivery");
+    const prepaidRadio = document.getElementById("prepaid");
+    const orderButton = document.getElementById("orderButton");
+
+    // Function to handle "Place Order" button click
+    function placeOrder() {
+      // Get the selected address from the dropdown
+      const addressDropdown = document.getElementById("addressDropdown");
+      const selectedAddressId = addressDropdown.value;
+
+      // Get the total price from the checkout summary
+      const totalPrice = parseFloat(document.getElementById("totalPrice").textContent);
+
+      // Send the data to the server
+      axios.post('/placeOrder', {
+        addressId: selectedAddressId,
+        totalPrice: totalPrice
+      })
+        .then(response => {
+          console.log('Order placed successfully:', response.data);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Order placed successfully",
+          }).then(() => {
+            window.location.href = "/myAccount/#orders";
+          });
+          // Optionally, redirect to a success page or show a success message
+        })
+        .catch(error => {
+
+          console.error('Error placing order:', error);
+          // Handle the error, show an error message to the user, etc.
+        });
+    }
+
+    // Function to handle "Proceed to Payment" button click
+    function proceedToPayment() {
+      // Add your logic for "Proceed to Payment" here
+      console.log("Proceed to Payment logic executed");
+    }
+
+    // Add event listener to the "Cash on Delivery" radio button
+    cashOnDeliveryRadio.addEventListener("change", function () {
+      if (this.checked) {
+        orderButton.innerText = "Place Order";
+        orderButton.onclick = placeOrder; // Assign "Place Order" function
+      }
+    });
+
+    // Add event listener to the "Prepaid" radio button
+    prepaidRadio.addEventListener("change", function () {
+      if (this.checked) {
+        orderButton.innerText = "Proceed to Payment";
+        orderButton.onclick = proceedToPayment; // Assign "Proceed to Payment" function
+      }
+    });
+  });
+
+</script>
