@@ -9,25 +9,112 @@
             <h3>Billing Details</h3>
             <div class="row">
               <div class="col-12 mb-20">
-                <label>Select Address <span>*</span></label>
-                <select class="select_option" name="address" id="addressDropdown">
-                  <!-- Display primary address as selected by default -->
-                  <option value="{{primaryAddress._id}}" selected>
-                    {{primaryAddress.name}} -
-                    {{primaryAddress.street}}, {{primaryAddress.city}},
-                    {{primaryAddress.state}} - {{primaryAddress.pin_code}} - {{primaryAddress.phone_number}}
-                  </option>
-                  <!-- Iterate over user's saved addresses and populate the options -->
-                  {{#each addresses}}
-                  <option value="{{this._id}}">
-                    {{this.name}} - {{this.street}}, {{this.city}}, {{this.state}} -
-                    {{this.pin_code}} - {{this.phone_number}}
-                  </option>
-                  {{/each}}
-                </select>
+                <label>Select An Address</label>
+                <div class="address" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                  <input type="radio" id="address" name="address" value="{{primaryAddress._id}}" checked
+                    style="width: 12px; height: 12px; margin-right: 5px;">
+                  <label for="address">{{primaryAddress.name}}</label><br>
+                  <p style="margin: 0;"> {{primaryAddress.house_name}}<br>
+                    {{primaryAddress.street}}, {{primaryAddress.city}},<br>
+                    {{primaryAddress.state}} - {{primaryAddress.pin_code}}<br>
+                    {{primaryAddress.phone_number}}
+                  </p>
+                </div>
+                {{#each addresses}}
+                <div class="address" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                  <input type="radio" id="address" name="address" value="{{this._id}}"
+                    style="width: 12px; height: 12px; margin-right: 5px;">
+                  <label for="address">{{this.name}}</label><br>
+                  <p style="margin: 0;"> {{this.house_name}}<br>
+                    {{this.street}}, {{this.city}},<br>
+                    {{this.state}} - {{this.pin_code}}<br>
+                    {{this.phone_number}}
+                  </p>
+                </div>
+                {{/each}}
+
+                <input id="address" name="address" type="radio" style="width: 12px; height: 12px; margin-right: 5px;"
+                  data-bs-target="createp_account" />
+                <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
+                  aria-controls="collapseOne">Ship to a different address?</label>
+
+                <div id="collapsetwo" class="collapse one" data-parent="#accordion">
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-lg-12 mb-20">
+                      <label>Name</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>House / Office Name</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>Street address</label>
+                      <input placeholder="Street or unit name" type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>Town / City</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-12 mb-20">
+                      <label>State</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-lg-6 mb-20">
+                      <label>PIN</label>
+                      <input type="text" />
+                    </div>
+                    <div class="col-lg-6 mb-20">
+                      <label>Phone</label>
+                      <input type="text" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
+
+          {{!-- <div class="col-12 mb-20">
+
+            <input id="address" name="address" type="radio" style="width: 12px; height: 12px; margin-right: 5px;"
+              data-bs-target="createp_account" />
+            <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
+              aria-controls="collapseOne">Ship to a different address?</label>
+
+            <div id="collapsetwo" class="collapse one" data-parent="#accordion">
+              <div class="row">
+                <div class="col-lg-6 mb-20">
+                  <label>Name <span>*</span></label>
+                  <input type="text" />
+                </div>
+                <div class="col-12 mb-20">
+                  <label>House Name</label>
+                  <input type="text" />
+                </div>
+
+                <div class="col-12 mb-20">
+                  <label>Street address <span>*</span></label>
+                  <input placeholder="House number and street name" type="text" />
+                </div>
+                <div class="col-12 mb-20">
+                  <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
+                </div>
+                <div class="col-12 mb-20">
+                  <label>Town / City <span>*</span></label>
+                  <input type="text" />
+                </div>
+                <div class="col-12 mb-20">
+                  <label>State<span>*</span></label>
+                  <input type="text" />
+                </div>
+                <div class="col-lg-6 mb-20">
+                  <label>Phone<span>*</span></label>
+                  <input type="text" />
+                </div>
+              </div>
+            </div>
+
+          </div> --}}
 
           {{!-- <form action="#">
             <h3>Billing Details</h3>
@@ -166,6 +253,7 @@
 
         </div>
 
+
         <div class="col-lg-6 col-md-6">
           <div class="coupon_code">
             <h3>Coupon</h3>
@@ -191,7 +279,7 @@
                   {{#each products}}
                   <tr>
                     <td>{{this.product.name}}<strong> × {{this.quantity}}</strong></td>
-                    <td>{{this.product.price}}</td>
+                    <td>&#x20B9; {{this.product.price}}</td>
                   </tr>
                   {{/each}}
 
@@ -199,15 +287,15 @@
                 <tfoot>
                   <tr>
                     <th>Cart Subtotal</th>
-                    <td>{{subTotal}}</td>
+                    <td>&#x20B9; {{subTotal}}</td>
                   </tr>
                   <tr>
                     <th>Shipping</th>
-                    <td><strong>{{shipping}}</strong></td>
+                    <td>&#x20B9; {{shipping}}</td>
                   </tr>
                   <tr class="order_total">
                     <th>Order Total</th>
-                    <td><strong id="totalPrice">{{totalPrice}}</strong></td>
+                    <td><strong id="totalPrice">&#x20B9; {{totalPrice}}</strong></td>
                   </tr>
                 </tfoot>
               </table>
@@ -236,67 +324,4 @@
 
 {{!-- SweetAlert --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const cashOnDeliveryRadio = document.getElementById("cashOnDelivery");
-    const prepaidRadio = document.getElementById("prepaid");
-    const orderButton = document.getElementById("orderButton");
-
-    // Function to handle "Place Order" button click
-    function placeOrder() {
-      // Get the selected address from the dropdown
-      const addressDropdown = document.getElementById("addressDropdown");
-      const selectedAddressId = addressDropdown.value;
-
-      // Get the total price from the checkout summary
-      const totalPrice = parseFloat(document.getElementById("totalPrice").textContent);
-
-      // Send the data to the server
-      axios.post('/placeOrder', {
-        addressId: selectedAddressId,
-        totalPrice: totalPrice
-      })
-        .then(response => {
-          console.log('Order placed successfully:', response.data);
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: "Order placed successfully",
-          }).then(() => {
-            window.location.href = "/myAccount/#orders";
-          });
-          // Optionally, redirect to a success page or show a success message
-        })
-        .catch(error => {
-
-          console.error('Error placing order:', error);
-          // Handle the error, show an error message to the user, etc.
-        });
-    }
-
-    // Function to handle "Proceed to Payment" button click
-    function proceedToPayment() {
-      // Add your logic for "Proceed to Payment" here
-      console.log("Proceed to Payment logic executed");
-    }
-
-    // Add event listener to the "Cash on Delivery" radio button
-    cashOnDeliveryRadio.addEventListener("change", function () {
-      if (this.checked) {
-        orderButton.innerText = "Place Order";
-        orderButton.onclick = placeOrder; // Assign "Place Order" function
-      }
-    });
-
-    // Add event listener to the "Prepaid" radio button
-    prepaidRadio.addEventListener("change", function () {
-      if (this.checked) {
-        orderButton.innerText = "Proceed to Payment";
-        orderButton.onclick = proceedToPayment; // Assign "Proceed to Payment" function
-      }
-    });
-  });
-
-</script>
+<script src="/user/scripts/checkout.js"></script>

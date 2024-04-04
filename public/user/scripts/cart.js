@@ -150,8 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function calculateCartTotals() {
-    let subtotal = 0;
-    // let shippingCharge = 50;
+    let total = 0;
 
     productCheckboxes.forEach((checkbox) => {
       if (checkbox.checked) {
@@ -166,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
               .closest("tr")
               .querySelector('.product_quantity input[type="text"]').value
           );
-          subtotal += productPrice * productQuantity;
+          total += productPrice * productQuantity;
         } else {
           console.error(
             "Product price element not found for selected checkbox!"
@@ -175,14 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // if (subtotal > 500) {
-    //   shippingCharge = 0;
-    // }
 
-    const total = subtotal;
-
-    document.getElementById("subTotal").textContent = subtotal;
-    // document.getElementById("shipping").textContent = shippingCharge;
     document.getElementById("total").textContent = total;
   }
 });

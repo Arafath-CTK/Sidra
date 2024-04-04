@@ -1,4 +1,3 @@
-<!--shopping cart area start -->
 <div class="shopping_cart_area mt-100">
   <div class="container">
     <form>
@@ -30,7 +29,7 @@
                           src="{{this.product.images.[0]}}" alt="" /></a></td>
                     <td class="product_name"><a href="/singleProduct/{{this.product._id}}">{{this.product.name}}</a>
                     </td>
-                    <td class="product-price">{{this.product.price}}</td>
+                    <td>&#x20B9; <span class="product-price">{{this.product.price}}</span></td>
 
                     <td class="product_quantity">
                       <div class="quantity-wrapper">
@@ -44,7 +43,7 @@
                       </div>
                     </td>
 
-                    <td class="product_total">{{this.totalPrice}}</td>
+                    <td>&#x20B9; <span class="product_total">{{this.totalPrice}}</span></td>
                     <td class="product_remove"><a onclick="removeProduct(`{{this._id}}`)"><i
                           class="fa fa-trash-o"></i></a></td>
                   </tr>
@@ -53,46 +52,23 @@
 
               </table>
             </div>
-
-            {{!-- <div class="cart_submit">
-              <button type="submit">update cart</button>
-            </div> --}}
           </div>
         </div>
       </div>
       <!--coupon code area start-->
       <div class="coupon_area">
         <div class="row justify-content-end">
-          {{!-- <div class="col-lg-6 col-md-6">
-            <div class="coupon_code left">
-              <h3>Coupon</h3>
-              <div class="coupon_inner">
-                <p>Enter your coupon code if you have one.</p>
-                <input placeholder="Coupon code" type="text" />
-                <button type="submit">Apply coupon</button>
-              </div>
-            </div>
-          </div> --}}
           <div class="col-lg-6 col-md-6">
             <div class="coupon_code right">
               <h3>Cart Summary</h3>
               <div class="coupon_inner">
-                <div class="cart_subtotal">
+                {{!-- <div class="cart_subtotal">
                   <p>Subtotal</p>
-                  <p class="cart_amount" id="subTotal">0</p>
-                </div>
-                {{!-- <div class="cart_subtotal">
-                  <p>Discounts</p>
-                  <p class="cart_amount" id="discounts" style="color: #79a206;">0</p>
+                  <p class="cart_amount">&#x20B9; <span id="subTotal">0</span></p>
                 </div> --}}
-                {{!-- <div class="cart_subtotal">
-                  <p>Shipping Charge</p>
-                  <p class="cart_amount" id="shipping">0</p>
-                </div> --}}
-
                 <div class="cart_subtotal">
                   <p style="font-size: 18px;">Total</p>
-                  <p class="cart_amount" id="total" style="font-size: 19px;">0</p>
+                  <p class="cart_amount" style="font-size: 19px;">&#x20B9; <span id="total">0</span></p>
                 </div>
                 <div class="checkout_btn">
                   <a href="/checkout">Proceed to Checkout</a>
@@ -102,11 +78,8 @@
           </div>
         </div>
       </div>
-
-      <!--coupon code area end-->
     </form>
   </div>
 </div>
-<!--shopping cart area end -->
 
 <script src="/user/scripts/cart.js"></script>
