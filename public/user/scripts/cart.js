@@ -3,11 +3,28 @@ function showToast(message) {
   Toastify({
     text: message,
     duration: 3000, // Duration in milliseconds
+    close: true,
     gravity: "bottom", // Position of the toast message
     position: "center",
     backgroundColor: "black", // Background color of the toast
   }).showToast();
 }
+
+document
+  .getElementById("proceedToCheckoutBtn")
+  .addEventListener("click", () => {
+    // Check if at least one product is selected
+    const selectedProducts = document.querySelectorAll(
+      ".product_checkbox:checked"
+    );
+    if (selectedProducts.length === 0) {
+      // No product selected, display an error message
+      showToast("Please select at least one product to proceed to checkout.");
+    } else {
+      // At least one product selected, proceed to the checkout page
+      window.location.href = "/checkout";
+    }
+  });
 
 async function removeProduct(id) {
   try {
@@ -173,7 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
-
 
     document.getElementById("total").textContent = total;
   }

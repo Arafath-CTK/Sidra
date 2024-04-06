@@ -140,6 +140,14 @@ let addAddressHelper = async (address, userId) => {
         isPrimary,
       } = address;
 
+      // Set default values if not provided
+      if (!addressType) {
+        addressType = "Home"; // Set default address type to 'home'
+      }
+      if (isPrimary === undefined || isPrimary === null) {
+        isPrimary = false; // Set default value of isPrimary to false
+      }
+
       let user = await User.findById(userId);
 
       let existingAddress = await User.findOne({
@@ -173,10 +181,18 @@ let addAddressHelper = async (address, userId) => {
         }
 
         user.addresses.push(newAddress);
-        await user.save();
+        const savedUser = await user.save();
+
+        // Find the newly added address in the user's addresses array
+        const newlyAddedAddress = savedUser.addresses.find(
+          (addr) =>
+            addr.house_name === newAddress.house_name &&
+            addr.street === newAddress.street &&
+            addr.pin_code === newAddress.pin_code
+        );
 
         console.log("address added successfully");
-        resolve({ success: true });
+        resolve({ success: true, addressId: newlyAddedAddress._id });
       }
     } catch (error) {
       reject(error);
@@ -390,12 +406,12 @@ let updateQuantityHelper = async (userId, cartData) => {
 let updateSelectedHelper = async (userId, cartId, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let {isSelected} = data
+      let { isSelected } = data;
       const updatedCart = await User.findOneAndUpdate(
-        {_id: userId, "cart._id": cartId},
-        {$set: {"cart.$.isSelected": isSelected}},
-        {new: true}
-      )
+        { _id: userId, "cart._id": cartId },
+        { $set: { "cart.$.isSelected": isSelected } },
+        { new: true }
+      );
 
       if (!updatedCart) {
         reject({ productNotExist: true });
@@ -403,10 +419,10 @@ let updateSelectedHelper = async (userId, cartId, data) => {
 
       resolve({ success: true, updatedCart });
     } catch (error) {
-      reject(error)
+      reject(error);
     }
-  })
-}
+  });
+};
 
 module.exports = {
   signUpHelper,
@@ -421,5 +437,5 @@ module.exports = {
   removeFromWishlistHelper,
   removeFromCartHelper,
   updateQuantityHelper,
-  updateSelectedHelper
+  updateSelectedHelper,
 };

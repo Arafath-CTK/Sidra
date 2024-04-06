@@ -4,16 +4,15 @@
     <div class="checkout_form">
       <div class="row">
         <div class="col-lg-6 col-md-6">
-
           <form action="#">
             <h3>Billing Details</h3>
             <div class="row">
               <div class="col-12 mb-20">
                 <label>Select An Address</label>
                 <div class="address" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                  <input type="radio" id="address" name="address" value="{{primaryAddress._id}}" checked
-                    style="width: 12px; height: 12px; margin-right: 5px;">
-                  <label for="address">{{primaryAddress.name}}</label><br>
+                  <input type="radio" id="address_{{primaryAddress._id}}" name="address" value="{{primaryAddress._id}}"
+                    checked style="width: 12px; height: 12px; margin-right: 5px;">
+                  <label for="address_{{primaryAddress._id}}">{{primaryAddress.name}}</label><br>
                   <p style="margin: 0;"> {{primaryAddress.house_name}}<br>
                     {{primaryAddress.street}}, {{primaryAddress.city}},<br>
                     {{primaryAddress.state}} - {{primaryAddress.pin_code}}<br>
@@ -22,9 +21,9 @@
                 </div>
                 {{#each addresses}}
                 <div class="address" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                  <input type="radio" id="address" name="address" value="{{this._id}}"
+                  <input type="radio" id="address_{{this._id}}" name="address" value="{{this._id}}"
                     style="width: 12px; height: 12px; margin-right: 5px;">
-                  <label for="address">{{this.name}}</label><br>
+                  <label for="address_{{this._id}}">{{this.name}}</label><br>
                   <p style="margin: 0;"> {{this.house_name}}<br>
                     {{this.street}}, {{this.city}},<br>
                     {{this.state}} - {{this.pin_code}}<br>
@@ -33,226 +32,85 @@
                 </div>
                 {{/each}}
 
-                <input id="address" name="address" type="radio" style="width: 12px; height: 12px; margin-right: 5px;"
-                  data-bs-target="createp_account" />
-                <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
-                  aria-controls="collapseOne">Ship to a different address?</label>
+                <!-- Collapsed list of all addresses -->
+                <div id="addressListCollapse" class="collapse" style="margin-top: 10px;">
+                  {{#each otherAddresses}}
+                  <div class="address" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                    <input type="radio" id="address_{{this._id}}" name="address" value="{{this._id}}"
+                      style="width: 12px; height: 12px; margin-right: 5px;">
+                    <label for="address_{{this._id}}">{{this.name}}</label><br>
+                    <p style="margin: 0;"> {{this.house_name}}<br>
+                      {{this.street}}, {{this.city}},<br>
+                      {{this.state}} - {{this.pin_code}}<br>
+                      {{this.phone_number}}
+                    </p>
+                  </div>
+                  {{/each}}
+                </div>
 
+                <!-- Button to toggle the collapsed list -->
+                <button id="showAllAddressesBtn" type="button" class="btn btn-primary"
+                  style="border-radius: 5px; background-color: #79a206; color: #fff; border: none; padding: 8px 16px; font-size: 16px; width: 100%;"
+                  data-bs-toggle="collapse" data-bs-target="#addressListCollapse" aria-expanded="false"
+                  aria-controls="addressListCollapse">
+                  Show All Addresses
+                </button>
+
+                <!-- New line for "Ship to a different address?" label and radio button -->
+                <div class="row mt-3">
+                  <div class="col-12 mb-20">
+                    <input id="newAddress" name="address" type="radio" value="new" data-bs-toggle="collapse"
+                      data-bs-target="#collapsetwo" aria-controls="collapsetwo"
+                      style="width: 12px; height: 12px; margin-right: 5px;" />
+                    <label id="addressLabel" class="righ_0" for="newAddress" data-bs-toggle="collapse"
+                      data-bs-target="#collapsetwo" aria-controls="collapsetwo">Ship to a different address?</label>
+                  </div>
+                </div>
+
+                <!-- Collapsible section for adding a new address -->
                 <div id="collapsetwo" class="collapse one" data-parent="#accordion">
                   <div class="row" style="margin-top: 20px;">
                     <div class="col-lg-12 mb-20">
                       <label>Name</label>
-                      <input type="text" />
+                      <input type="text" class="error" id="name" name="name" />
+                      <small id="nameError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-12 mb-20">
                       <label>House / Office Name</label>
-                      <input type="text" />
+                      <input type="text" class="error" id="house" name="house" />
+                      <small id="houseError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-12 mb-20">
                       <label>Street address</label>
-                      <input placeholder="Street or unit name" type="text" />
+                      <input type="text" class="error" id="street" name="street" />
+                      <small id="streetError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-12 mb-20">
                       <label>Town / City</label>
-                      <input type="text" />
+                      <input type="text" class="error" id="city" name="city" />
+                      <small id="cityError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-12 mb-20">
                       <label>State</label>
-                      <input type="text" />
+                      <input type="text" class="error" id="state" name="state" />
+                      <small id="stateError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-lg-6 mb-20">
                       <label>PIN</label>
-                      <input type="text" />
+                      <input type="number" class="error" id="pin" name="pin" />
+                      <small id="pinError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                     <div class="col-lg-6 mb-20">
                       <label>Phone</label>
-                      <input type="text" />
+                      <input type="number" class="error" id="phone" name="phone" />
+                      <small id="phoneError" style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </form>
-
-          {{!-- <div class="col-12 mb-20">
-
-            <input id="address" name="address" type="radio" style="width: 12px; height: 12px; margin-right: 5px;"
-              data-bs-target="createp_account" />
-            <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
-              aria-controls="collapseOne">Ship to a different address?</label>
-
-            <div id="collapsetwo" class="collapse one" data-parent="#accordion">
-              <div class="row">
-                <div class="col-lg-6 mb-20">
-                  <label>Name <span>*</span></label>
-                  <input type="text" />
-                </div>
-                <div class="col-12 mb-20">
-                  <label>House Name</label>
-                  <input type="text" />
-                </div>
-
-                <div class="col-12 mb-20">
-                  <label>Street address <span>*</span></label>
-                  <input placeholder="House number and street name" type="text" />
-                </div>
-                <div class="col-12 mb-20">
-                  <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
-                </div>
-                <div class="col-12 mb-20">
-                  <label>Town / City <span>*</span></label>
-                  <input type="text" />
-                </div>
-                <div class="col-12 mb-20">
-                  <label>State<span>*</span></label>
-                  <input type="text" />
-                </div>
-                <div class="col-lg-6 mb-20">
-                  <label>Phone<span>*</span></label>
-                  <input type="text" />
-                </div>
-              </div>
-            </div>
-
-          </div> --}}
-
-          {{!-- <form action="#">
-            <h3>Billing Details</h3>
-            <div class="row">
-              <div class="col-lg-6 mb-20">
-                <label>First Name <span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-lg-6 mb-20">
-                <label>Last Name <span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <label>Company Name</label>
-                <input type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <label for="country">country <span>*</span></label>
-                <select class="select_option" name="cuntry" id="country">
-                  <option value="2">bangladesh</option>
-                  <option value="3">Algeria</option>
-                  <option value="4">Afghanistan</option>
-                  <option value="5">Ghana</option>
-                  <option value="6">Albania</option>
-                  <option value="7">Bahrain</option>
-                  <option value="8">Colombia</option>
-                  <option value="9">Dominican Republic</option>
-                </select>
-              </div>
-
-              <div class="col-12 mb-20">
-                <label>Street address <span>*</span></label>
-                <input placeholder="House number and street name" type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <label>Town / City <span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <label>State / County <span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-lg-6 mb-20">
-                <label>Phone<span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-lg-6 mb-20">
-                <label> Email Address <span>*</span></label>
-                <input type="text" />
-              </div>
-              <div class="col-12 mb-20">
-                <input id="account" type="checkbox" data-bs-target="createp_account" />
-                <label for="account" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                  aria-controls="collapseOne">Create an account?</label>
-
-                <div id="collapseOne" class="collapse one" data-parent="#accordion">
-                  <div class="card-body1">
-                    <label> Account password <span>*</span></label>
-                    <input placeholder="password" type="password" />
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-20">
-                <input id="address" type="checkbox" data-bs-target="createp_account" />
-                <label class="righ_0" for="address" data-bs-toggle="collapse" data-bs-target="#collapsetwo"
-                  aria-controls="collapseOne">Ship to a different address?</label>
-
-                <div id="collapsetwo" class="collapse one" data-parent="#accordion">
-                  <div class="row">
-                    <div class="col-lg-6 mb-20">
-                      <label>First Name <span>*</span></label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-lg-6 mb-20">
-                      <label>Last Name <span>*</span></label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-12 mb-20">
-                      <label>Company Name</label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-12 mb-20">
-                      <div class="select_form_select">
-                        <label for="countru_name">country <span>*</span></label>
-                        <select class="select_option" name="cuntry" id="countru_name">
-                          <option value="2">bangladesh</option>
-                          <option value="3">Algeria</option>
-                          <option value="4">Afghanistan</option>
-                          <option value="5">Ghana</option>
-                          <option value="6">Albania</option>
-                          <option value="7">Bahrain</option>
-                          <option value="8">Colombia</option>
-                          <option value="9">Dominican Republic</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-12 mb-20">
-                      <label>Street address <span>*</span></label>
-                      <input placeholder="House number and street name" type="text" />
-                    </div>
-                    <div class="col-12 mb-20">
-                      <input placeholder="Apartment, suite, unit etc. (optional)" type="text" />
-                    </div>
-                    <div class="col-12 mb-20">
-                      <label>Town / City <span>*</span></label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-12 mb-20">
-                      <label>State / County <span>*</span></label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-lg-6 mb-20">
-                      <label>Phone<span>*</span></label>
-                      <input type="text" />
-                    </div>
-                    <div class="col-lg-6">
-                      <label> Email Address <span>*</span></label>
-                      <input type="text" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="order-notes">
-                  <label for="order_note">Order Notes</label>
-                  <textarea id="order_note"
-                    placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
-                </div>
-              </div>
-            </div>
-          </form> --}}
-
         </div>
-
 
         <div class="col-lg-6 col-md-6">
           <div class="coupon_code">
@@ -295,7 +153,7 @@
                   </tr>
                   <tr class="order_total">
                     <th>Order Total</th>
-                    <td><strong id="totalPrice">&#x20B9; {{totalPrice}}</strong></td>
+                    <td><strong>&#x20B9; <small id="totalPrice">{{totalPrice}}</small></strong></td>
                   </tr>
                 </tfoot>
               </table>

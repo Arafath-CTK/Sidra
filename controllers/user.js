@@ -317,7 +317,9 @@ let addAddress = async (req, res) => {
         return res.status(409).json({ addressExist: true });
       } else if (addedAddress.success) {
         console.log("address added successfully");
-        return res.status(200).json({ success: true });
+        return res
+          .status(200)
+          .json({ success: true, addressId: addedAddress.addressId });
       }
     }
   } catch (error) {
@@ -910,9 +912,13 @@ let checkoutPage = async (req, res) => {
       );
 
       // Filter out all other addresses except the primary one
-      let addresses = allAddresses.filter(
-        (address) => address.isPrimary !== true
-      );
+      let addresses = allAddresses
+        .filter((address) => address.isPrimary !== true)
+        .slice(0, 2);
+
+      let otherAddresses = allAddresses
+        .filter((address) => address.isPrimary !== true)
+        .slice(2);
 
       let products = userData.cart
         .map((item) => {
@@ -943,6 +949,7 @@ let checkoutPage = async (req, res) => {
         products,
         primaryAddress,
         addresses,
+        otherAddresses,
         subTotal,
         shipping,
         totalPrice,
@@ -967,6 +974,7 @@ let placeOrder = async (req, res) => {
       let userId = tokenExtracted.userId;
 
       const { addressId, totalPrice } = req.body;
+      console.log(addressId);
 
       // Find the user by ID
       const user = await User.findById(userId).populate("cart.product");

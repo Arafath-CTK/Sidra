@@ -16,9 +16,15 @@ const userSchema = new mongoose.Schema(
         city: String,
         state: String,
         pin_code: String,
-        address_type: String,
+        address_type: {
+          type: String,
+          default: "Home",
+        },
         phone_number: String,
-        isPrimary: Boolean,
+        isPrimary: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
@@ -45,7 +51,7 @@ const userSchema = new mongoose.Schema(
         total_amount: Number,
         status: String,
         address: {
-          property_name: String,
+          house_name: String,
           street: String,
           city: String,
           state: String,
