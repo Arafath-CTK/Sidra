@@ -38,6 +38,7 @@ router.put("/cart/updateSelected/:id", userControllers.updateSelected)
 router.get("/cart/count", userControllers.cartCount);
 router.get("/checkout", userControllers.checkoutPage);
 router.post("/placeOrder", userControllers.placeOrder)
+router.post("/payment/create-order", userControllers.createOrder);
 
 router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
 router.post("/addtowishlist/:id", userControllers.addToWishlist)

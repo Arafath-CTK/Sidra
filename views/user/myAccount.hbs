@@ -206,17 +206,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {{#each orders}}
                                     <tr>
-                                        <td>65f90fac657721f0333069ff</td>
+                                        <td>{{this._id}}</td>
                                         <td class="product-info">
-                                            <img src="https://via.placeholder.com/150" alt="Product Image">
-                                            <p>Aglaonema Lipstick</p>
+                                            {{#each this.products}}
+                                            <div >
+                                                <img src="{{this.product_id.images.[0]}}"
+                                                    alt="Product Image">
+                                                <p>{{this.product_id.name}}</p>
+                                            </div>
+                                            {{/each}}
                                         </td>
-                                        <td>&#x20B9; 100.00</td>
-                                        <td>January 1, 2024</td>
-                                        <td>Shipped</td>
+                                        <td>&#x20B9; {{this.total_amount}}</td>
+                                        <td>{{this.created_at}}</td>
+                                        <td>{{this.status}}</td>
                                         <td><a href="#" class="cancel-text">Cancel Order</a></td>
                                     </tr>
+                                    {{/each}}
                                 </tbody>
                             </table>
                         </div>

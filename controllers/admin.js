@@ -169,7 +169,7 @@ let addProductPost = async (req, res) => {
           });
         } else if (uploaded.success) {
           console.log("Product added successfully");
-          res.status(200).json({success: true})
+          res.status(200).json({ success: true });
         }
       }
     }
@@ -264,13 +264,11 @@ let editProductPage = async (req, res) => {
     }
   } catch (error) {
     console.error("Error while rendering the product editing page: ", error);
-    res
-      .status(500)
-      .render("error", {
-        layout: false,
-        errorMessage: "Error while rendering the product editing page: ",
-        error,
-      });
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while rendering the product editing page: ",
+      error,
+    });
   }
 };
 
@@ -308,6 +306,75 @@ let editProductPut = async (req, res) => {
   }
 };
 
+let orderListPage = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      const usersWithOrders = await User.find({}).populate({
+        path: "orders.products.product_id",
+        model: "product",
+      });
+
+      // Extract orders from each user
+      const allOrders = usersWithOrders.reduce((accumulator, currentUser) => {
+        accumulator.push(...currentUser.orders);
+        return accumulator;
+      }, []);
+
+      res.status(200).render("admin/orderList", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Order List",
+        orders: allOrders,
+      });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while rendering the order list page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while rendering the order list page: ",
+      error,
+    });
+  }
+};
+
+let changeStatus = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      const { orderId } = req.params;
+      const { status } = req.body;
+
+      const user = await User.findOne({ "orders._id": orderId });
+      console.log(user, "hot itt");
+      const order = user.orders.find(
+        (order) => order._id.toString() === orderId
+      );
+      console.log("adad", order);
+
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      // Update the status of the order
+      order.status = status;
+
+      // Save the updated user
+      await user.save();
+
+      res.json({ message: `Status for order ${orderId} updated successfully` });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while changing the order status: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while changing the order status: ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   signInPage,
   signOut,
@@ -321,4 +388,6 @@ module.exports = {
   deleteProduct,
   editProductPage,
   editProductPut,
+  orderListPage,
+  changeStatus,
 };

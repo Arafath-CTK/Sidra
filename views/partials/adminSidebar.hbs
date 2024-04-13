@@ -69,11 +69,11 @@
         <!-- Menu: Sub menu ul -->
         <ul class="sub-menu collapse" id="menu-order">
           <li>
-            <a class="ms-link" href="order-list.html">
+            <a class="ms-link" href="/admin/orderList">
               Orders List
             </a>
           </li>
-          <li>
+          {{!-- <li>
             <a class="ms-link" href="order-details.html">
               Order Details
             </a>
@@ -82,7 +82,7 @@
             <a class="ms-link" href="order-invoices.html">
               Order Invoices
             </a>
-          </li>
+          </li> --}}
         </ul>
       </li>
 
@@ -133,12 +133,12 @@
 </div>
 
 <script>
-const navLinks = document.querySelectorAll('.m-link');
+  const navLinks = document.querySelectorAll('.m-link');
 
-navLinks.forEach(link => {
+  navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        navLinks.forEach(otherLink => otherLink.classList.remove('active'));
-        link.classList.add('active');
+      navLinks.forEach(otherLink => otherLink.classList.remove('active'));
+      link.classList.add('active');
     });
-});
+  });
 </script>

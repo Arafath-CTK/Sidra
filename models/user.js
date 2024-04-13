@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema(
         total_amount: Number,
         status: String,
         address: {
+          name: String,
           house_name: String,
           street: String,
           city: String,

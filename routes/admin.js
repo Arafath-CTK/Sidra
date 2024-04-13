@@ -11,7 +11,7 @@ router.post("/signIn", adminControllers.signInPost);
 router.get("/signout", preventBack, adminControllers.signOut)
 
 router.get("/", preventBack, adminControllers.adminHome);
-
+ 
 router.get("/usersList", preventBack, adminControllers.usersListPage)
 router.post("/usersList/:userId/block", authenticateAdmin(), adminControllers.userAction)
 
@@ -21,5 +21,8 @@ router.get("/listProduct", preventBack, authenticateAdmin(), adminControllers.pr
 router.get("/editProduct/:id", preventBack, authenticateAdmin(), adminControllers.editProductPage)
 router.put("/editProduct/:id", preventBack, authenticateAdmin(), upload.array('image', 3),adminControllers.editProductPut)
 router.delete("/products/:id", preventBack, authenticateAdmin(), adminControllers.deleteProduct)
+
+router.get("/orderList", preventBack, authenticateAdmin(), adminControllers.orderListPage)
+router.put("/changeStatus/:id", authenticateAdmin(), adminControllers.changeStatus)
 
 module.exports = router;

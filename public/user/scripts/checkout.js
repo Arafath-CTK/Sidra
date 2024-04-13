@@ -1,5 +1,4 @@
 function showToast(message) {
-  // Display toast message using Toastify library
   Toastify({
     text: message,
     duration: 3000, // Duration in milliseconds
@@ -173,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .post("/placeOrder", {
         addressId: selectedAddressId,
         totalPrice: totalPrice,
+        paymentStatus: "COD",
       })
       .then((response) => {
         console.log("Order placed successfully:", response.data);
@@ -190,9 +190,74 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to handle "Proceed to Payment" button click
-  function proceedToPayment() {
-    // Add your logic for "Proceed to Payment" here
-    console.log("Proceed to Payment logic executed");
+  async function proceedToPayment() {
+    console.log("outer");
+    try {
+      console.log("started inner");
+      const isNewAddressSelected =
+        document.getElementById("newAddress").checked;
+      let selectedAddressId;
+
+      if (isNewAddressSelected) {
+        const response = await addAddress();
+
+        if (response.success) {
+          selectedAddressId = response.addressId;
+        } else {
+          showToast("Error adding new address");
+          return;
+        }
+      } else {
+        selectedAddressId = document.querySelector(
+          'input[name="address"]:checked'
+        ).value;
+      }
+
+      // Get the total price from the checkout summary
+      const totalPrice = parseFloat(
+        document.getElementById("totalPrice").textContent
+      );
+
+      const response = await axios.post("/payment/create-order", {
+        amount: totalPrice,
+      });
+
+      const order = response.data;
+
+      const razorpay = new Razorpay({
+        key: order.apiKey,
+        amount: order.amount,
+        currency: "INR",
+        order_id: order.id,
+        name: "Sidra",
+        description: "Complete the payment for order placement",
+        handler: function () {
+          axios
+            .post("/placeOrder", {
+              addressId: selectedAddressId,
+              totalPrice: totalPrice,
+              paymentStatus: "Pre Paid",
+            })
+            .then((response) => {
+              console.log("Order placed successfully:", response.data);
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Order placed successfully",
+              }).then(() => {
+                window.location.href = "/myAccount/#orders";
+              });
+            })
+            .catch((error) => {
+              console.error("Error placing order:", error);
+            });
+        },
+      });
+
+      razorpay.open();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // Add event listener to the "Cash on Delivery" radio button

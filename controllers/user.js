@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
+const razorpay = require("../config/razorpay");
 const { use } = require("../routes/user");
 
 let homePage = async (req, res) => {
@@ -276,6 +277,7 @@ let myAccountPage = async (req, res) => {
     }
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
       role = tokenExtracted.role;
       email = tokenExtracted.userEmail;
       if (role !== "user") {
@@ -286,6 +288,12 @@ let myAccountPage = async (req, res) => {
       let addresses = userData.addresses;
       let orders = userData.orders;
 
+      // Populate product details in the orders array
+      let populatedOrders = await User.populate(orders, {
+        path: "products.product_id",
+        model: "product",
+      });
+
       return res.status(200).render("user/myAccount", {
         title: "Sidra | My Account",
         user: true,
@@ -294,7 +302,7 @@ let myAccountPage = async (req, res) => {
         userEmail: userData.email,
         memberSince: year,
         addresses,
-        orders,
+        orders: populatedOrders,
       });
     }
   } catch (error) {
@@ -973,7 +981,7 @@ let placeOrder = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
 
-      const { addressId, totalPrice } = req.body;
+      const { addressId, totalPrice, paymentStatus } = req.body;
       console.log(addressId);
 
       // Find the user by ID
@@ -1008,8 +1016,9 @@ let placeOrder = async (req, res) => {
           quantity: item.quantity,
         })),
         total_amount: totalPrice,
-        address: selectedAddress,
         status: "Pending", // Set initial status
+        address: selectedAddress,
+        payment_status: paymentStatus,
         created_at: new Date(),
       };
 
@@ -1031,10 +1040,39 @@ let placeOrder = async (req, res) => {
       res.redirect("/signin");
     }
   } catch (error) {
-    console.error("Error rendering the checkout page: ", error);
+    console.error("Error placing the order: ", error);
     res.status(500).render("error", {
       layout: false,
-      errorMessage: "Error rendering the checkout page",
+      errorMessage: "Error placing the order",
+    });
+  }
+};
+
+let createOrder = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      const { amount } = req.body;
+
+      const response = await razorpay.orders.create({
+        amount: amount * 100,
+        currency: "INR",
+        payment_capture: 1,
+      });
+
+      res.status(200).json({
+        apiKey: process.env.KEY_ID,
+        amount: amount,
+        id: response.id,
+      });
+    } else {
+      console.log("failed");
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.error("Error creating the order: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error creating the order",
     });
   }
 };
@@ -1074,4 +1112,5 @@ module.exports = {
   cartCount,
   checkoutPage,
   placeOrder,
+  createOrder,
 };

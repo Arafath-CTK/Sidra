@@ -1,0 +1,91 @@
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+  <div class="container-xxl">
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Orders List</h3>
+        </div>
+      </div>
+    </div>
+    <!-- Row end  -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Items</th>
+                  <th>Customer Name</th>
+                  <th>Price</th>
+                  <th>Payment Info</th>
+                  <th>Status</th>
+                  <th>Cancellation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each orders}}
+                <tr>
+                  <td style="max-width: 100px; word-wrap: break-word; word-break: break-all;">{{this._id}}</td>
+                  <td>
+                    {{#each this.products}}
+                    <img src="{{this.product_id.images.[0]}}" class="avatar lg rounded me-2" alt="profile-image" />
+                    <span>{{this.product_id.name}}</span>
+                    <br>
+                    {{/each}}
+                  </td>
+                  <td>{{this.address.name}}</td>
+                  <td>{{this.total_amount}}</td>
+                  <td>{{this.payment_status}}</td>
+                  <td>
+                    <select class="form-select" data-order-id="{{this._id}}">
+                      <option value="Pending">Pending</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button class="btn btn-danger">Cancel</button>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Row end  -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const statusSelects = document.querySelectorAll('.form-select');
+  
+  statusSelects.forEach(select => {
+    select.addEventListener('change', function(event) {
+      const orderId = this.getAttribute('data-order-id');
+      const newStatus = this.value;
+      updateStatus(orderId, newStatus);
+    });
+  });
+});
+
+  function updateStatus(orderId, newStatus) {
+    // Send an Axios request to update the status
+    axios.put(`/admin/changeStatus/${orderId}`, { status: newStatus })
+      .then(response => {
+        console.log(`Status for order ${orderId} updated successfully.`);
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error updating status:', error);
+        // Handle error
+      });
+  }
+</script>
