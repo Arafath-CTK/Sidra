@@ -432,18 +432,22 @@
   $("#slider-range").slider({
     range: true,
     min: 0,
-    max: 500,
-    values: [0, 500],
+    max: 5000,
+    values: [0, 5000],
     slide: function (event, ui) {
-      $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+      $("#amount").val(
+        "\u20B9" + ui.values[0] + " - \u20B9" + ui.values[1]
+      );
     },
   });
+  
   $("#amount").val(
-    "$" +
+    "\u20B9" +
       $("#slider-range").slider("values", 0) +
-      " - $" +
+      " - \u20B9" +
       $("#slider-range").slider("values", 1)
   );
+  
 
   /*---elevateZoom---*/
   $("#zoom1").elevateZoom({

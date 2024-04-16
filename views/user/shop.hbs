@@ -1,3 +1,10 @@
+<style>
+    .widget_categories a.active,
+    .widget_dropdown_categories a.active {
+        color: #79a206;
+    }
+</style>
+
 <!--shop  area start-->
 <div class="shop_area mt-100 mb-100">
     <div class="container">
@@ -9,54 +16,40 @@
                         <div class="widget_list widget_categories">
                             <h3>Categories</h3>
                             <ul>
-                                <li class="widget_sub_categories sub_categories1"><a
-                                        href="javascript:void(0)">Plants</a>
+                                <li class="widget_sub_categories sub_categories1"><a href="#"
+                                        data-category="plants">Plants</a>
                                     <ul class="widget_dropdown_categories dropdown_categories1">
-                                        <li><a href="#">Indoor</a></li>
-                                        <li><a href="#">Outdoor</a></li>
-                                        <li><a href="#">Flowering</a></li>
+                                        <li><a data-subcategory="indoor">Indoor</a></li>
+                                        <li><a data-subcategory="outdoor">Outdoor</a></li>
+                                        <li><a data-subcategory="flowering">Flowering</a></li>
                                     </ul>
                                 </li>
-                                <li class="widget_sub_categories sub_categories2"><a
-                                        href="javascript:void(0)">Containers</a>
+                                <li class="widget_sub_categories sub_categories2"><a href="#"
+                                        data-category="pots">Containers</a>
                                     <ul class="widget_dropdown_categories dropdown_categories2">
-                                        <li><a href="#">Ceramic</a></li>
-                                        <li><a href="#">Plastic</a></li>
-                                        <li><a href="#">Clay</a></li>
+                                        <li><a data-subcategory="ceramic">Ceramic</a></li>
+                                        <li><a data-subcategory="plastic">Plastic</a></li>
+                                        <li><a data-subcategory="clay">Clay</a></li>
                                     </ul>
                                 </li>
-                                <li class="widget_sub_categories sub_categories3"><a href="javascript:void(0)">Gardening
+                                <li class="widget_sub_categories sub_categories3"><a href="#"
+                                        data-category="supplies">Gardening
                                         Supplies</a>
                                     <ul class="widget_dropdown_categories dropdown_categories3">
-                                        <li><a href="#">Fertilizers</a></li>
-                                        <li><a href="#">Tools</a></li>
-                                        <li><a href="#">Accessories</a></li>
+                                        <li><a data-subcategory="fertilizers">Fertilizers</a></li>
+                                        <li><a data-subcategory="tools">Tools</a></li>
+                                        <li><a data-subcategory="accessories">Accessories</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="widget_list widget_filter">
                             <h3>Filter by price</h3>
-                            <form action="#">
-                                <div id="slider-range"></div>
-                                <button type="submit">Filter</button>
-                                <input type="text" name="text" id="amount" />
-                            </form>
+                            <div id="slider-range"></div>
+                            <input type="text" name="text" id="amount" />
                         </div>
-                        <div class="widget_list widget_color">
-                            <h3>Select By SIze</h3>
-                            <ul>
-                                <li>
-                                    <a href="#">S <span>(6)</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"> M <span>(8)</span></a>
-                                </li>
-                                <li>
-                                    <a href="#">L <span>(10)</span></a>
-                                </li>
-                            </ul>
-                        </div>
+
+                        <button id="applyFilterBtn" type="button">Filter</button>
                     </div>
                 </aside>
                 <!--sidebar widget end-->

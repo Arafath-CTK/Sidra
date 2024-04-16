@@ -657,6 +657,73 @@ let singleProductPage = async (req, res) => {
   }
 };
 
+let filter = async (req, res) => {
+  try {
+    const { category, subcategory, price } = req.query;
+    let filters = {};
+
+    filters.isActive = true;
+
+    if (category) {
+      filters.category = category;
+    }
+    if (subcategory) {
+      filters.sub_category = subcategory;
+    }
+    if (price) {
+      const [minPrice, maxPrice] = price.split("-");
+      filters.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+    }
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const PAGE_SIZE = 24;
+
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const totalProducts = await Product.countDocuments(filters);
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    const currentPageMinusOne = Math.max(1, page - 1);
+    const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+    // Calculate pages array
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({
+        pageNumber: i,
+        isCurrent: i === page,
+      });
+    }
+
+    const products = await Product.find(filters).skip(skip).limit(PAGE_SIZE);
+
+    const user = req.cookies.userToken ? true : false;
+
+    // Determine whether to disable "Prev" and "Next" buttons
+    const disablePrev = page === 1;
+    const disableNext = page === totalPages;
+
+    res.status(200).render("user/shop", {
+      title: "Sidra | Shop",
+      user,
+      products,
+      currentPage: page,
+      currentPageMinusOne,
+      currentPagePlusOne,
+      totalPages,
+      pages,
+      disablePrev,
+      disableNext,
+    });
+  } catch (error) {
+    console.error("Error filtering the product: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error filtering the product",
+    });
+  }
+};
+
 let search = async (req, res) => {
   try {
     const category = req.query.category === "all" ? "" : req.query.category;
@@ -1236,6 +1303,7 @@ module.exports = {
   containersPage,
   suppliesPage,
   singleProductPage,
+  filter,
   search,
   wishlistPage,
   addToWishlist,

@@ -105,3 +105,54 @@ function showToast(message) {
     backgroundColor: "black", // Background color of the toast
   }).showToast();
 }
+
+// Get all category and subcategory links
+const categoryLinks = document.querySelectorAll(".widget_categories a");
+
+// Add click event listeners to category and subcategory links
+categoryLinks.forEach((link) => {
+  link.addEventListener("click", function (event) {
+    // Prevent the default action of the link
+    event.preventDefault();
+
+    // Remove the 'active' class from all category and subcategory links
+    categoryLinks.forEach((link) => {
+      link.classList.remove("active");
+    });
+
+    // Add the 'active' class to the clicked link and its parent category link
+    this.classList.add("active");
+    const parentCategoryLink = this.closest(
+      ".widget_sub_categories"
+    ).querySelector("a");
+    if (parentCategoryLink) {
+      parentCategoryLink.classList.add("active");
+    }
+  });
+});
+
+document
+  .getElementById("applyFilterBtn")
+  .addEventListener("click", function () {
+    const activeLink = document.querySelector(".widget_categories .active a");
+    const selectedCategory = activeLink ? activeLink.dataset.category : null;
+
+    const activeSubcategoryLink = document.querySelector(
+      ".widget_dropdown_categories .active a"
+    );
+    const selectedSubcategory = activeSubcategoryLink
+      ? activeSubcategoryLink.dataset.subcategory
+      : null;
+
+    const priceRange = document.getElementById("amount").value;
+
+    console.log(selectedCategory);
+
+    // Construct the URL with selected filters
+    let url = `/shop/filter?`;
+    if (selectedCategory) url += `category=${selectedCategory}&`;
+    if (selectedSubcategory) url += `subcategory=${selectedSubcategory}&`;
+    if (priceRange) url += `price=${priceRange}`;
+
+    window.location.href = url;
+  });

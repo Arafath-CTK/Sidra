@@ -29,6 +29,7 @@ router.get("/shop/plants", userControllers.plantsPage);
 router.get("/shop/containers", userControllers.containersPage);
 router.get("/shop/supplies", userControllers.suppliesPage);
 router.get("/singleProduct/:id", preventBack, userControllers.singleProductPage);
+router.get("/shop/filter", userControllers.filter)
 router.get("/search", userControllers.search)
 
 router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
