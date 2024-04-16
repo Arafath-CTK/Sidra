@@ -8,28 +8,42 @@ const { use } = require("../routes/user");
 
 let homePage = async (req, res) => {
   try {
-    const plants = await Product.find({ category: "plants" });
-    const containers = await Product.find({ category: "pots" });
-    const supplies = await Product.find({ category: "supplies" });
+    const plants = await Product.find({ category: "plants", isActive: true });
+    const containers = await Product.find({ category: "pots", isActive: true });
+    const supplies = await Product.find({
+      category: "supplies",
+      isActive: true,
+    });
 
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
-      if (tokenExtracted.role === "user") {
-        return res.render("user/home", {
-          title: "Sidra | Home",
-          user: true,
-          plants: plants.slice(-8).reverse(),
-          containers: containers.slice(-8).reverse(),
-          supplies: supplies.slice(-8).reverse(),
-        });
-      }
+      let userId = tokenExtracted.userId;
+      let user = await User.findById(userId).populate("wishlist");
+
+      return res.render("user/home", {
+        title: "Sidra | Home",
+        user: true,
+        plants: plants.slice(-8).reverse(),
+        containers: containers.slice(-8).reverse(),
+        supplies: supplies.slice(-8).reverse(),
+        wishlist: user.wishlist,
+      });
     }
     return res.render("user/home", {
       title: "Sidra | Home",
       user: false,
-      plants: plants.slice(-8).reverse(),
-      containers: containers.slice(-8).reverse(),
-      supplies: supplies.slice(-8).reverse(),
+      plants: plants
+        .filter((product) => product.isActive)
+        .slice(-8)
+        .reverse(),
+      containers: containers
+        .filter((product) => product.isActive)
+        .slice(-8)
+        .reverse(),
+      supplies: supplies
+        .filter((product) => product.isActive)
+        .slice(-8)
+        .reverse(),
     });
   } catch (error) {
     res.render("error", { layout: false, errorMessage: error });
@@ -290,7 +304,7 @@ let myAccountPage = async (req, res) => {
 
       // Populate product details in the orders array
       let populatedOrders = await User.populate(orders, {
-        path: "products.product_id",
+        path: "product",
         model: "product",
       });
 
@@ -413,7 +427,7 @@ let shopPage = async (req, res) => {
 
     const skip = (page - 1) * PAGE_SIZE;
 
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments({ isActive: true });
     const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
 
     const currentPageMinusOne = Math.max(1, page - 1);
@@ -428,7 +442,9 @@ let shopPage = async (req, res) => {
       });
     }
 
-    let products = await Product.find().skip(skip).limit(PAGE_SIZE);
+    let products = await Product.find({ isActive: true })
+      .skip(skip)
+      .limit(PAGE_SIZE);
 
     const user = req.cookies.userToken ? true : false;
 
@@ -464,7 +480,7 @@ let plantsPage = async (req, res) => {
 
     const skip = (page - 1) * PAGE_SIZE;
 
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments({ isActive: true });
     const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
 
     const currentPageMinusOne = Math.max(1, page - 1);
@@ -479,7 +495,7 @@ let plantsPage = async (req, res) => {
       });
     }
 
-    const plants = await Product.find({ category: "plants" })
+    const plants = await Product.find({ category: "plants", isActive: true })
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -517,7 +533,7 @@ let containersPage = async (req, res) => {
 
     const skip = (page - 1) * PAGE_SIZE;
 
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments({ isActive: true });
     const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
 
     const currentPageMinusOne = Math.max(1, page - 1);
@@ -532,7 +548,7 @@ let containersPage = async (req, res) => {
       });
     }
 
-    const containers = await Product.find({ category: "pots" })
+    const containers = await Product.find({ category: "pots", isActive: true })
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -570,7 +586,7 @@ let suppliesPage = async (req, res) => {
 
     const skip = (page - 1) * PAGE_SIZE;
 
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments({ isActive: true });
     const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
 
     const currentPageMinusOne = Math.max(1, page - 1);
@@ -585,7 +601,10 @@ let suppliesPage = async (req, res) => {
       });
     }
 
-    const supplies = await Product.find({ category: "supplies" })
+    const supplies = await Product.find({
+      category: "supplies",
+      isActive: true,
+    })
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -634,6 +653,124 @@ let singleProductPage = async (req, res) => {
     res.status(500).render("error", {
       layout: false,
       errorMessage: "Error rendering the product page",
+    });
+  }
+};
+
+let search = async (req, res) => {
+  try {
+    const category = req.query.category === "all" ? "" : req.query.category;
+    const query = req.query.query;
+
+    let products;
+    if (category) {
+      const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      const page = req.query.page ? parseInt(req.query.page) : 1;
+      const PAGE_SIZE = 24;
+
+      const skip = (page - 1) * PAGE_SIZE;
+
+      const totalProducts = await Product.countDocuments({
+        category: category,
+        isActive: true,
+        name: { $regex: new RegExp(escapedQuery, "i") },
+      });
+      const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+      const currentPageMinusOne = Math.max(1, page - 1);
+      const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+      // Calculate pages array
+      const pages = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push({
+          pageNumber: i,
+          isCurrent: i === page,
+        });
+      }
+
+      products = await Product.find({
+        category: category,
+        isActive: true,
+        name: { $regex: new RegExp(escapedQuery, "i") },
+      })
+        .skip(skip)
+        .limit(PAGE_SIZE);
+
+      // Determine whether to disable "Prev" and "Next" buttons
+      const disablePrev = page === 1;
+      const disableNext = page === totalPages;
+
+      const user = req.cookies.userToken ? true : false;
+
+      res.status(200).render("user/shop", {
+        title: "Sidra | Search",
+        user,
+        products,
+        currentPage: page,
+        currentPageMinusOne,
+        currentPagePlusOne,
+        totalPages,
+        pages,
+        disablePrev,
+        disableNext,
+      });
+    } else {
+      const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      const page = req.query.page ? parseInt(req.query.page) : 1;
+      const PAGE_SIZE = 24;
+
+      const skip = (page - 1) * PAGE_SIZE;
+
+      const totalProducts = await Product.countDocuments({
+        isActive: true,
+        name: { $regex: new RegExp(escapedQuery, "i") },
+      });
+      const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+      const currentPageMinusOne = Math.max(1, page - 1);
+      const currentPagePlusOne = Math.min(totalPages, page + 1);
+
+      // Calculate pages array
+      const pages = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push({
+          pageNumber: i,
+          isCurrent: i === page,
+        });
+      }
+
+      products = await Product.find({
+        isActive: true,
+        name: { $regex: new RegExp(escapedQuery, "i") },
+      })
+        .skip(skip)
+        .limit(PAGE_SIZE);
+
+      // Determine whether to disable "Prev" and "Next" buttons
+      const disablePrev = page === 1;
+      const disableNext = page === totalPages;
+
+      const user = req.cookies.userToken ? true : false;
+
+      res.status(200).render("user/shop", {
+        title: "Sidra | Search",
+        user,
+        products,
+        currentPage: page,
+        currentPageMinusOne,
+        currentPagePlusOne,
+        totalPages,
+        pages,
+        disablePrev,
+        disableNext,
+      });
+    }
+  } catch (error) {
+    console.error("Error searching the product: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error searching the product",
     });
   }
 };
@@ -981,8 +1118,7 @@ let placeOrder = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
 
-      const { addressId, totalPrice, paymentStatus } = req.body;
-      console.log(addressId);
+      const { addressId, paymentStatus } = req.body;
 
       // Find the user by ID
       const user = await User.findById(userId).populate("cart.product");
@@ -1009,24 +1145,25 @@ let placeOrder = async (req, res) => {
           .json({ message: "No products selected for order" });
       }
 
-      // Create a new order object
-      const newOrder = {
-        products: selectedProducts.map((item) => ({
-          product_id: item.product._id,
+      // Iterate through each selected product and create a new order object
+      for (const item of selectedProducts) {
+        const newOrder = {
+          product: item.product._id,
           quantity: item.quantity,
-        })),
-        total_amount: totalPrice,
-        status: "Pending", // Set initial status
-        address: selectedAddress,
-        payment_status: paymentStatus,
-        created_at: new Date(),
-      };
+          price: item.product.price,
+          total_price: item.quantity * item.product.price,
+          address: selectedAddress,
+          payment_status: paymentStatus,
+          status: "Pending",
+          created_at: new Date(),
+        };
 
-      // Push the new order to the user's orders array
-      user.orders.push(newOrder);
+        // Push the new order to the user's orders array
+        user.orders.push(newOrder);
 
-      // Remove selected products from the cart
-      user.cart = user.cart.filter((item) => !item.isSelected);
+        // Remove selected product from the cart
+        user.cart = user.cart.filter((cartItem) => cartItem !== item);
+      }
 
       // Save the updated user document
       await user.save();
@@ -1034,9 +1171,8 @@ let placeOrder = async (req, res) => {
       // Respond with success message
       res
         .status(200)
-        .json({ message: "Order placed successfully", order: newOrder });
+        .json({ message: "Orders placed successfully", orders: user.orders });
     } else {
-      console.log("failed");
       res.redirect("/signin");
     }
   } catch (error) {
@@ -1100,6 +1236,7 @@ module.exports = {
   containersPage,
   suppliesPage,
   singleProductPage,
+  search,
   wishlistPage,
   addToWishlist,
   removeFromWishlist,

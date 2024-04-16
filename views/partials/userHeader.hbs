@@ -12,17 +12,17 @@
                     <div class="col-lg-9 col-md-6 col-6">
                         <div class="header_right_info">
                             <div class="search_container">
-                                <form action="#">
+                                <form id="searchForm">
                                     <div class="hover_category">
-                                        <select class="select_option" name="select" id="categori1">
-                                            <option selected value="1">All Categories</option>
-                                            <option value="2">Plants</option>
-                                            <option value="3">Containers For Plants</option>
-                                            <option value="4">Gardening Supplies</option>
+                                        <select class="select_option" name="category" id="category">
+                                            <option selected value="all">All Categories</option>
+                                            <option value="plants">Plants</option>
+                                            <option value="pots">Containers For Plants</option>
+                                            <option value="supplies">Gardening Supplies</option>
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text" />
+                                        <input id="searchInput" placeholder="Search product..." type="text" />
                                         <button type="submit"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
@@ -37,69 +37,6 @@
                                 <div class="header_account-list mini_cart_wrapper">
                                     <a href="/cart"><i class="icon-shopping-bag"></i><span
                                             class="item_count"></span></a>
-                                    <!--mini cart-->
-                                    {{! <div class="mini_cart">
-                                        <div class="cart_gallery">
-                                            <div class="cart_close">
-                                                <div class="cart_text">
-                                                    <h3>cart</h3>
-                                                </div>
-                                                <div class="mini_cart_close">
-                                                    <a href="javascript:void(0)"><i class="icon-x"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="cart_item">
-                                                <div class="cart_img">
-                                                    <a href="#"><img src="/user/assets/img/s-product/product.jpg"
-                                                            alt="" /></a>
-                                                </div>
-                                                <div class="cart_info">
-                                                    <a href="#">Primis In Faucibus</a>
-                                                    <p>1 x <span> $65.00 </span></p>
-                                                </div>
-                                                <div class="cart_remove">
-                                                    <a href="#"><i class="icon-x"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="cart_item">
-                                                <div class="cart_img">
-                                                    <a href="#"><img src="/user/assets/img/s-product/product2.jpg"
-                                                            alt="" /></a>
-                                                </div>
-                                                <div class="cart_info">
-                                                    <a href="#">Letraset Sheets</a>
-                                                    <p>1 x <span> $60.00 </span></p>
-                                                </div>
-                                                <div class="cart_remove">
-                                                    <a href="#"><i class="icon-x"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mini_cart_table">
-                                            <div class="cart_table_border">
-                                                <div class="cart_total">
-                                                    <span>Sub total:</span>
-                                                    <span class="price">$125.00</span>
-                                                </div>
-                                                <div class="cart_total mt-10">
-                                                    <span>total:</span>
-                                                    <span class="price">$125.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mini_cart_footer">
-                                            <div class="cart_button">
-                                                <a href="cart.html"><i class="fa fa-shopping-cart"></i>
-                                                    View cart</a>
-                                            </div>
-                                            <div class="cart_button">
-                                                <a class="active" href="checkout.html"><i class="fa fa-sign-in"></i>
-                                                    Checkout</a>
-                                            </div>
-
-                                        </div>
-                                    </div> }}
-                                    <!--mini cart end-->
                                 </div>
                             </div>
                         </div>

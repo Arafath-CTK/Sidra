@@ -1,14 +1,15 @@
 <!-- Body: Body -->
 <!-- Spinner background overlay -->
 <div id="spinnerOverlay"
-  style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
+    style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
 </div>
 
-<div id="spinner" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
-  class=" text-center mt-3">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+<div id="spinner"
+    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
+    class=" text-center mt-3">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
 
 <div class="body d-flex py-3">
@@ -120,34 +121,45 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {{#each products}}
+                                                {{#each sortedProducts}}
                                                 <tr class="col-12 g-0">
                                                     <td class="col-4"
                                                         style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <img class="w120 rounded img-fluid mb-2"
-                                                            src="{{this.images.[0]}}" alt="" />
+                                                            src="{{this.images.[0]}}" {{#unless this.isActive}}
+                                                            style="filter: grayscale(100%);" {{/unless}}>
                                                         <div class="ms-2"><b>{{this.name}}</b></div>
                                                     </td>
                                                     <td class="col-6"
                                                         style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <div class="mb-5" style="width: 250px;">
-                                                            <p class="mb-1 mt-2"><b>Description :</b><br /><span
-                                                                    class="text-primary">{{this.description}}</span></p>
-                                                            <div class="mt-1"><b>Price: <span
-                                                                        class="text-primary">{{this.price}}</span></b>
+                                                            <p class="mb-1 mt-2"><b>Description :</b><br /><span {{#if
+                                                                    this.isActive}}class="text-primary"
+                                                                    {{else}}class="text-gray"
+                                                                    {{/if}}>{{this.description}}</span></p>
+                                                            <div class="mt-1"><b>Price: <span {{#if
+                                                                        this.isActive}}class="text-primary"
+                                                                        {{else}}class="text-gray"
+                                                                        {{/if}}>{{this.price}}</span></b>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td class="col-2"
                                                         style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
                                                         <div class="d-flex">
+                                                            <span style="display: none;">{{#if
+                                                                this.isActive}}active{{else}}disabled{{/if}}</span>
                                                             <button type="button" class="btn btn-outline-secondary me-2"
                                                                 onclick="editProduct('{{this._id}}')">
                                                                 <i class="icofont-edit text-success"></i>
                                                             </button>
                                                             <button type="button" class="btn btn-outline-secondary"
-                                                                onclick="deleteProduct('{{this._id}}')">
-                                                                <i class="icofont-ui-delete text-danger"></i>
+                                                                onclick="{{#if this.isActive}}disableProduct('{{this._id}}', 'disable'){{else}}disableProduct('{{this._id}}', 'enable'){{/if}}">
+                                                                {{#if this.isActive}}
+                                                                <i class="icofont-ui-block text-danger"></i>
+                                                                {{else}}
+                                                                <i class="icofont-ui-reply text-success"></i>
+                                                                {{/if}}
                                                             </button>
                                                         </div>
                                                     </td>

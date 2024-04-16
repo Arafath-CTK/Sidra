@@ -29,6 +29,12 @@ router.get("/shop/plants", userControllers.plantsPage);
 router.get("/shop/containers", userControllers.containersPage);
 router.get("/shop/supplies", userControllers.suppliesPage);
 router.get("/singleProduct/:id", preventBack, userControllers.singleProductPage);
+router.get("/search", userControllers.search)
+
+router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
+router.post("/addtowishlist/:id", userControllers.addToWishlist)
+router.delete("/removeFromWishlist/:id", userControllers.removeFromWishlist)
+router.get("/checkwishlist/:id", authenticateUser(), userControllers.checkWishlist)
 
 router.get("/cart",preventBack, authenticateUser(), userControllers.cartPage);
 router.post("/addtocart", preventBack, userControllers.addToCart);
@@ -40,9 +46,5 @@ router.get("/checkout", userControllers.checkoutPage);
 router.post("/placeOrder", userControllers.placeOrder)
 router.post("/payment/create-order", userControllers.createOrder);
 
-router.get("/wishlist", authenticateUser(), userControllers.wishlistPage)
-router.post("/addtowishlist/:id", userControllers.addToWishlist)
-router.delete("/removeFromWishlist/:id", userControllers.removeFromWishlist)
-router.get("/checkwishlist/:id", authenticateUser(), userControllers.checkWishlist)
 
 module.exports = router;

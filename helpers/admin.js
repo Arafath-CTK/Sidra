@@ -61,15 +61,15 @@ function editProductHelper(productData, imageData, productId) {
         Description,
         mainCategory,
         subCategory,
-      } = productData; 
+      } = productData;
 
       const existingProduct = await Product.findById(productId);
-      
+
       if (!existingProduct) {
         resolve({ productNotExist: true });
         return;
       }
- 
+
       if (existingProduct) {
         existingProduct.name = ProductName;
         existingProduct.price = Price;
@@ -93,7 +93,7 @@ function editProductHelper(productData, imageData, productId) {
         }
 
         await existingProduct.save();
-        resolve({ success: true});
+        resolve({ success: true });
       }
     } catch (error) {
       reject(error);
@@ -109,12 +109,10 @@ function deleteProductHelper(productId) {
         return resolve({ productNotExist: true });
       }
 
-      for (const image of product.images) {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(publicId);
-      }
+      const updatedIsActive = !product.isActive;
 
-      await Product.findByIdAndDelete(productId);
+      await Product.findByIdAndUpdate(productId, { isActive: updatedIsActive });
+
       return resolve({ success: true });
     } catch (error) {
       reject(error);

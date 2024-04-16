@@ -9,7 +9,6 @@ const adminSchema = new mongoose.Schema(
     banners: [
       {
         image: String,
-        link: String,
         position: String,
       },
     ],

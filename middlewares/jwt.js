@@ -119,7 +119,6 @@ let authenticateUser = () => async (req, res, next) => {
     const baererToken = req.cookies.userToken;
 
     if (!baererToken) {
-      console.log("not logged in");
       return res.status(302).redirect("/signIn");
     }
 

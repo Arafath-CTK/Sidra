@@ -12,23 +12,23 @@ function hideSpinner() {
   document.getElementById("spinnerOverlay").style.display = "none";
 }
 
-function deleteProduct(productId) {
+function disableProduct(productId, action) {
   showSpinner();
+  let message = action === "disable" ? "Product disabled successfully!" : "Product enabled successfully!";
   fetch(`/admin/products/${productId}`, {
     method: "DELETE",
   })
     .then((response) => {
       if (response.ok) {
-        console.log("Product deleted successfully");
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Product deleted successfully!",
+          text: message,
         }).then(() => {
           location.reload();
         });
       } else {
-        console.error("Product deletion failed");
+        console.error("Product action failed");
       }
       hideSpinner()
     })

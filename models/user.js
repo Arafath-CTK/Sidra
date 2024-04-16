@@ -37,19 +37,13 @@ const userSchema = new mongoose.Schema(
     ],
     orders: [
       {
-        products: [
-          {
-            product_id: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "product",
-            },
-            quantity: Number,
-            price: Number,
-            total_price: Number,
-          },
-        ],
-        total_amount: Number,
-        status: String,
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "product",
+        },
+        quantity: Number,
+        price: Number, // Price per unit for this product
+        total_price: Number, // Total price for this product (quantity * price)
         address: {
           name: String,
           house_name: String,
@@ -59,6 +53,7 @@ const userSchema = new mongoose.Schema(
           pin_code: String,
         },
         payment_status: String,
+        status: String,
         created_at: Date,
       },
     ],

@@ -191,12 +191,27 @@ let productListPage = async (req, res) => {
       let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
       if (tokenExtracted.role === "admin") {
         const products = await Product.find();
+
+        // Separate enabled and disabled products
+        const enabledProducts = products.filter((product) => product.isActive);
+        const disabledProducts = products.filter(
+          (product) => !product.isActive
+        );
+
+        // Sort enabled products alphabetically by name
+        enabledProducts.sort((a, b) => a.name.localeCompare(b.name));
+        // Sort disabled products alphabetically by name
+        disabledProducts.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Concatenate enabled and disabled products
+        const sortedProducts = [...enabledProducts, ...disabledProducts];
+
         res.status(200).render("admin/productList", {
           layout: "adminLayout",
           title: "Sidra Admin | Product List",
           adminName: tokenExtracted.adminName,
           adminMail: tokenExtracted.adminEmail,
-          products,
+          sortedProducts,
         });
       }
     }
@@ -217,14 +232,14 @@ let deleteProduct = async (req, res) => {
       console.log("Product not found in the database");
       res.status(404).send();
     } else {
-      console.log("Product deleted successfully");
+      console.log("Product disabled successfully");
       res.status(204).send();
     }
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error disabling product:", error);
     res
       .status(500)
-      .render("error", { errorMessage: "Error deleting product:", error });
+      .render("error", { errorMessage: "Error disabling product:", error });
   }
 };
 
@@ -310,7 +325,7 @@ let orderListPage = async (req, res) => {
   try {
     if (req.cookies.adminToken) {
       const usersWithOrders = await User.find({}).populate({
-        path: "orders.products.product_id",
+        path: "orders.product",
         model: "product",
       });
 

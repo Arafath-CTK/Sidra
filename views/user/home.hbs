@@ -55,9 +55,9 @@
           </div>
           <div class="shipping_content">
             <h3>Free Delivery</h3>
-            <p>Free shipping around the world for all
+            <p>Free shipping around the India for all
               <br />
-              orders over $120
+              orders over &#x20B9;500
             </p>
           </div>
         </div>
@@ -79,15 +79,14 @@
       <div class="col-lg-4 col-md-6">
         <div class="single_shipping col_3">
           <div class="shipping_icone">
-            <img src="/user/assets/img/about/shipping3.png" alt="" />
+            <img src="/user/assets/img/about/shipping3.png" width="48px" height="35px" />
           </div>
           <div class="shipping_content">
-            <h3>Friendly Services</h3>
-            <p>You have 30-day return guarantee for
+            <h3>Secure Packaging</h3>
+            <p>Your orders are carefully packaged to ensure
               <br />
-              every single order
+              safe delivery to your doorstep
             </p>
-
           </div>
         </div>
       </div>
@@ -165,17 +164,17 @@
     <div class="tab-content">
 
       <div class="tab-pane fade show active" id="plants" role="tabpanel">
-        <div class="row row-cols-lg-4 row-cols-md-3">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-2">
           {{#each plants}}
-          <div class="col" style="margin-top: 20px;">
+          <div class="col mb-4" style="margin-top: 20px;">
             <div class="product_items">
               <article class="single_product">
                 <figure>
                   <input type="hidden" id="productId" name="productId" value="{{this._id}}">
 
                   <div class="product_thumb">
-                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img src="{{this.images.[0]}}"
-                        alt="" /></a>
+                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img src="{{this.images.[0]}}" alt=""
+                        class="img-fluid" /></a>
                     <div class="action_links">
                       <ul>
                         <li class="add_to_cart"><a href="cart.html" title="Add to cart"><i
@@ -216,8 +215,8 @@
       </div>
 
       <div class="tab-pane fade" id="pots" role="tabpanel">
-        <div class="row row-cols-lg-4 row-cols-md-3"> {{#each containers}}
-          <div class="col" style="margin-top: 20px;">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-2"> {{#each containers}}
+          <div class="col mb-4" style="margin-top: 20px;">
             <div class="product_items">
               <article class="single_product">
                 <figure>
@@ -266,8 +265,8 @@
       </div>
 
       <div class="tab-pane fade" id="supplies" role="tabpanel">
-        <div class="row row-cols-lg-4 row-cols-md-3"> {{#each supplies}}
-          <div class="col" style="margin-top: 20px;">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-2"> {{#each supplies}}
+          <div class="col mb-4" style="margin-top: 20px;">
             <div class="product_items">
               <article class="single_product">
                 <figure>
@@ -630,8 +629,72 @@
 </div> --}}
 <!--testimonial area end-->
 
+{{#if wishlist}}
+<section class="blog_section" style="background-color:#e9e9e9 !important">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="product_header">
+          <div class="section_title">
+            <h2>Your Favourites</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="swiper-container" style="overflow: hidden;">
+        <div class="swiper-wrapper">
+          {{#each wishlist}}
+          <div class="swiper-slide">
+            <div class="product_items">
+              <article class="single_product">
+                <figure>
+                  <input type="hidden" id="productId" name="productId" value="{{this._id}}">
+
+                  <div class="product_thumb">
+                    <a class="primary_img" href="/singleProduct/{{this._id}}"><img src="{{this.images.[0]}}" alt=""
+                        class="img-fluid" /></a>
+                    <div class="action_links">
+                      <ul>
+                        <li class="wishlistAdd"><a><i onclick="addToWishlist(this, `{{this._id}}`)"
+                              class="fa-regular fa-heart"></i></a></li>
+                        <li class="wishlistRemove d-none"><a><i onclick="removeFromWishlist(this, `{{this._id}}`)"
+                              class="fa-solid fa-heart" style="color: #79a206;"></i></a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <figcaption class="product_content">
+                    <div class="product_rating">
+                      <ul>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                        <li><a href="#"><i class="icon-star"></i></a></li>
+                      </ul>
+                    </div>
+                    <h4 class="product_name"><a href="/singleProduct/{{this._id}}">{{this.name}}</a></h4>
+                    <div class="price_box">
+                      <span class="current_price">&#x20B9; {{this.price}}</span>
+                      {{!-- <span class="old_price">£74.00</span> --}}
+                    </div>
+                  </figcaption>
+                </figure>
+              </article>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{/if}}
+
+
 <!--blog area start-->
-<section class="blog_section">
+{{!-- <section class="blog_section">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -737,7 +800,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> --}}
 <!--blog area end-->
 
 <!--newsletter area start-->
@@ -772,4 +835,5 @@
 <!--newsletter area end-->
 
 <!-- Custom JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/user/scripts/home.js"></script>

@@ -64,34 +64,30 @@
 
     /* Adjust column widths */
     .ordersTable th:nth-child(1),
-    .ordersTable td:nth-child(1) {
-        width: 20% !important;
+    .ordersTable td:nth-child(1),
+    .ordersTable th:nth-child(5),
+    .ordersTable td:nth-child(5) {
+        width: 13% !important;
     }
 
     .ordersTable th:nth-child(2),
     .ordersTable td:nth-child(2) {
-        width: 27% !important;
+        width: 25% !important;
     }
 
     .ordersTable th:nth-child(3),
-    .ordersTable td:nth-child(3),
+    .ordersTable td:nth-child(3) {
+        width: 5% !important;
+    }
+
     .ordersTable th:nth-child(4),
-    .ordersTable td:nth-child(4) {
-        width: 15% !important;
-    }
-
-    .ordersTable th:nth-child(5),
-    .ordersTable td:nth-child(5) {
-        width: 10% !important;
-    }
-
+    .ordersTable td:nth-child(4),
     .ordersTable th:nth-child(6),
-    .ordersTable td:nth-child(6) {
-        width: 20% !important;
-    }
-
+    .ordersTable td:nth-child(6),
     .ordersTable th:nth-child(7),
-    .ordersTable td:nth-child(7) {
+    .ordersTable td:nth-child(7),
+    .ordersTable th:nth-child(8),
+    .ordersTable td:nth-child(8) {
         width: 10% !important;
     }
 </style>
@@ -199,8 +195,10 @@
                                     <tr>
                                         <th>Order ID</th>
                                         <th>Product</th>
+                                        <th>Qty</th>
                                         <th>Total Price</th>
                                         <th>Date</th>
+                                        <th>Payment Method</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -208,20 +206,18 @@
                                 <tbody>
                                     {{#each orders}}
                                     <tr>
-                                        <td>{{this._id}}</td>
+                                        <td style="max-width: 40px; word-wrap: break-word; word-break: break-all;">
+                                            {{this._id}}</td>
                                         <td class="product-info">
-                                            {{#each this.products}}
-                                            <div >
-                                                <img src="{{this.product_id.images.[0]}}"
-                                                    alt="Product Image">
-                                                <p>{{this.product_id.name}}</p>
-                                            </div>
-                                            {{/each}}
+                                            <img src="{{this.product.images.[0]}}">
+                                            <p>{{this.product.name}}</p>
                                         </td>
-                                        <td>&#x20B9; {{this.total_amount}}</td>
+                                        <td>{{this.quantity}}</td>
+                                        <td>&#x20B9; {{this.total_price}}</td>
                                         <td>{{this.created_at}}</td>
+                                        <td>{{this.payment_status}}</td>
                                         <td>{{this.status}}</td>
-                                        <td><a href="#" class="cancel-text">Cancel Order</a></td>
+                                        <td><a href="" class="cancel-text">Cancel</a></td>
                                     </tr>
                                     {{/each}}
                                 </tbody>

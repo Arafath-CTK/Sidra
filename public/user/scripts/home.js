@@ -105,3 +105,26 @@ function showToast(message) {
     backgroundColor: "black", // Background color of the toast
   }).showToast();
 }
+
+window.addEventListener("DOMContentLoaded", function () {
+  const swiper = new Swiper(".swiper-container", {
+    slidesPerView: 1, // Display 4 products at a time
+    spaceBetween: 20, // Add spacing between products (optional)
+    loop: true, // Enable continuous looping
+    autoplay: {
+      delay: 2500, // Auto-slide every 3 seconds
+      disableOnInteraction: false, // Allow manual swiping to pause autoplay
+    },
+    breakpoints: {
+      // Adjust slides per view for different screen sizes
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 15,
+      },
+      1024: {
+        slidesPerView: 4,
+        spaceBetween: 20,
+      },
+    },
+  });
+});

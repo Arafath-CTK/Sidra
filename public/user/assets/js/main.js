@@ -723,3 +723,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error fetching cart data:", error);
   }
 });
+
+document
+  .getElementById("searchForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+    const category = document.getElementById("category").value;
+    const query = document.getElementById("searchInput").value;
+    // Redirect to the search results page with the selected category and query
+    window.location.href = `/search?category=${category}&query=${query}`;
+  });

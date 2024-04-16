@@ -18,29 +18,30 @@
               <thead>
                 <tr>
                   <th>Id</th>
-                  <th>Items</th>
+                  <th>Product</th>
                   <th>Customer Name</th>
+                  <th>Qty</th>
                   <th>Price</th>
-                  <th>Payment Info</th>
-                  <th>Status</th>
-                  <th>Cancellation</th>
+                  <th style="width: 5%;">Payment Method</th>
+                  <th style="width: 18%;">Status</th>
+                  {{!-- <th>Cancellation</th> --}}
                 </tr>
               </thead>
               <tbody>
                 {{#each orders}}
                 <tr>
-                  <td style="max-width: 100px; word-wrap: break-word; word-break: break-all;">{{this._id}}</td>
+                  <td style="max-width: 140px; word-wrap: break-word; word-break: break-all;">{{this._id}}</td>
                   <td>
-                    {{#each this.products}}
-                    <img src="{{this.product_id.images.[0]}}" class="avatar lg rounded me-2" alt="profile-image" />
-                    <span>{{this.product_id.name}}</span>
-                    <br>
-                    {{/each}}
+                    <div style="display: flex; align-items: center; justify-content: start;">
+                      <img src="{{this.product.images.[0]}}" class="avatar lg rounded me-2" />
+                      <span>{{this.product.name}}</span>
+                    </div>
                   </td>
                   <td>{{this.address.name}}</td>
-                  <td>{{this.total_amount}}</td>
-                  <td>{{this.payment_status}}</td>
-                  <td>
+                  <td>{{this.quantity}}</td>
+                  <td>{{this.total_price}}</td>
+                  <td style="width: 5%;">{{this.payment_status}}</td>
+                  <td style="width: 18%;">
                     <select class="form-select" data-order-id="{{this._id}}">
                       <option value="Pending">Pending</option>
                       <option value="Shipped">Shipped</option>
@@ -48,12 +49,13 @@
                       <option value="Cancelled">Cancelled</option>
                     </select>
                   </td>
-                  <td>
+                  {{!-- <td>
                     <button class="btn btn-danger">Cancel</button>
-                  </td>
+                  </td> --}}
                 </tr>
                 {{/each}}
               </tbody>
+
             </table>
           </div>
         </div>
@@ -64,17 +66,17 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-  const statusSelects = document.querySelectorAll('.form-select');
-  
-  statusSelects.forEach(select => {
-    select.addEventListener('change', function(event) {
-      const orderId = this.getAttribute('data-order-id');
-      const newStatus = this.value;
-      updateStatus(orderId, newStatus);
+  document.addEventListener('DOMContentLoaded', function () {
+    const statusSelects = document.querySelectorAll('.form-select');
+
+    statusSelects.forEach(select => {
+      select.addEventListener('change', function (event) {
+        const orderId = this.getAttribute('data-order-id');
+        const newStatus = this.value;
+        updateStatus(orderId, newStatus);
+      });
     });
   });
-});
 
   function updateStatus(orderId, newStatus) {
     // Send an Axios request to update the status
