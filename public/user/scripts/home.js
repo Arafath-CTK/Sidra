@@ -48,8 +48,12 @@ async function addToWishlist(icon, productId) {
           .querySelector(".wishlistRemove")
           .classList.remove("d-none");
         showToast("Product added to the wishlist");
+      } else if (data.notLogged) {
+        showToast("You are not logged in");
+        setTimeout(function () {
+          window.location.href = "/signIn";
+        }, 1500);
       } else {
-        // Unexpected response from server
         console.error("Unexpected response:", response);
       }
     } else if (response.status === 302) {

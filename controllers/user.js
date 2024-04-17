@@ -5,6 +5,7 @@ const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
 const razorpay = require("../config/razorpay");
 const { use } = require("../routes/user");
+const { log } = require("handlebars/runtime");
 
 let homePage = async (req, res) => {
   try {
@@ -659,16 +660,15 @@ let singleProductPage = async (req, res) => {
 
 let filter = async (req, res) => {
   try {
-    const { category, subcategory, price } = req.query;
+    const { subcategories, price } = req.query;
+    console.log(subcategories);
+
     let filters = {};
 
     filters.isActive = true;
-
-    if (category) {
-      filters.category = category;
-    }
-    if (subcategory) {
-      filters.sub_category = subcategory;
+    if (subcategories && subcategories !== "") {
+      const subcategoryArray = subcategories.split(",");
+      filters.sub_category = { $in: subcategoryArray };
     }
     if (price) {
       const [minPrice, maxPrice] = price.split("-");

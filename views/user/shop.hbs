@@ -13,43 +13,57 @@
                 <!--sidebar widget start-->
                 <aside class="sidebar_widget">
                     <div class="widget_inner">
+
                         <div class="widget_list widget_categories">
-                            <h3>Categories</h3>
-                            <ul>
-                                <li class="widget_sub_categories sub_categories1"><a href="#"
-                                        data-category="plants">Plants</a>
-                                    <ul class="widget_dropdown_categories dropdown_categories1">
-                                        <li><a data-subcategory="indoor">Indoor</a></li>
-                                        <li><a data-subcategory="outdoor">Outdoor</a></li>
-                                        <li><a data-subcategory="flowering">Flowering</a></li>
-                                    </ul>
-                                </li>
-                                <li class="widget_sub_categories sub_categories2"><a href="#"
-                                        data-category="pots">Containers</a>
-                                    <ul class="widget_dropdown_categories dropdown_categories2">
-                                        <li><a data-subcategory="ceramic">Ceramic</a></li>
-                                        <li><a data-subcategory="plastic">Plastic</a></li>
-                                        <li><a data-subcategory="clay">Clay</a></li>
-                                    </ul>
-                                </li>
-                                <li class="widget_sub_categories sub_categories3"><a href="#"
-                                        data-category="supplies">Gardening
-                                        Supplies</a>
-                                    <ul class="widget_dropdown_categories dropdown_categories3">
-                                        <li><a data-subcategory="fertilizers">Fertilizers</a></li>
-                                        <li><a data-subcategory="tools">Tools</a></li>
-                                        <li><a data-subcategory="accessories">Accessories</a></li>
-                                    </ul>
-                                </li>
+                            <h3 style="margin-bottom: 10px;">Categories</h3>
+                            <ul class="main_categories" style="list-style-type: none; padding: 0;">
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="category_plants" value="plants">
+                                    Plants</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="category_pots" value="pots">
+                                    Containers</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="category_supplies" value="supplies">
+                                    Gardening Supplies</li>
+                            </ul>
+                            <h3 style="margin-top: 20px; margin-bottom: 10px;">Sub categories</h3>
+                            <ul class="sub_categories" style="list-style-type: none; padding: 0;">
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_plants" value="indoor"> Indoor</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_plants" value="outdoor"> Outdoor</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_plants" value="flowering"> Flowering</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_pots" value="ceramic"> Ceramic</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_pots" value="plastic"> Plastic</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_pots" value="clay">
+                                    Clay</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_supplies" value="fertilizers"> Fertilizers</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_supplies" value="tools">
+                                    Tools</li>
+                                <li style="margin-bottom: 5px; cursor: pointer;"><input type="checkbox"
+                                        name="subcategory_supplies" value="accessories"> Accessories</li>
                             </ul>
                         </div>
+
                         <div class="widget_list widget_filter">
                             <h3>Filter by price</h3>
-                            <div id="slider-range"></div>
-                            <input type="text" name="text" id="amount" />
+                            <form action="#">
+                                <div id="slider-range"></div>
+                                <input style="margin-right: 5px; width:fit-content" type="text" name="text"
+                                    id="amount" />
+                            </form>
                         </div>
 
-                        <button id="applyFilterBtn" type="button">Filter</button>
+                        <button id="applyFilterBtn" type="button"
+                            style="display: block; width: 100%; padding: 12px; margin-top: 20px; font-size: 1rem; color: #fff; background-color: #79a206; border: none; border-radius: 4px; cursor: pointer;">Apply
+                            Filter</button>
                     </div>
                 </aside>
                 <!--sidebar widget end-->

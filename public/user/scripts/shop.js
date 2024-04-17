@@ -48,6 +48,11 @@ async function addToWishlist(icon, productId) {
           .querySelector(".wishlistRemove")
           .classList.remove("d-none");
         showToast("Product added to the wishlist");
+      } else if (data.notLogged) {
+        showToast("You are not logged in");
+        setTimeout(function () {
+          window.location.href = "/signIn";
+        }, 1500);
       } else {
         // Unexpected response from server
         console.error("Unexpected response:", response);
@@ -106,53 +111,144 @@ function showToast(message) {
   }).showToast();
 }
 
-// Get all category and subcategory links
-const categoryLinks = document.querySelectorAll(".widget_categories a");
-
-// Add click event listeners to category and subcategory links
-categoryLinks.forEach((link) => {
-  link.addEventListener("click", function (event) {
-    // Prevent the default action of the link
-    event.preventDefault();
-
-    // Remove the 'active' class from all category and subcategory links
-    categoryLinks.forEach((link) => {
-      link.classList.remove("active");
-    });
-
-    // Add the 'active' class to the clicked link and its parent category link
-    this.classList.add("active");
-    const parentCategoryLink = this.closest(
-      ".widget_sub_categories"
-    ).querySelector("a");
-    if (parentCategoryLink) {
-      parentCategoryLink.classList.add("active");
-    }
-  });
-});
-
 document
   .getElementById("applyFilterBtn")
-  .addEventListener("click", function () {
-    const activeLink = document.querySelector(".widget_categories .active a");
-    const selectedCategory = activeLink ? activeLink.dataset.category : null;
+  .addEventListener("click", async () => {
+    try {
+      const selectedSubcategories = [];
+      const subcategoryCheckboxes = document.querySelectorAll(
+        ".sub_categories input[type='checkbox']"
+      );
+      subcategoryCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          selectedSubcategories.push(checkbox.value);
+        }
+      });
+      if (selectedSubcategories.length === 0) {
+        selectedSubcategories.push("");
+      }
 
-    const activeSubcategoryLink = document.querySelector(
-      ".widget_dropdown_categories .active a"
-    );
-    const selectedSubcategory = activeSubcategoryLink
-      ? activeSubcategoryLink.dataset.subcategory
-      : null;
+      const selectedCategories = [];
+      const categoryCheckboxes = document.querySelectorAll(
+        ".main_categories input[type='checkbox']"
+      );
+      categoryCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          selectedCategories.push(checkbox.value);
+        }
+      });
+      if (selectedCategories.length === 0) {
+        selectedCategories.push("");
+      }
 
-    const priceRange = document.getElementById("amount").value;
+      // Get the selected price range
+      const priceRange = document.getElementById("amount").value;
 
-    console.log(selectedCategory);
+      // Extracting price range in the format required by the backend
+      const [minPrice, maxPrice] = priceRange.split(" - ");
+      const formattedPriceRange = `${minPrice.replace(
+        "₹",
+        ""
+      )}-${maxPrice.replace("₹", "")}`;
 
-    // Construct the URL with selected filters
-    let url = `/shop/filter?`;
-    if (selectedCategory) url += `category=${selectedCategory}&`;
-    if (selectedSubcategory) url += `subcategory=${selectedSubcategory}&`;
-    if (priceRange) url += `price=${priceRange}`;
+      // Construct the URL with query parameters
+      const filteredURL = `/shop/filter?categories=${selectedCategories.join(
+        ","
+      )}&subcategories=${selectedSubcategories.join(
+        ","
+      )}&price=${formattedPriceRange}`;
 
-    window.location.href = url;
+      // Navigate to the filtered page
+      window.location.href = filteredURL;
+    } catch (error) {
+      console.error("Error applying filter: ", error);
+      // Handle error as needed
+    }
   });
+
+// Function to handle category and subcategory selection
+function handleCategorySelection(categoryName, subcategoryNames) {
+  const categoryCheckbox = document.querySelector(
+    `input[name="${categoryName}"]`
+  );
+  const subcategoryCheckboxes = document.querySelectorAll(
+    `input[name="${subcategoryNames}"]`
+  );
+
+  categoryCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+      subcategoryCheckboxes.forEach((subcategoryCheckbox) => {
+        subcategoryCheckbox.checked = true;
+      });
+    } else {
+      subcategoryCheckboxes.forEach((subcategoryCheckbox) => {
+        subcategoryCheckbox.checked = false;
+      });
+    }
+  });
+
+  subcategoryCheckboxes.forEach((subcategoryCheckbox) => {
+    subcategoryCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        categoryCheckbox.checked = true;
+      } else {
+        // If all subcategories of this category are unchecked, uncheck the category
+        if (
+          !Array.from(subcategoryCheckboxes).some(
+            (checkbox) => checkbox.checked
+          )
+        ) {
+          categoryCheckbox.checked = false;
+        }
+      }
+    });
+  });
+}
+handleCategorySelection("category_plants", "subcategory_plants");
+handleCategorySelection("category_pots", "subcategory_pots");
+handleCategorySelection("category_supplies", "subcategory_supplies");
+
+// Function to prefill selected filters
+function prefillFilters() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const categories = urlParams.get("categories");
+  const subcategories = urlParams.get("subcategories");
+  const priceRange = urlParams.get("price");
+
+  if (categories) {
+    const categoryArray = categories.split(",");
+    categoryArray.forEach((category) => {
+      const checkbox = document.querySelector(`input[value="${category}"]`);
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    });
+  }
+
+  if (subcategories) {
+    const subcategoryArray = subcategories.split(",");
+    subcategoryArray.forEach((subcategory) => {
+      const checkbox = document.querySelector(`input[value="${subcategory}"]`);
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    });
+  }
+
+  if (priceRange) {
+    const [minPrice, maxPrice] = priceRange.split("-");
+    document.getElementById("amount").value = `₹${minPrice}-${maxPrice}`;
+
+    // Update the slider range values
+    $("#slider-range").slider({
+      range: true,
+      min: 0,
+      max: 5000,
+      values: [parseInt(minPrice), parseInt(maxPrice)],
+      slide: function (event, ui) {
+        $("#amount").val("\u20B9" + ui.values[0] + " - \u20B9" + ui.values[1]);
+      },
+    });
+  }
+}
+window.addEventListener("DOMContentLoaded", prefillFilters);
