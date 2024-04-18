@@ -1,3 +1,14 @@
+function showToast(message) {
+  // Display toast message using Toastify library
+  Toastify({
+    text: message,
+    duration: 3000, // Duration in milliseconds
+    gravity: "bottom", // Position of the toast message
+    position: "center",
+    backgroundColor: "black", // Background color of the toast
+  }).showToast();
+}
+
 // Function to check wishlist status for each product and initialize on page load
 async function initializeWishlistStatus() {
   try {
@@ -26,9 +37,6 @@ async function initializeWishlistStatus() {
     console.error("Error occurred while initializing wishlist status:", error);
   }
 }
-
-// Call the initialization function on page load
-document.addEventListener("DOMContentLoaded", initializeWishlistStatus);
 
 async function addToWishlist(icon, productId) {
   try {
@@ -100,72 +108,6 @@ async function removeFromWishlist(icon, productId) {
   }
 }
 
-function showToast(message) {
-  // Display toast message using Toastify library
-  Toastify({
-    text: message,
-    duration: 3000, // Duration in milliseconds
-    gravity: "bottom", // Position of the toast message
-    position: "center",
-    backgroundColor: "black", // Background color of the toast
-  }).showToast();
-}
-
-document
-  .getElementById("applyFilterBtn")
-  .addEventListener("click", async () => {
-    try {
-      const selectedSubcategories = [];
-      const subcategoryCheckboxes = document.querySelectorAll(
-        ".sub_categories input[type='checkbox']"
-      );
-      subcategoryCheckboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          selectedSubcategories.push(checkbox.value);
-        }
-      });
-      if (selectedSubcategories.length === 0) {
-        selectedSubcategories.push("");
-      }
-
-      const selectedCategories = [];
-      const categoryCheckboxes = document.querySelectorAll(
-        ".main_categories input[type='checkbox']"
-      );
-      categoryCheckboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          selectedCategories.push(checkbox.value);
-        }
-      });
-      if (selectedCategories.length === 0) {
-        selectedCategories.push("");
-      }
-
-      // Get the selected price range
-      const priceRange = document.getElementById("amount").value;
-
-      // Extracting price range in the format required by the backend
-      const [minPrice, maxPrice] = priceRange.split(" - ");
-      const formattedPriceRange = `${minPrice.replace(
-        "₹",
-        ""
-      )}-${maxPrice.replace("₹", "")}`;
-
-      // Construct the URL with query parameters
-      const filteredURL = `/shop/filter?categories=${selectedCategories.join(
-        ","
-      )}&subcategories=${selectedSubcategories.join(
-        ","
-      )}&price=${formattedPriceRange}`;
-
-      // Navigate to the filtered page
-      window.location.href = filteredURL;
-    } catch (error) {
-      console.error("Error applying filter: ", error);
-      // Handle error as needed
-    }
-  });
-
 // Function to handle category and subcategory selection
 function handleCategorySelection(categoryName, subcategoryNames) {
   const categoryCheckbox = document.querySelector(
@@ -204,9 +146,6 @@ function handleCategorySelection(categoryName, subcategoryNames) {
     });
   });
 }
-handleCategorySelection("category_plants", "subcategory_plants");
-handleCategorySelection("category_pots", "subcategory_pots");
-handleCategorySelection("category_supplies", "subcategory_supplies");
 
 // Function to prefill selected filters
 function prefillFilters() {
@@ -237,18 +176,102 @@ function prefillFilters() {
 
   if (priceRange) {
     const [minPrice, maxPrice] = priceRange.split("-");
-    document.getElementById("amount").value = `₹${minPrice}-${maxPrice}`;
+    document.getElementById(
+      "amount"
+    ).value = `\u20B9${minPrice}-\u20B9${maxPrice}`;
 
     // Update the slider range values
     $("#slider-range").slider({
       range: true,
       min: 0,
       max: 5000,
-      values: [parseInt(minPrice), parseInt(maxPrice)],
+      values: [minPrice, maxPrice],
       slide: function (event, ui) {
         $("#amount").val("\u20B9" + ui.values[0] + " - \u20B9" + ui.values[1]);
       },
     });
   }
 }
-window.addEventListener("DOMContentLoaded", prefillFilters);
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await initializeWishlistStatus();
+
+  prefillFilters();
+  handleCategorySelection("category_plants", "subcategory_plants");
+  handleCategorySelection("category_pots", "subcategory_pots");
+  handleCategorySelection("category_supplies", "subcategory_supplies");
+
+  const sortElement = document.getElementById("sort");
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentSort = urlParams.get("sort") || "name";
+  if (currentSort) {
+    for (let i = 0; i < sortElement.options.length; i++) {
+      if (sortElement.options[i].value === currentSort) {
+        sortElement.options[i].selected = true;
+        break;
+      }
+    }
+  }
+
+  sortElement.addEventListener("change", (event) => {
+    const sortBy = event.target.value;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("sort", sortBy);
+    window.location.search = urlParams.toString();
+  });
+
+  document
+    .getElementById("applyFilterBtn")
+    .addEventListener("click", async () => {
+      try {
+        const selectedSubcategories = [];
+        const subcategoryCheckboxes = document.querySelectorAll(
+          ".sub_categories input[type='checkbox']"
+        );
+        subcategoryCheckboxes.forEach((checkbox) => {
+          if (checkbox.checked) {
+            selectedSubcategories.push(checkbox.value);
+          }
+        });
+        if (selectedSubcategories.length === 0) {
+          selectedSubcategories.push("");
+        }
+
+        const selectedCategories = [];
+        const categoryCheckboxes = document.querySelectorAll(
+          ".main_categories input[type='checkbox']"
+        );
+        categoryCheckboxes.forEach((checkbox) => {
+          if (checkbox.checked) {
+            selectedCategories.push(checkbox.value);
+          }
+        });
+        if (selectedCategories.length === 0) {
+          selectedCategories.push("");
+        }
+
+        // Get the selected price range
+        const priceRange = document.getElementById("amount").value;
+
+        // Extracting price range in the format required by the backend
+        const [minPrice, maxPrice] = priceRange.split("-");
+        const formattedPriceRange = `${minPrice.replace(
+          "₹",
+          ""
+        )}-${maxPrice.replace("₹", "")}`;
+
+        // Construct the URL with query parameters
+        const filteredURL = `/shop/filter?categories=${selectedCategories.join(
+          ","
+        )}&subcategories=${selectedSubcategories.join(
+          ","
+        )}&price=${formattedPriceRange}`;
+
+        // Navigate to the filtered page
+        window.location.href = filteredURL;
+      } catch (error) {
+        console.error("Error applying filter: ", error);
+        // Handle error as needed
+      }
+    });
+});

@@ -425,6 +425,23 @@ let shopPage = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const PAGE_SIZE = 24;
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     const skip = (page - 1) * PAGE_SIZE;
 
@@ -444,6 +461,7 @@ let shopPage = async (req, res) => {
     }
 
     let products = await Product.find({ isActive: true })
+      .sort(sortOption)
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -478,6 +496,23 @@ let plantsPage = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const PAGE_SIZE = 24;
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     const skip = (page - 1) * PAGE_SIZE;
 
@@ -497,6 +532,7 @@ let plantsPage = async (req, res) => {
     }
 
     const plants = await Product.find({ category: "plants", isActive: true })
+      .sort(sortOption)
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -531,6 +567,23 @@ let containersPage = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const PAGE_SIZE = 24;
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     const skip = (page - 1) * PAGE_SIZE;
 
@@ -550,6 +603,7 @@ let containersPage = async (req, res) => {
     }
 
     const containers = await Product.find({ category: "pots", isActive: true })
+      .sort(sortOption)
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -584,6 +638,23 @@ let suppliesPage = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const PAGE_SIZE = 24;
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     const skip = (page - 1) * PAGE_SIZE;
 
@@ -606,6 +677,7 @@ let suppliesPage = async (req, res) => {
       category: "supplies",
       isActive: true,
     })
+      .sort(sortOption)
       .skip(skip)
       .limit(PAGE_SIZE);
 
@@ -662,6 +734,23 @@ let filter = async (req, res) => {
   try {
     const { subcategories, price } = req.query;
     console.log(subcategories);
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     let filters = {};
 
@@ -695,7 +784,10 @@ let filter = async (req, res) => {
       });
     }
 
-    const products = await Product.find(filters).skip(skip).limit(PAGE_SIZE);
+    const products = await Product.find(filters)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(PAGE_SIZE);
 
     const user = req.cookies.userToken ? true : false;
 
@@ -728,6 +820,23 @@ let search = async (req, res) => {
   try {
     const category = req.query.category === "all" ? "" : req.query.category;
     const query = req.query.query;
+    const sortBy = req.query.sort || "name"; // Default sorting by name
+
+    // Sorting options
+    let sortOption = {};
+    if (sortBy === "name") {
+      sortOption = { name: 1 };
+    } else if (sortBy === "latest") {
+      sortOption = { createdAt: -1 };
+    } else if (sortBy === "lowtohigh") {
+      sortOption = { price: 1 };
+    } else if (sortBy === "hightolow") {
+      sortOption = { price: -1 };
+    }
+    // else if (sortBy === "rating") {
+    //   // You need to implement sorting by rating
+    //   // sortOption = { averageRating: -1 };
+    // }
 
     let products;
     if (category) {
@@ -761,6 +870,7 @@ let search = async (req, res) => {
         isActive: true,
         name: { $regex: new RegExp(escapedQuery, "i") },
       })
+        .sort(sortOption)
         .skip(skip)
         .limit(PAGE_SIZE);
 
@@ -786,6 +896,23 @@ let search = async (req, res) => {
       const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
       const page = req.query.page ? parseInt(req.query.page) : 1;
       const PAGE_SIZE = 24;
+      const sortBy = req.query.sort || "name"; // Default sorting by name
+
+      // Sorting options
+      let sortOption = {};
+      if (sortBy === "name") {
+        sortOption = { name: 1 };
+      } else if (sortBy === "latest") {
+        sortOption = { createdAt: -1 };
+      } else if (sortBy === "lowtohigh") {
+        sortOption = { price: 1 };
+      } else if (sortBy === "hightolow") {
+        sortOption = { price: -1 };
+      }
+      // else if (sortBy === "rating") {
+      //   // You need to implement sorting by rating
+      //   // sortOption = { averageRating: -1 };
+      // }
 
       const skip = (page - 1) * PAGE_SIZE;
 
@@ -811,6 +938,7 @@ let search = async (req, res) => {
         isActive: true,
         name: { $regex: new RegExp(escapedQuery, "i") },
       })
+        .sort(sortOption)
         .skip(skip)
         .limit(PAGE_SIZE);
 

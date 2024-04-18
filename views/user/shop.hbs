@@ -1,8 +1,46 @@
 <style>
-    .widget_categories a.active,
-    .widget_dropdown_categories a.active {
-        color: #79a206;
-    }
+ /* Styles for the select container */
+.niceselect_option {
+  position: relative;
+}
+
+/* Styles for the select element */
+.sortSelection select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 8px; /* Adjusted padding */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px; /* Adjusted font size */
+  outline: none;
+}
+
+/* Styles for the select arrow */
+.sortSelection::after {
+  content: '\25BE'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 6px; /* Adjusted position */
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styles for select options */
+.sortSelection select option {
+  background-color: #fff;
+  color: #333;
+  font-size: 14px; /* Adjusted font size */
+}
+
+/* Hover styles for select options */
+.sortSelection select option:hover {
+  background-color: #f0f0f0;
+}
+
 </style>
 
 <!--shop  area start-->
@@ -79,19 +117,19 @@
                         <button data-role="grid_4" type="button" class="active btn-grid-4" data-bs-toggle="tooltip"
                             title="4"></button>
                     </div>
-                    <div class=" niceselect_option">
-                        <form class="select_option" action="#">
-                            <select name="orderby" id="short">
 
-                                <option selected value="1">Sort by average rating</option>
-                                <option value="2">Sort by popularity</option>
-                                <option value="3">Sort by newness</option>
-                                <option value="4">Sort by price: low to high</option>
-                                <option value="5">Sort by price: high to low</option>
-                                <option value="6">Product Name: Z</option>
+                    <div class="niceselect_option" style="margin-right: 10px !important;">
+                        <div class="sortSelection">
+                            <select name="orderby" id="sort">
+                                <option value="name">Product name</option>
+                                <option value="latest">Latest first</option>
+                                <option value="lowtohigh">Price: low to high</option>
+                                <option value="hightolow">Price: high to low</option>
+                                {{!-- <option value="rating">Average rating</option> --}}
                             </select>
-                        </form>
+                        </div>
                     </div>
+
                 </div>
                 <!--shop toolbar end-->
                 <div class="row shop_wrapper grid_4">
@@ -109,9 +147,6 @@
                                     </div> --}}
                                     <div class="action_links">
                                         <ul>
-                                            {{!-- <li class="add_to_cart"><a href="cart" title="Add to cart"><i
-                                                        class="icon-shopping-bag"></i></a></li> --}}
-
                                             <li class="wishlistAdd"><a><i onclick="addToWishlist(this, `{{this._id}}`)"
                                                         class="fa-regular fa-heart"></i></a></li>
                                             <li class="wishlistRemove d-none"><a><i
@@ -119,13 +154,7 @@
                                                         class="fa-solid fa-heart" style="color: #79a206;"></i></a></li>
                                         </ul>
                                     </div>
-                                    {{!-- <div class="action_links list_action">
-                                        <ul>
-                                            <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_box" title="quick view"> <i
-                                                        class="icon-eye"></i></a></li>
-                                        </ul>
-                                    </div> --}}
+
                                 </div>
                                 <div class="product_content grid_content">
                                     <div class="product_price_rating">
