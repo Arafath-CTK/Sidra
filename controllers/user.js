@@ -287,18 +287,11 @@ let resetPassword = async (req, res) => {
 
 let myAccountPage = async (req, res) => {
   try {
-    if (!req.cookies.userToken) {
-      return res.render("user/signIn", { title: "Sidra | SignIn" });
-    }
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
-      role = tokenExtracted.role;
-      email = tokenExtracted.userEmail;
-      if (role !== "user") {
-        return res.render("user/signIn", { title: "Sidra | SignIn" });
-      }
-      let userData = await User.findOne({ email: email });
+      
+      let userData = await User.findById(userId);
       let year = userData.register_date.split("/")[2];
       let addresses = userData.addresses;
       let orders = userData.orders;
@@ -319,6 +312,8 @@ let myAccountPage = async (req, res) => {
         addresses,
         orders: populatedOrders,
       });
+    } else {
+      return res.render("user/signIn", { title: "Sidra | SignIn" });
     }
   } catch (error) {
     console.error("Unexpected error occured due to: ", error);
