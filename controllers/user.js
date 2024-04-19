@@ -125,7 +125,6 @@ let signUpVerifyOTP = async (req, res) => {
       return res.status(400).json({ invalidOTP: true });
     } else {
       console.log("OTP verified");
-
       // Clear OTP from session after successful verification
       req.session.otp = null;
       res.status(200).json({ otpVerified: true });
@@ -141,10 +140,8 @@ let signUpVerifyOTP = async (req, res) => {
 
 let signUpPost = async (req, res) => {
   try {
-    console.log("User registration started");
     let registered = await helper.signUpHelper(req.body);
     if (registered.success) {
-      console.log(registered.user, "User registration completed");
       return res.status(200).json({ success: true });
     }
   } catch (error) {
@@ -244,7 +241,7 @@ let verifyOTP = async (req, res) => {
     ) {
       return res.status(400).json({ invalidOTP: true });
     } else {
-      console.log("OTP verified, proceed with password reset");
+      console.log("OTP verified");
 
       // Clear OTP from session after successful verification
       req.session.otp = null;
@@ -290,7 +287,7 @@ let myAccountPage = async (req, res) => {
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
-      
+
       let userData = await User.findById(userId);
       let year = userData.register_date.split("/")[2];
       let addresses = userData.addresses;
@@ -413,6 +410,47 @@ let deleteAddress = async (req, res) => {
       layout: false,
       errorMessage: "Error occured while deleting the address",
     });
+  }
+};
+
+let newEmailVerification = async (req, res) => {
+  try {
+    const { email } = req.body;
+    let response = await helper.signUpVerificationHelper(email);
+    if (response.emailExist) {
+      console.log("The entered email already exists");
+      res.status(200).json({ emailExist: true });
+    } else {
+      const { otp, expiry } = await helper.generateAndSendOTP(email);
+      req.session.otp = { email, otp, expiry };
+      res.status(200).json({ success: true });
+    }
+  } catch (error) {
+    console.error("Error initiating email verification: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: `internal server error: ${error}`,
+    });
+  }
+};
+
+let editUserData = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
+      let updated = await helper.editUserDataHelper(req.body, userId);
+      if (updated.success) {
+        res.status(200).json({ success: true });
+      } else if (updated.userNotExist) {
+        res.status(200).json({ userNotExist: true });
+      }
+    } else {
+      return res.status(200).json({ notLogged: true });
+    }
+  } catch (error) {
+    res.render("error", { errorMessage: error });
   }
 };
 
@@ -1412,6 +1450,8 @@ module.exports = {
   editAddressPage,
   editAddressPut,
   deleteAddress,
+  newEmailVerification,
+  editUserData,
   signUpVerification,
   signUpVerifyOTP,
   signUpPost,

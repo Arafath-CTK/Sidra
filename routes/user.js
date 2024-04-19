@@ -23,6 +23,8 @@ router.post("/address", preventBack, authenticateUser(), userControllers.addAddr
 router.get("/address/:id", preventBack, authenticateUser(), userControllers.editAddressPage)
 router.put("/address/:id", preventBack, authenticateUser(), userControllers.editAddressPut)
 router.delete("/address/:id", preventBack, authenticateUser(), userControllers.deleteAddress);
+router.post("/myAccount/newEmailVerification", preventBack, authenticateUser(), userControllers.newEmailVerification);
+router.post("/myAccount/editUserData", preventBack, authenticateUser(), userControllers.editUserData)
 
 router.get("/shop", userControllers.shopPage);
 router.get("/shop/plants", userControllers.plantsPage);

@@ -91,7 +91,7 @@
         width: 10% !important;
     }
 
-    .dataEditBtn button {
+    .dataEditBtn {
         background-color: #79a206;
         color: white;
         padding: 10px 0;
@@ -104,6 +104,18 @@
     }
 </style>
 
+<!-- Spinner background overlay -->
+<div id="spinnerOverlay"
+  style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
+</div>
+
+<div id="spinner"
+  style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
+  class=" text-center mt-3">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 <!-- my account start  -->
 <!-- Spinner background overlay -->
 <div id="spinnerOverlay"
@@ -234,33 +246,40 @@
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="nameError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="text" class="error" id="house" name="house"
                                         placeholder="House/Building Name"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="houseError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="text" class="error" id="street" name="street"
                                         placeholder="Street, Area Name"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="streetError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="text" class="error" id="city" name="city" placeholder="City"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="cityError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="text" class="error" id="state" name="state" placeholder="State"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="stateError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="number" class="error" id="pin" name="pin" placeholder="PIN Code"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="pinError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
                                     <input type="number" class="error" id="phone" name="phone"
                                         placeholder="Phone Number"
                                         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
                                     <small id="phoneError"
                                         style="margin-bottom: 15px; margin-left: 3px; color: red;"></small>
+
 
                                     <div style="margin-bottom: 20px;">
                                         <button class="address-button"
@@ -379,29 +398,64 @@
                                 <div class="login_form_container">
                                     <div class="account_login_form">
                                         <form>
-                                            <label>Name</label>
-                                            <input type="text" id="name" name="name" value="{{ userName }}">
-                                            <small id="nameError" style="color: red;"></small>
+                                            <div id="input-section">
+                                                <div style="margin-bottom: 15px !important;">
+                                                    <label>Name</label>
+                                                    <input type="text" id="nameEdit" name="name"
+                                                        style="margin-bottom: 1px !important;" value="{{ userName }}">
+                                                    <input type="hidden" id="existingName" value="{{ userName }}">
+                                                    <small id="nameError" style="color: red;"></small>
+                                                </div>
 
-                                            <label>Email</label>
-                                            <input type="text" id="email" name="email" value="{{ userEmail }}">
-                                            <small id="emailError" style="color: red;"></small>
+                                                <div style="margin-bottom: 15px !important;">
+                                                    <label>Email</label>
+                                                    <input type="text" id="email" name="email"
+                                                        style="margin-bottom: 1px !important;" value="{{ userEmail }}">
+                                                    <input type="hidden" id="existingEmail" value="{{ userEmail }}">
+                                                    <small id="emailError" style="color: red;"></small>
+                                                </div>
 
-                                            <label>Phone Number</label>
-                                            <input type="text" id="phoneNumber" name="phone" value="{{ userPhone_number }}">
-                                            <small id="phoneNumberError" style="color: red;"></small>
+                                                <div style="margin-bottom: 15px !important;">
+                                                    <label>Phone Number</label>
+                                                    <input type="text" id="phoneNumber"
+                                                        style="margin-bottom: 1px !important;" name="phone"
+                                                        value="{{ userPhone_number }}">
+                                                    <input type="hidden" id="existingPhone"
+                                                        value="{{ userPhone_number }}">
+                                                    <small id="phoneNumberError" style="color: red;"></small>
+                                                </div>
 
-                                            <label>Password</label>
-                                            <input type="password" id="password" name="password">
-                                            <small id="passwordError" style="color: red;"></small>
+                                                <div style="margin-bottom: 15px !important;">
+                                                    <label>Password</label>
+                                                    <input type="password" id="password"
+                                                        style="margin-bottom: 1px !important;" name="password">
+                                                    <small id="passwordError" style="color: red;"></small>
+                                                </div>
 
-                                            <label>Confirm Password</label>
-                                            <input type="text" id="confirmPassword" name="confirm-password">
-                                            <small id="confirmPasswordError" style="color: red;"></small>
+                                                <div style="margin-bottom: 15px !important;">
+                                                    <label>Confirm Password</label>
+                                                    <input type="password" id="confirmPassword"
+                                                        style="margin-bottom: 1px !important;" name="confirm-password">
+                                                    <small id="confirmPasswordError" style="color: red;"></small>
+                                                </div>
 
-                                            <div class="dataEditBtn">
-                                                <button type="submit">Save</button>
+                                                <div class="btn dataEditBtn" onclick="editUserData()">Save</div>
                                             </div>
+
+                                            <div id="otp-section" style="display: none;">
+                                                <p>
+                                                    <label>Enter The OTP</label>
+                                                    <input type="text" id="otp" name="otp" />
+                                                </p>
+                                                <div class="login_submit">
+                                                    <div class="btn"
+                                                        style="font-size: 13px; color: white; background-color: #79a206; border-radius: 50px"
+                                                        onclick="verifyOTP()">Verify Email</div>
+                                                </div>
+                                            </div>
+
+                                            <div id="message" style="text-align: center; margin-top: 3px;"></div>
+
                                         </form>
                                     </div>
                                 </div>

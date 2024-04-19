@@ -296,6 +296,38 @@ let deleteAddressHelper = async (addressId, userId) => {
   });
 };
 
+let editUserDataHelper = async (userData, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { name, email, phoneNumber, password } = userData;
+
+      let user = await User.findById(userId);
+      if (!user) {
+        resolve({ userNotExist: true });
+      }
+
+      if (name) {
+        user.name = name;
+      }
+      if (email) {
+        user.email = email;
+      }
+      if (phoneNumber) {
+        user.phone_number = phoneNumber;
+      }
+      if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+      }
+
+      await user.save();
+      resolve({ success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 let addToWishlistHelper = async (userId, productId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -424,8 +456,6 @@ let updateSelectedHelper = async (userId, cartId, data) => {
   });
 };
 
-// let placeOrderHelper = async();
-
 module.exports = {
   signUpHelper,
   signInHelper,
@@ -434,11 +464,11 @@ module.exports = {
   addAddressHelper,
   editAddressHelper,
   deleteAddressHelper,
+  editUserDataHelper,
   addToCartHelper,
   addToWishlistHelper,
   removeFromWishlistHelper,
   removeFromCartHelper,
   updateQuantityHelper,
   updateSelectedHelper,
-  // placeOrderHelper,
 };
