@@ -87,6 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .closest(".product_quantity")
         .querySelector(".cartId").value;
       const newQuantity = parseInt(inputField.value) + 1;
+
+      // Limit the maximum quantity to 10
+      if (newQuantity > 10) {
+        showToast("Maximum quantity reached");
+        return; // Exit function if maximum quantity is reached
+      }
+
       await updateQuantity(cartId, newQuantity);
       inputField.value = newQuantity;
       updateTotalPrice(button.closest("tr"), newQuantity);

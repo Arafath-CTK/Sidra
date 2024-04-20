@@ -23,6 +23,6 @@ router.put("/editProduct/:id", preventBack, authenticateAdmin(), upload.array('i
 router.delete("/products/:id", preventBack, authenticateAdmin(), adminControllers.deleteProduct)
 
 router.get("/orderList", preventBack, authenticateAdmin(), adminControllers.orderListPage)
-router.put("/changeStatus/:id", authenticateAdmin(), adminControllers.changeStatus)
+router.put("/changeStatus", authenticateAdmin(), adminControllers.changeStatus)
 
 module.exports = router;

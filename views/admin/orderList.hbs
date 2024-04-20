@@ -23,35 +23,34 @@
                   <th>Qty</th>
                   <th>Price</th>
                   <th style="width: 5%;">Payment Method</th>
-                  <th style="width: 18%;">Status</th>
-                  {{!-- <th>Cancellation</th> --}}
+                  <th style="width: 15%;">Status</th>
+                  <th>Notes</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each orders}}
                 <tr>
-                  <td style="max-width: 140px; word-wrap: break-word; word-break: break-all;">{{this._id}}</td>
+                  <td style="max-width: 110px; word-wrap: break-word; word-break: break-all;">{{this._id}}</td>
                   <td>
                     <div style="display: flex; align-items: center; justify-content: start;">
                       <img src="{{this.product.images.[0]}}" class="avatar lg rounded me-2" />
                       <span>{{this.product.name}}</span>
                     </div>
                   </td>
-                  <td>{{this.address.name}}</td>
+                  <td>{{this.name}}</td>
                   <td>{{this.quantity}}</td>
                   <td>{{this.total_price}}</td>
                   <td style="width: 5%;">{{this.payment_status}}</td>
-                  <td style="width: 18%;">
-                    <select class="form-select" data-order-id="{{this._id}}">
+                  <td style="width: 15%;">
+                    <input type="hidden" class="orderStatus" value="{{this.status}}">
+                    <select class="form-select">
                       <option value="Pending">Pending</option>
                       <option value="Shipped">Shipped</option>
                       <option value="Delivered">Delivered</option>
                       <option value="Cancelled">Cancelled</option>
                     </select>
                   </td>
-                  {{!-- <td>
-                    <button class="btn btn-danger">Cancel</button>
-                  </td> --}}
+                  <td style="max-width: 50px; word-wrap: break-word;">{{this.reason}}</td>
                 </tr>
                 {{/each}}
               </tbody>
@@ -65,29 +64,33 @@
   </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const statusSelects = document.querySelectorAll('.form-select');
+<!-- Modal -->
+<div class="modal" id="cancelReasonModal" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cancellation Reason</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <select id="cancellationReason" class="form-select mb-3">
+          <option disabled selected value="">Select a reason...</option>
+          <option value="Out of Stock">Out of Stock</option>
+          <option value="Address Issue">Shipping Address Issue</option>
+          <option value="Payment Issue">Payment Issue</option>
+          <option value="Custom">Custom</option>
+        </select>
 
-    statusSelects.forEach(select => {
-      select.addEventListener('change', function (event) {
-        const orderId = this.getAttribute('data-order-id');
-        const newStatus = this.value;
-        updateStatus(orderId, newStatus);
-      });
-    });
-  });
+        <input type="text" style="display: none;" id="customReasonInput" class="form-control"
+          placeholder="Enter custom reason...">
 
-  function updateStatus(orderId, newStatus) {
-    // Send an Axios request to update the status
-    axios.put(`/admin/changeStatus/${orderId}`, { status: newStatus })
-      .then(response => {
-        console.log(`Status for order ${orderId} updated successfully.`);
-        window.location.reload();
-      })
-      .catch(error => {
-        console.error('Error updating status:', error);
-        // Handle error
-      });
-  }
-</script>
+        <small id="customReasonError" style="display: none; color: red; margin-top: 2px; margin-left: 3px"></small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="saveReasonBtn">Save Reason</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/scripts/orderList.js"></script>

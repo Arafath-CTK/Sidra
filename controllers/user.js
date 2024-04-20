@@ -1345,6 +1345,7 @@ let placeOrder = async (req, res) => {
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
+      let customerName = tokenExtracted.userName;
 
       const { addressId, paymentStatus } = req.body;
 
@@ -1376,6 +1377,7 @@ let placeOrder = async (req, res) => {
       // Iterate through each selected product and create a new order object
       for (const item of selectedProducts) {
         const newOrder = {
+          name: customerName,
           product: item.product._id,
           quantity: item.quantity,
           price: item.product.price,

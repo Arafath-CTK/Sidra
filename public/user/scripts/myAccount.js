@@ -19,6 +19,15 @@ function showToast(message) {
   }).showToast();
 }
 
+window.addEventListener('DOMContentLoaded', (event) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const section = urlParams.get('section');
+
+  if (section === 'orders') {
+    document.querySelector('a[href="#orders"]').click();
+  }
+});
+
 async function addAddress() {
   try {
     const name = document.getElementById("name").value;

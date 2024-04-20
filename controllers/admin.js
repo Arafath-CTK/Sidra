@@ -356,29 +356,27 @@ let orderListPage = async (req, res) => {
 let changeStatus = async (req, res) => {
   try {
     if (req.cookies.adminToken) {
-      const { orderId } = req.params;
-      const { status } = req.body;
+      const { status, orderId, reason } = req.body;
 
       const user = await User.findOne({ "orders._id": orderId });
-      console.log(user, "hot itt");
       const order = user.orders.find(
         (order) => order._id.toString() === orderId
       );
-      console.log("adad", order);
-
       if (!order) {
         return res.status(404).json({ error: "Order not found" });
       }
 
-      // Update the status of the order
       order.status = status;
 
-      // Save the updated user
+      if (status === "Cancelled" && reason) {
+        order.reason = reason;
+      }
+
       await user.save();
 
-      res.json({ message: `Status for order ${orderId} updated successfully` });
+      res.status(200).json({ success: true });
     } else {
-      res.render("admin/signIn", { layout: false });
+      res.status(200).json({ notLoggedIn: true });
     }
   } catch (error) {
     console.error("Error while changing the order status: ", error);

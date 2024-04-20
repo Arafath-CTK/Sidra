@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema(
     ],
     orders: [
       {
+        name: String,
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "product",
@@ -54,6 +55,10 @@ const userSchema = new mongoose.Schema(
         },
         payment_status: String,
         status: String,
+        reason: {
+          type: String,
+          default: "NA",
+        },
         created_at: Date,
       },
     ],

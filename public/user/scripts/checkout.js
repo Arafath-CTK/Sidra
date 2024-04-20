@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
           title: "Success",
           text: "Order placed successfully",
         }).then(() => {
-          window.location.href = "/myAccount/#orders";
+          window.location.href = "/myAccount?section=orders";
         });
       })
       .catch((error) => {
@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: "Success",
                 text: "Order placed successfully",
               }).then(() => {
-                window.location.href = "/myAccount/#orders";
+                window.location.href = "/myAccount?section=orders";
               });
             })
             .catch((error) => {
