@@ -1,0 +1,212 @@
+<!-- Body: Body -->
+<div class="body d-flex py-lg-3 py-md-2">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Coupons</h3>
+                    <div class="col-auto d-flex w-sm-100">
+                        <a href="/admin/addCoupon" class="btn btn-primary btn-set-task w-sm-100"><i
+                                class="icofont-plus-circle me-2 fs-6"></i>Add Coupons</a>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Row end  -->
+        {{#if coupons}}
+        <div class="row clearfix g-3">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Coupons Code</th>
+                                    <th>Type</th>
+                                    <th>Discount</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each coupons}}
+                                <tr>
+                                    <td><span class="fw-bold ms-1">{{this.code}}</span></td>
+                                    <td class="coupon-type">{{this.coupon_type}}</td>
+                                    <td class="discount-value">{{this.discount}}</td>
+                                    <td class="order-date">{{this.start_date}}</td>
+                                    <td class="order-date">{{this.end_date}}</td>
+                                    <td>
+                                        {{#if this.isActive}}
+                                        <span class="badge bg-success">Active</span>
+                                        {{else}}
+                                        <span class="badge bg-danger">Inactive</span>
+                                        {{/if}}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <button type="button" onclick="openEditCouponModal('{{this._id}}')"
+                                                class="btn btn-outline-secondary"><i
+                                                    class="icofont-edit text-success"></i></button>
+                                            <button type="button" onclick="removeCoupon('{{this._id}}')"
+                                                class="btn btn-outline-secondary deleterow"><i
+                                                    class="icofont-ui-delete text-danger"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">No Coupons Available</h4>
+                        <p class="card-text">There are currently no coupons available.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true" style="z-index: 999999999999999999999999999;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="editCouponModalLabel">Edit Coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form id="coupon-form">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <!-- Coupon Status -->
+                            <div class="card mb-3">
+                                <!-- Card Header -->
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                    <h6 class="m-0 fw-bold">Coupon Status</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="active" name="couponStatus"
+                                            checked>
+                                        <label class="form-check-label">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="inactive"
+                                            name="couponStatus">
+                                        <label class="form-check-label">
+                                            Inactive
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Date Schedule -->
+                            <div class="card">
+                                <!-- Card Header -->
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                    <h6 class="m-0 fw-bold">Date Schedule</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" name="startDate" class="form-control w-100 start-date">
+                                            <div class="invalid-feedback">Please provide a valid start date.</div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" name="endDate" class="form-control w-100 end-date">
+                                            <div class="invalid-feedback">Please provide a valid end date.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <!-- Coupon Information -->
+                            <div class="card mb-3">
+                                <!-- Card Header -->
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                    <h6 class="m-0 fw-bold">Coupon Information</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Coupon Code</label>
+                                            <input type="text" name="couponCode" class="form-control coupon-code">
+                                            <div class="invalid-feedback">Please provide a valid coupon code.</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Min. Cart Value</label>
+                                            <input type="number" min="1" name="cartValue"
+                                                class="form-control min-cart-value">
+                                            <div class="invalid-feedback">Please provide a valid minimum cart value.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Coupon Type</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="couponType"
+                                                    value="Percentage" checked>
+                                                <label class="form-check-label">
+                                                    Percentage
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="couponType"
+                                                    value="Fixed Amount">
+                                                <label class="form-check-label">
+                                                    Fixed Amount
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Discount Value</label>
+                                            <input type="number" min="1" name="discountValue"
+                                                class="form-control discount-value">
+                                            <div class="invalid-feedback">Please provide a valid discount value.</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Coupon Limit</label>
+                                            <input type="number" min="1" name="couponLimit"
+                                                class="form-control coupon-limit">
+                                            <div class="invalid-feedback">Please provide a valid coupon limit.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/admin/scripts/couponsList.js"></script>

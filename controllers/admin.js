@@ -324,6 +324,7 @@ let editProductPut = async (req, res) => {
 let orderListPage = async (req, res) => {
   try {
     if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
       const usersWithOrders = await User.find({}).populate({
         path: "orders.product",
         model: "product",
@@ -338,6 +339,8 @@ let orderListPage = async (req, res) => {
       res.status(200).render("admin/orderList", {
         layout: "adminLayout",
         title: "Sidra Admin | Order List",
+        adminName: tokenExtracted.adminName,
+        adminMail: tokenExtracted.adminEmail,
         orders: allOrders,
       });
     } else {
@@ -388,6 +391,182 @@ let changeStatus = async (req, res) => {
   }
 };
 
+let couponsListPage = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+
+      let admin = await Admin.findById(adminId);
+
+      let coupons = admin.coupons;
+
+      res.status(200).render("admin/couponsList", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Coupons List",
+        adminName: tokenExtracted.adminName,
+        adminMail: tokenExtracted.adminEmail,
+        coupons,
+      });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while rendering the coupons list page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while rendering the coupons list page: ",
+      error,
+    });
+  }
+};
+
+let couponsAddPage = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+
+      res.status(200).render("admin/couponsAdd", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Coupons Add",
+        adminName: tokenExtracted.adminName,
+        adminMail: tokenExtracted.adminEmail,
+      });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while rendering the coupons add page: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while rendering the coupons add page: ",
+      error,
+    });
+  }
+};
+
+let addCouponPost = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+
+      const {
+        couponCode,
+        cartValue,
+        couponType,
+        discountValue,
+        couponLimit,
+        startDate,
+        endDate,
+        couponStatus,
+      } = req.body;
+
+      // Check if the coupon code already exists
+      const existingCoupon = await Admin.findOne({
+        "coupons.code": couponCode,
+      });
+      if (existingCoupon) {
+        return res.status(400).json({ couponExist: true });
+      }
+
+      // Find the admin and push the new coupon
+      const admin = await Admin.findById(adminId);
+
+      const newCoupon = {
+        code: String(couponCode).toUpperCase(),
+        coupon_type: String(couponType),
+        discount: parseFloat(discountValue),
+        start_date: new Date(startDate),
+        end_date: new Date(endDate),
+        isActive: couponStatus === "active",
+        max_usage: parseInt(couponLimit),
+        min_cart_value: parseFloat(cartValue),
+      };
+
+      admin.coupons.push(newCoupon);
+      await admin.save();
+
+      res.status(200).json({ success: true });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while submitting the coupon: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while submitting the coupon: ",
+      error,
+    });
+  }
+};
+
+let deleteCoupon = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+
+      let couponId = req.params.id;
+
+      const admin = await Admin.findByIdAndUpdate(
+        adminId,
+        { $pull: { coupons: { _id: couponId } } },
+        { new: true }
+      );
+
+      if (!admin) {
+        return res.status(404).json({ success: false });
+      }
+
+      res.status(200).json({ success: true });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error removing the coupon: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error removing the coupon: ",
+      error,
+    });
+  }
+};
+
+let couponEditModal = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+
+      const { id } = req.params;
+
+      const admin = await Admin.findById(adminId);
+
+      if (!admin) {
+        return res.status(404).json({ adminNotExist: true });
+      }
+
+      const coupon = admin.coupons.id(id);
+
+      if (!coupon) {
+        return res.status(404).json({ couponNotExist: true });
+      }
+
+      res.status(200).json(coupon);
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error opening the coupon edit modal: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error opening the coupon edit modal: ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   signInPage,
   signOut,
@@ -403,4 +582,9 @@ module.exports = {
   editProductPut,
   orderListPage,
   changeStatus,
+  couponsListPage,
+  couponsAddPage,
+  addCouponPost,
+  deleteCoupon,
+  couponEditModal,
 };

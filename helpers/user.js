@@ -387,7 +387,6 @@ let addToCartHelper = async (productData, userId) => {
 
       await user.save();
 
-      console.log("Product added to cart successfully");
       resolve({ success: true });
     } catch (error) {
       reject(error);

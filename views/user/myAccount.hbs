@@ -106,15 +106,15 @@
 
 <!-- Spinner background overlay -->
 <div id="spinnerOverlay"
-  style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
+    style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100001;">
 </div>
 
 <div id="spinner"
-  style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
-  class=" text-center mt-3">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100005;"
+    class=" text-center mt-3">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
 <!-- my account start  -->
 <!-- Spinner background overlay -->
@@ -191,10 +191,18 @@
                                         </td>
                                         <td>{{this.quantity}}</td>
                                         <td>&#x20B9; {{this.total_price}}</td>
-                                        <td>{{this.created_at}}</td>
+                                        <td class="order-date">{{this.created_at}}</td>
                                         <td>{{this.payment_status}}</td>
                                         <td>{{this.status}}</td>
-                                        <td><a href="" class="cancel-text">Cancel</a></td>
+                                        <td>
+                                            <!-- Cancel Button -->
+                                            <a class="cancel-text btn btn-danger btn-sm"
+                                                onclick="cancelOrder('{{this._id}}')"
+                                                style="display: none; color:white !important">Cancel</a>
+                                            <a href="/singleProduct/{{this.product._id}}"
+                                                class="reorder-text btn btn-success btn-sm"
+                                                style="display: none;">Reorder</a>
+                                        </td>
                                     </tr>
                                     {{/each}}
                                 </tbody>

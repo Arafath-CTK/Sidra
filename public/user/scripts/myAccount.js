@@ -19,11 +19,11 @@ function showToast(message) {
   }).showToast();
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener("DOMContentLoaded", (event) => {
   const urlParams = new URLSearchParams(window.location.search);
-  const section = urlParams.get('section');
+  const section = urlParams.get("section");
 
-  if (section === 'orders') {
+  if (section === "orders") {
     document.querySelector('a[href="#orders"]').click();
   }
 });
@@ -542,3 +542,61 @@ async function verifyOTP() {
       "Unexpected error occured while verifying otp";
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const orders = document.querySelectorAll(".ordersTable tbody tr");
+
+  orders.forEach((order) => {
+    const status = order.querySelector("td:nth-child(7)").textContent.trim();
+    const cancelButton = order.querySelector(".cancel-text");
+    const reorderButton = order.querySelector(".reorder-text");
+
+    if (status === "Pending" || status === "Shipped") {
+      // Show Cancel button
+      cancelButton.style.display = "inline-block";
+    } else if (status === "Delivered" || status === "Cancelled") {
+      // Show Reorder button
+      reorderButton.style.display = "inline-block";
+    } else if (status === "Requested for cancellation") {
+      cancelButton.style.display = "inline-block";
+      cancelButton.style.backgroundColor = "lightgrey";
+      cancelButton.style.border = "1px solid darkgrey";
+      cancelButton.style.pointerEvents = "none";
+    }
+  });
+});
+
+function cancelOrder(orderId) {
+  axios
+    .put("/cancelOrder", { orderId })
+    .then((response) => {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Requested for order cancellation",
+      });
+    })
+    .then(() => {
+      window.location.href = "/myAccount?section=orders";
+    })
+    .catch((error) => {
+      console.error("Error placing order:", error);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const orderDateCells = document.querySelectorAll(".order-date");
+
+  orderDateCells.forEach(function(cell) {
+      const dateString = cell.textContent;
+      const formattedDate = formatDate(new Date(dateString));
+      cell.textContent = formattedDate;
+  });
+
+  function formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+  }
+});

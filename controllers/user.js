@@ -1443,6 +1443,36 @@ let createOrder = async (req, res) => {
   }
 };
 
+let cancelOrder = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      let { orderId } = req.body;
+
+      const user = await User.findOne({ "orders._id": orderId });
+      const order = user.orders.find(
+        (order) => order._id.toString() === orderId
+      );
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      order.status = "Requested for cancellation";
+
+      await user.save();
+      res.status(200).json({ success: true });
+    } else {
+      console.log("failed");
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.error("Error cancelling the order: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error cancelling the order",
+    });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -1483,4 +1513,5 @@ module.exports = {
   checkoutPage,
   placeOrder,
   createOrder,
+  cancelOrder,
 };

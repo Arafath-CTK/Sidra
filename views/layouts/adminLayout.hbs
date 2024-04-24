@@ -71,4 +71,18 @@
       $('#myDataTable').DataTable();
     });</script>
 
+  <script>
+    $(document).ready(function () {
+      $('.deleterow').on('click', function () {
+        var tablename = $(this).closest('table').DataTable();
+        tablename
+          .row($(this)
+            .parents('tr'))
+          .remove()
+          .draw();
+
+      });
+    });
+  </script>
+
 </body>

@@ -5,7 +5,7 @@ const adminSchema = new mongoose.Schema(
     name: { type: String },
     email: { type: String, unique: true, lowercase: true },
     password: { type: String },
-    register_date: {type: String},
+    register_date: { type: String },
     banners: [
       {
         image: String,
@@ -14,11 +14,15 @@ const adminSchema = new mongoose.Schema(
     ],
     coupons: [
       {
-        code: String,
-        discount: String,
-        expiry: Date,
-        min_order_amount: Number,
-      }, 
+        code: { type: String, unique: true, uppercase: true },
+        coupon_type: String,
+        discount: Number,
+        start_date: Date,
+        end_date: Date,
+        isActive: Boolean,
+        max_usage: Number,
+        min_cart_value: Number,
+      },
     ],
     blogs: [
       {

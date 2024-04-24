@@ -28,14 +28,10 @@ async function updateStatus(orderId, newStatus, reason) {
   }
 }
 
-// Event listener for modal close button
-document.getElementById("cancelReasonModal").addEventListener("hide.bs.modal", function (event) {
-  window.location.reload();
-});
-
 document.addEventListener("DOMContentLoaded", function () {
   const statusSelects = document.querySelectorAll(".form-select");
 
+  // Add event listener for each form-select
   statusSelects.forEach((select) => {
     const status = select.parentElement.querySelector(".orderStatus").value;
     const option = select.querySelector(`option[value="${status}"]`);
@@ -48,69 +44,61 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelector("td:first-child")
         .textContent.trim();
       const newStatus = this.value;
+
       if (newStatus === "Cancelled") {
-        $("#cancelReasonModal").modal("show");
+        const modal = new bootstrap.Modal(
+          document.getElementById("cancelReasonModal")
+        );
+        modal.show();
+
+        // Event listener for save reason button click
+        document
+          .getElementById("saveReasonBtn")
+          .addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Get the selected cancellation reason
+            const selectedReason =
+              document.getElementById("cancellationReason").value;
+            const customReason = document
+              .getElementById("customReasonInput")
+              .value.trim();
+
+            // Close the modal
+            modal.hide();
+
+            // Update status with reason
+            updateStatus(
+              orderId,
+              newStatus,
+              selectedReason === "Custom" ? customReason : selectedReason
+            ).then(() => {
+              window.location.reload();
+            });
+          });
       } else {
-        updateStatus(orderId, newStatus);
+        // If the new status is not 'Cancelled', directly update the status
+        updateStatus(orderId, newStatus).then(() => {
+          window.location.reload();
+        });
       }
     });
   });
+
+  // Event listener for custom reason selection
+  document
+    .getElementById("cancellationReason")
+    .addEventListener("change", function () {
+      const customReasonInput = document.getElementById("customReasonInput");
+      customReasonInput.style.display =
+        this.value === "Custom" ? "block" : "none";
+    });
 });
 
-// Event listener for custom reason selection
-document.getElementById("cancellationReason").addEventListener("change", function () {
-  const customReasonInput = document.getElementById("customReasonInput");
-  customReasonInput.style.display = this.value === "Custom" ? "block" : "none";
-});
-
-// Event listener for custom reason selection
-document.getElementById("saveReasonBtn").addEventListener("click", function (event) {
-  event.preventDefault();
-
-  const selectedReason = document.getElementById("cancellationReason").value;
-  const customReason = document.getElementById("customReasonInput").value.trim();
-  const customReasonError = document.getElementById("customReasonError");
-
-  // Reset error messages
-  customReasonError.textContent = "";
-  customReasonError.style.display = "none";
-
-  let isValid = true;
-
-  // Check if a reason is selected
-  if (selectedReason === "") {
-    customReasonError.textContent = "Please select a valid reason for cancellation";
-    customReasonError.style.display = "block";
-    isValid = false;
-  }
-
-  // Check if "Custom" reason is selected and if custom reason input is provided and meets the word count requirement
-  if (selectedReason === "Custom") {
-    if (customReason === "") {
-      customReasonError.textContent = "Please provide a custom reason for cancellation";
-      customReasonError.style.display = "block";
-      isValid = false;
-    } else if (customReason.split(/\s+/).filter(word => word.length > 0).length < 2) {
-      customReasonError.textContent = "Please provide a custom reason with at least 2 words";
-      customReasonError.style.display = "block";
-      isValid = false;
-    }
-  }
-
-  // If all validations pass, proceed with updating the status
-  if (isValid) {
-    const orderId = document.querySelector("#myDataTable .form-select").closest("tr").querySelector("td:first-child").textContent.trim();
-    const reason = selectedReason === "Custom" ? customReason : selectedReason;
-
-    // Update status with reason
-    updateStatus(orderId, "Cancelled", reason)
-      .then(() => {
-        // Close the modal once the status update is complete
-        $('#cancelReasonModal').modal('hide');
-      })
-      .catch((error) => {
-        console.error("Error updating status:", error);
-        // Handle error
-      });
-  }
-});
+// Event listener for modal close button
+document
+  .getElementById("cancelReasonModal")
+  .addEventListener("hide.bs.modal", function (event) {
+    // Reload the page when the modal is closed
+    window.location.reload();
+  });

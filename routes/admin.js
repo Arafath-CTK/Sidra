@@ -25,4 +25,10 @@ router.delete("/products/:id", preventBack, authenticateAdmin(), adminController
 router.get("/orderList", preventBack, authenticateAdmin(), adminControllers.orderListPage)
 router.put("/changeStatus", authenticateAdmin(), adminControllers.changeStatus)
 
+router.get("/couponsList", preventBack, authenticateAdmin(), adminControllers.couponsListPage)
+router.get("/addCoupon", preventBack, authenticateAdmin(), adminControllers.couponsAddPage)
+router.post("/addCoupon", preventBack, adminControllers.addCouponPost)
+router.delete("/coupon/:id", preventBack, adminControllers.deleteCoupon)
+router.get("/coupon/:id", preventBack, adminControllers.couponEditModal)
+
 module.exports = router;
