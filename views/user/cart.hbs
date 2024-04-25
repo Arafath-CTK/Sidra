@@ -1,10 +1,10 @@
+{{#if products}}
 <div class="shopping_cart_area mt-100">
   <div class="container">
     <form>
       <div class="row">
         <div class="col-12">
           <div class="table_desc">
-
             <div class="cart_page table-responsive">
               <table>
                 <thead>
@@ -42,14 +42,12 @@
                           style="padding: 5px 10px; font-size: 16px; background-color: #f0f0f0; border: none; cursor: pointer;">+</button>
                       </div>
                     </td>
-
                     <td>&#x20B9; <span class="product_total">{{this.totalPrice}}</span></td>
                     <td class="product_remove"><a onclick="removeProduct(`{{this._id}}`)"><i
                           class="fa fa-trash-o"></i></a></td>
                   </tr>
                   {{/each}}
                 </tbody>
-
               </table>
             </div>
           </div>
@@ -82,5 +80,17 @@
     </form>
   </div>
 </div>
+{{else}}
+<div class="row justify-content-center mt-5 mb-5">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-body text-center">
+        <h4 class="card-title">No Products Available</h4>
+        <p class="card-text">There are currently no products added to the cart.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
 
 <script src="/user/scripts/cart.js"></script>

@@ -8,9 +8,23 @@ function showToast(message) {
   }).showToast();
 }
 
-document.getElementById("addressLabel").addEventListener("click", function (e) {
-  document.getElementById("newAddress").checked = true;
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  function toggleCollapsetwo() {
+    const newAddress = document.getElementById("newAddress");
+    const collapsetwo = document.getElementById("addressForm");
+
+    if (newAddress.checked) {
+      collapsetwo.style.display = "block";
+    } else {
+      collapsetwo.style.display = "none";
+    }
+  }
+
+  toggleCollapsetwo();
+
+  document
+    .getElementById("newAddress")
+    .addEventListener("change", toggleCollapsetwo);
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -101,10 +115,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (errorCount > 0) {
-        // Find the first input field with an error
         const errorFields = document.querySelectorAll(".error");
         if (errorFields.length > 0) {
-          // Focus on the first input field with an error
           errorFields[0].focus();
         }
         return { success: false };
@@ -191,9 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to handle "Proceed to Payment" button click
   async function proceedToPayment() {
-    console.log("outer");
     try {
-      console.log("started inner");
       const isNewAddressSelected =
         document.getElementById("newAddress").checked;
       let selectedAddressId;
@@ -275,4 +285,65 @@ document.addEventListener("DOMContentLoaded", function () {
       orderButton.onclick = proceedToPayment; // Assign "Proceed to Payment" function
     }
   });
+
+  if (cashOnDeliveryRadio.checked) {
+    orderButton.innerText = "Place Order";
+    orderButton.onclick = placeOrder;
+  } else if (prepaidRadio.checked) {
+    orderButton.innerText = "Proceed to Payment";
+    orderButton.onclick = proceedToPayment;
+  }
+});
+
+// Initialize a boolean variable to track whether a coupon has been applied
+let couponApplied = false;
+document.getElementById("couponSubmit").addEventListener("click", async function () {
+  try {
+    const couponCode = document.getElementById("couponCodeInput").value;
+    const cartSubtotal = parseFloat(document.getElementById("cartSubtotal").textContent.replace(/[^\d.]/g, ''));
+
+    // Check if a coupon has already been applied
+    if (couponApplied) {
+      // Display error message indicating that a coupon has already been applied
+      document.getElementById("inValidCouponFeedback").innerHTML = "You can apply only one coupon per checkout";
+      document.getElementById("couponCodeInput").classList.remove("is-valid");
+      document.getElementById("couponCodeInput").classList.add("is-invalid");
+      return; // Exit the function without proceeding further
+    }
+
+    // Send coupon code and cart subtotal to the server
+    const response = await axios.post("/coupon", { couponCode, cartSubtotal });
+
+    if (response.data.notExist || response.data.inactive) {
+      // Display error message if the coupon does not exist or is inactive
+      document.getElementById("inValidCouponFeedback").innerHTML = "Coupon does not exist or is inactive";
+      document.getElementById("couponCodeInput").classList.add("is-invalid");
+    } else if (response.data.notApplicable) {
+      // Display error message if the coupon is not applicable
+      document.getElementById("inValidCouponFeedback").innerHTML = "Coupon is not applicable";
+      document.getElementById("couponCodeInput").classList.add("is-invalid");
+    } else if (response.data.success) {
+      // Display success message if the coupon is applied successfully
+      document.getElementById("validCouponFeedback").innerHTML = "Coupon Applied";
+      document.getElementById("inValidCouponFeedback").innerHTML = ""; // Clear any previous invalid coupon feedback
+      document.getElementById("couponCodeInput").classList.remove("is-invalid");
+      document.getElementById("couponCodeInput").classList.add("is-valid");
+
+      // Update UI with discount amount and new total price
+      const discount = response.data.discount;
+      const newTotalPrice = document.getElementById("totalPrice").textContent - discount;
+
+      document.getElementById("discountAmount").textContent = "₹ " + discount;
+      document.getElementById("appliedCoupon").value = response.data.couponId;
+      document.getElementById("totalPrice").textContent = newTotalPrice;
+
+      // Set the boolean variable to true to indicate that a coupon has been applied
+      couponApplied = true;
+    }
+  } catch (error) {
+    console.error("Error applying coupon:", error);
+    // Display generic error message
+    document.getElementById("inValidCouponFeedback").innerHTML = "Error applying coupon. Please try again later.";
+    document.getElementById("couponCodeInput").classList.add("is-invalid");
+  }
 });

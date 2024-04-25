@@ -176,15 +176,15 @@ function validateCouponForm() {
   if (!startDateValue) {
     startDateInput.classList.add("is-invalid");
     isValid = false;
-  } else {
-    startDate = new Date(startDateValue);
-    const currentDate = new Date();
-    if (startDate < currentDate) {
-      startDateInput.classList.add("is-invalid");
-      isValid = false;
-    } else {
-      startDateInput.classList.remove("is-invalid");
-    }
+  // } else {
+  //   startDate = new Date(startDateValue);
+  //   const currentDate = new Date();
+  //   if (startDate < currentDate) {
+  //     startDateInput.classList.add("is-invalid");
+  //     isValid = false;
+  //   } else {
+  //     startDateInput.classList.remove("is-invalid");
+  //   }
   }
 
   // Validate end date

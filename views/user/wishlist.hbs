@@ -1,3 +1,4 @@
+{{#if wishlist}}
 <!--wishlist area start -->
 <div class="wishlist_area mt-100">
   <div class="container">
@@ -38,5 +39,17 @@
   </div>
 </div>
 <!--wishlist area end -->
+{{else}}
+<div class="row justify-content-center mt-5 mb-5">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-body text-center">
+        <h4 class="card-title">No Products Available</h4>
+        <p class="card-text">There are currently no products wishlisted.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
 
 <script src="/user/scripts/wishlist.js"></script>

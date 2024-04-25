@@ -1,5 +1,6 @@
 const helper = require("../helpers/user");
 const User = require("../models/user");
+const Admin = require("../models/admin");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
@@ -1340,6 +1341,59 @@ let checkoutPage = async (req, res) => {
   }
 };
 
+let applyCoupon = async (req, res) => {
+  try {
+    if (req.cookies.userToken) {
+      const { couponCode, cartSubtotal } = req.body;
+
+      // Find the admin with the associated coupon
+      const admin = await Admin.findOne({ "coupons.code": couponCode });
+
+      if (!admin) {
+        return res.json({ notExist: true });
+      }
+
+      // Find the coupon in the admin's coupons array
+      const coupon = admin.coupons.find((coupon) => coupon.code === couponCode);
+
+      if (!coupon) {
+        return res.json({ notExist: true });
+      }
+
+      // Check if the coupon is active
+      if (!coupon.isActive) {
+        return res.json({ inactive: true });
+      }
+
+      // Check eligibility based on criteria like minimum cart value, start date, end date, and maximum usage
+      if (
+        cartSubtotal < coupon.min_cart_value ||
+        Date.now() < coupon.start_date ||
+        Date.now() > coupon.end_date ||
+        coupon.max_usage <= 0
+      ) {
+        return res.json({ notApplicable: true });
+      }
+
+      // Calculate the discount based on the coupon type and amount
+      let discount = 0;
+      if (coupon.coupon_type === "Percentage") {
+        discount = (coupon.discount / 100) * cartSubtotal;
+      } else if (coupon.coupon_type === "Fixed Amount") {
+        discount = coupon.discount;
+      }
+
+      let couponId = coupon._id;
+      return res.status(200).json({ success: true, discount, couponId });
+    } else {
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.error("Error applying the coupon: ", error);
+    res.status(500).json({ message: "Error applying the coupon" });
+  }
+};
+
 let placeOrder = async (req, res) => {
   try {
     if (req.cookies.userToken) {
@@ -1511,6 +1565,7 @@ module.exports = {
   updateSelected,
   cartCount,
   checkoutPage,
+  applyCoupon,
   placeOrder,
   createOrder,
   cancelOrder,
