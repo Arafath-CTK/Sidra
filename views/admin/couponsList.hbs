@@ -79,18 +79,22 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true" style="z-index: 999999999999999999999999999;">
+<div class="modal fade" id="editCouponModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editCouponModalLabel" aria-hidden="true" style="z-index: 999999999999999999999999999;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="editCouponModalLabel">Edit Coupon</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
 
-                <form id="coupon-form">
+            <form id="coupon-form">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="editCouponModalLabel">Edit Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
                     <div class="row">
                         <div class="col-lg-4">
+
+                            <input type="hidden" id="couponId" name="couponId" value="">
                             <!-- Coupon Status -->
                             <div class="card mb-3">
                                 <!-- Card Header -->
@@ -184,7 +188,7 @@
                                         <div class="col-md-6">
                                             <label class="form-label">Discount Value</label>
                                             <input type="number" min="1" name="discountValue"
-                                                class="form-control discount-value">
+                                                class="form-control discount_value">
                                             <div class="invalid-feedback">Please provide a valid discount value.</div>
                                         </div>
                                         <div class="col-md-6">
@@ -198,15 +202,17 @@
                             </div>
                         </div>
                     </div>
-                </form>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
 
-
+{{!-- SweetAlert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/admin/scripts/couponsList.js"></script>

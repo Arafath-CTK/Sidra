@@ -445,7 +445,7 @@ let couponsAddPage = async (req, res) => {
   }
 };
 
-let addCouponPost = async (req, res) => {
+let couponAddPost = async (req, res) => {
   try {
     if (req.cookies.adminToken) {
       let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
@@ -567,6 +567,56 @@ let couponEditModal = async (req, res) => {
   }
 };
 
+let couponEditPost = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+
+      const { couponId, couponCode, cartValue, couponType, discountValue, couponLimit, startDate, endDate, couponStatus } = req.body;
+
+      const couponExists = await Admin.exists({
+        "coupons.code": couponCode,
+        "_id": { $ne: adminId }
+      });
+
+      if (couponExists) {
+        return res.status(400).json({couponExists: true})
+      }
+
+      let admin = await Admin.findById(adminId);
+
+      const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
+
+      if (couponIndex !== -1) {
+        admin.coupons[couponIndex].code = couponCode;
+        admin.coupons[couponIndex].coupon_type = couponType;
+        admin.coupons[couponIndex].discount = discountValue;
+        admin.coupons[couponIndex].start_date = startDate;
+        admin.coupons[couponIndex].end_date = endDate;
+        admin.coupons[couponIndex].isActive = couponStatus === 'active';
+        admin.coupons[couponIndex].max_usage = couponLimit;
+        admin.coupons[couponIndex].min_cart_value = cartValue;
+
+        await admin.save();
+
+        res.status(200).json({success: true})
+      } else {
+        res.status(404).json({couponNotExist: true})
+      }
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error while editing the coupon: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error while editing the coupon: ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   signInPage,
   signOut,
@@ -584,7 +634,8 @@ module.exports = {
   changeStatus,
   couponsListPage,
   couponsAddPage,
-  addCouponPost,
+  couponAddPost,
   deleteCoupon,
   couponEditModal,
+  couponEditPost,
 };
