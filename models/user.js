@@ -62,6 +62,7 @@ const userSchema = new mongoose.Schema(
         created_at: Date,
       },
     ],
+    usedCoupons: [String],
   },
   { versionKey: false }
 );

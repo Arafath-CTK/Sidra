@@ -179,13 +179,24 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("totalPrice").textContent
     );
 
+    // Get the applied coupon ID from the hidden input field
+    const appliedCouponId = document.getElementById("appliedCoupon").value;
+
+    // Prepare the data payload
+    const data = {
+      addressId: selectedAddressId,
+      totalPrice: totalPrice,
+      paymentStatus: "COD",
+    };
+
+    // Include the applied coupon ID if it's valid
+    if (appliedCouponId) {
+      data.appliedCoupon = appliedCouponId;
+    }
+
     // Send the data to the server
     axios
-      .post("/placeOrder", {
-        addressId: selectedAddressId,
-        totalPrice: totalPrice,
-        paymentStatus: "COD",
-      })
+      .post("/placeOrder", data)
       .then((response) => {
         console.log("Order placed successfully:", response.data);
         Swal.fire({
@@ -228,6 +239,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("totalPrice").textContent
       );
 
+      // Get the applied coupon ID from the hidden input field
+      const appliedCouponId = document.getElementById("appliedCoupon").value;
+
       const response = await axios.post("/payment/create-order", {
         amount: totalPrice,
       });
@@ -242,12 +256,20 @@ document.addEventListener("DOMContentLoaded", function () {
         name: "Sidra",
         description: "Complete the payment for order placement",
         handler: function () {
+          // Prepare the data payload
+          const data = {
+            addressId: selectedAddressId,
+            totalPrice: totalPrice,
+            paymentStatus: "Pre Paid",
+          };
+
+          // Include the applied coupon ID if it's valid
+          if (appliedCouponId) {
+            data.appliedCoupon = appliedCouponId;
+          }
+
           axios
-            .post("/placeOrder", {
-              addressId: selectedAddressId,
-              totalPrice: totalPrice,
-              paymentStatus: "Pre Paid",
-            })
+            .post("/placeOrder", data)
             .then((response) => {
               console.log("Order placed successfully:", response.data);
               Swal.fire({
@@ -297,53 +319,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Initialize a boolean variable to track whether a coupon has been applied
 let couponApplied = false;
-document.getElementById("couponSubmit").addEventListener("click", async function () {
-  try {
-    const couponCode = document.getElementById("couponCodeInput").value;
-    const cartSubtotal = parseFloat(document.getElementById("cartSubtotal").textContent.replace(/[^\d.]/g, ''));
+document
+  .getElementById("couponSubmit")
+  .addEventListener("click", async function () {
+    try {
+      const couponCode = document.getElementById("couponCodeInput").value;
+      const cartSubtotal = parseFloat(
+        document
+          .getElementById("cartSubtotal")
+          .textContent.replace(/[^\d.]/g, "")
+      );
 
-    // Check if a coupon has already been applied
-    if (couponApplied) {
-      // Display error message indicating that a coupon has already been applied
-      document.getElementById("inValidCouponFeedback").innerHTML = "You can apply only one coupon per checkout";
-      document.getElementById("couponCodeInput").classList.remove("is-valid");
+      // Check if a coupon has already been applied
+      if (couponApplied) {
+        // Display error message indicating that a coupon has already been applied
+        document.getElementById("inValidCouponFeedback").innerHTML =
+          "You can apply only one coupon per checkout";
+        document.getElementById("couponCodeInput").classList.remove("is-valid");
+        document.getElementById("couponCodeInput").classList.add("is-invalid");
+        return; // Exit the function without proceeding further
+      }
+
+      // Send coupon code and cart subtotal to the server
+      const response = await axios.post("/coupon", {
+        couponCode,
+        cartSubtotal,
+      });
+
+      if (response.data.notExist || response.data.inactive) {
+        // Display error message if the coupon does not exist or is inactive
+        document.getElementById("inValidCouponFeedback").innerHTML =
+          "Coupon does not exist or is inactive";
+        document.getElementById("couponCodeInput").classList.add("is-invalid");
+      } else if (response.data.notApplicable) {
+        // Display error message if the coupon is not applicable
+        document.getElementById("inValidCouponFeedback").innerHTML =
+          "Coupon is not applicable";
+        document.getElementById("couponCodeInput").classList.add("is-invalid");
+      } else if (response.data.success) {
+        // Display success message if the coupon is applied successfully
+        document.getElementById("validCouponFeedback").innerHTML =
+          "Coupon Applied";
+        document.getElementById("inValidCouponFeedback").innerHTML = ""; // Clear any previous invalid coupon feedback
+        document
+          .getElementById("couponCodeInput")
+          .classList.remove("is-invalid");
+        document.getElementById("couponCodeInput").classList.add("is-valid");
+
+        // Update UI with discount amount and new total price
+        const discount = response.data.discount;
+        const newTotalPrice =
+          document.getElementById("totalPrice").textContent - discount;
+
+        document.getElementById("discountAmount").textContent = "₹ " + discount;
+        document.getElementById("appliedCoupon").value = response.data.couponId;
+        document.getElementById("totalPrice").textContent = newTotalPrice;
+
+        // Set the boolean variable to true to indicate that a coupon has been applied
+        couponApplied = true;
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      // Display generic error message
+      document.getElementById("inValidCouponFeedback").innerHTML =
+        "Error applying coupon. Please try again later.";
       document.getElementById("couponCodeInput").classList.add("is-invalid");
-      return; // Exit the function without proceeding further
     }
-
-    // Send coupon code and cart subtotal to the server
-    const response = await axios.post("/coupon", { couponCode, cartSubtotal });
-
-    if (response.data.notExist || response.data.inactive) {
-      // Display error message if the coupon does not exist or is inactive
-      document.getElementById("inValidCouponFeedback").innerHTML = "Coupon does not exist or is inactive";
-      document.getElementById("couponCodeInput").classList.add("is-invalid");
-    } else if (response.data.notApplicable) {
-      // Display error message if the coupon is not applicable
-      document.getElementById("inValidCouponFeedback").innerHTML = "Coupon is not applicable";
-      document.getElementById("couponCodeInput").classList.add("is-invalid");
-    } else if (response.data.success) {
-      // Display success message if the coupon is applied successfully
-      document.getElementById("validCouponFeedback").innerHTML = "Coupon Applied";
-      document.getElementById("inValidCouponFeedback").innerHTML = ""; // Clear any previous invalid coupon feedback
-      document.getElementById("couponCodeInput").classList.remove("is-invalid");
-      document.getElementById("couponCodeInput").classList.add("is-valid");
-
-      // Update UI with discount amount and new total price
-      const discount = response.data.discount;
-      const newTotalPrice = document.getElementById("totalPrice").textContent - discount;
-
-      document.getElementById("discountAmount").textContent = "₹ " + discount;
-      document.getElementById("appliedCoupon").value = response.data.couponId;
-      document.getElementById("totalPrice").textContent = newTotalPrice;
-
-      // Set the boolean variable to true to indicate that a coupon has been applied
-      couponApplied = true;
-    }
-  } catch (error) {
-    console.error("Error applying coupon:", error);
-    // Display generic error message
-    document.getElementById("inValidCouponFeedback").innerHTML = "Error applying coupon. Please try again later.";
-    document.getElementById("couponCodeInput").classList.add("is-invalid");
-  }
-});
+  });

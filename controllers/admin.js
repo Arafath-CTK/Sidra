@@ -372,6 +372,17 @@ let changeStatus = async (req, res) => {
       order.status = status;
 
       if (status === "Cancelled" && reason) {
+        const product = await Product.findById(order.product);
+
+        if (!product) {
+          return res.status(404).json({ error: "Product not found" });
+        }
+
+        // Increment the product quantity
+        await Product.findByIdAndUpdate(order.product, {
+          $inc: { stock: order.quantity },
+        });
+
         order.reason = reason;
       }
 
@@ -573,20 +584,32 @@ let couponEditPost = async (req, res) => {
       let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
       let adminId = tokenExtracted.adminId;
 
-      const { couponId, couponCode, cartValue, couponType, discountValue, couponLimit, startDate, endDate, couponStatus } = req.body;
+      const {
+        couponId,
+        couponCode,
+        cartValue,
+        couponType,
+        discountValue,
+        couponLimit,
+        startDate,
+        endDate,
+        couponStatus,
+      } = req.body;
 
       const couponExists = await Admin.exists({
         "coupons.code": couponCode,
-        "_id": { $ne: adminId }
+        _id: { $ne: adminId },
       });
 
       if (couponExists) {
-        return res.status(400).json({couponExists: true})
+        return res.status(400).json({ couponExists: true });
       }
 
       let admin = await Admin.findById(adminId);
 
-      const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
+      const couponIndex = admin.coupons.findIndex(
+        (coupon) => coupon._id.toString() === couponId
+      );
 
       if (couponIndex !== -1) {
         admin.coupons[couponIndex].code = couponCode;
@@ -594,15 +617,15 @@ let couponEditPost = async (req, res) => {
         admin.coupons[couponIndex].discount = discountValue;
         admin.coupons[couponIndex].start_date = startDate;
         admin.coupons[couponIndex].end_date = endDate;
-        admin.coupons[couponIndex].isActive = couponStatus === 'active';
+        admin.coupons[couponIndex].isActive = couponStatus === "active";
         admin.coupons[couponIndex].max_usage = couponLimit;
         admin.coupons[couponIndex].min_cart_value = cartValue;
 
         await admin.save();
 
-        res.status(200).json({success: true})
+        res.status(200).json({ success: true });
       } else {
-        res.status(404).json({couponNotExist: true})
+        res.status(404).json({ couponNotExist: true });
       }
     } else {
       res.render("admin/signIn", { layout: false });

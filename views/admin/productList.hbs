@@ -27,7 +27,7 @@
         </div>
         <!-- Row end  -->
         <div class="row g-2 mb-3">
-            <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
+            {{!-- <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
                 <div class="card mb-3">
                     <div class="reset-block">
                         <div class="filter-title">
@@ -96,94 +96,110 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-                <div class="body d-flex py-3">
-                    <div class="container-xxl">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
+            </div> --}}
+            {{!-- <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-9"> --}}
 
-                                        <table id="myDataTable" class="table-auto text-center ms-1 me-1 w-full"
-                                            style="width: 100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3" style="text-align: center;">
-                                                        <b><span class="text-danger text-uppercase"
-                                                                id="Errormessage">{{productListError}}</span></b>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th style="text-align: center;">Product</th>
-                                                    <th style="text-align: center;">Details</th>
-                                                    <th style="text-align: center;">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{#each sortedProducts}}
-                                                <tr class="col-12 g-0">
-                                                    <td class="col-4"
-                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
-                                                        <img class="w120 rounded img-fluid mb-2"
-                                                            src="{{this.images.[0]}}" {{#unless this.isActive}}
-                                                            style="filter: grayscale(100%);" {{/unless}}>
-                                                        <div class="ms-2"><b>{{this.name}}</b></div>
-                                                    </td>
-                                                    <td class="col-6"
-                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
-                                                        <div class="mb-5" style="width: 250px;">
-                                                            <p class="mb-1 mt-2"><b>Description :</b><br /><span {{#if
-                                                                    this.isActive}}class="text-primary"
-                                                                    {{else}}class="text-gray"
-                                                                    {{/if}}>{{this.description}}</span></p>
-                                                            <div class="mt-1"><b>Price: <span {{#if
+                <div>
+                    <div class="body d-flex py-3">
+                        <div class="container-xxl">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                            <table id="myDataTable" class="table-auto text-center ms-1 me-1 w-full"
+                                                style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="3" style="text-align: center;">
+                                                            <b><span class="text-danger text-uppercase"
+                                                                    id="Errormessage">{{productListError}}</span></b>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="text-align: center;">Product</th>
+                                                        <th style="text-align: center;">Details</th>
+                                                        <th style="text-align: center;">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each sortedProducts}}
+                                                    <tr class="col-12 g-0">
+                                                        <td class="col-4"
+                                                            style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
+                                                            <img class="w120 rounded img-fluid mb-2"
+                                                                src="{{this.images.[0]}}" {{#unless this.isActive}}
+                                                                style="filter: grayscale(100%);" {{/unless}}>
+                                                        </td>
+                                                        <td class="col-6"
+                                                            style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
+                                                            <div class="mb-5" style="width: 250px;">
+                                                                <div class="mt-1"><span>Name: </span><b {{#if
                                                                         this.isActive}}class="text-primary"
                                                                         {{else}}class="text-gray"
-                                                                        {{/if}}>{{this.price}}</span></b>
+                                                                        {{/if}}>{{this.name}}</b>
+                                                                </div>
+
+                                                                {{!-- <p class="mb-1 mt-2"><b>Description
+                                                                        :</b><br /><span {{#if
+                                                                        this.isActive}}class="text-primary"
+                                                                        {{else}}class="text-gray"
+                                                                        {{/if}}>{{this.description}}</span></p> --}}
+
+                                                                <div class="mt-1"><span>Price: </span><b {{#if
+                                                                        this.isActive}}class="text-primary"
+                                                                        {{else}}class="text-gray"
+                                                                        {{/if}}>{{this.price}}</b>
+                                                                </div>
+
+                                                                <div class="mt-1"><span>Stock Qty: </span><b {{#if
+                                                                        this.isActive}}class="text-primary"
+                                                                        {{else}}class="text-gray"
+                                                                        {{/if}}>{{this.stock}}</b>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="col-2"
-                                                        style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
-                                                        <div class="d-flex">
-                                                            <span style="display: none;">{{#if
-                                                                this.isActive}}active{{else}}disabled{{/if}}</span>
-                                                            <button type="button" class="btn btn-outline-secondary me-2"
-                                                                onclick="editProduct('{{this._id}}')">
-                                                                <i class="icofont-edit text-success"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-outline-secondary"
-                                                                onclick="{{#if this.isActive}}disableProduct('{{this._id}}', 'disable'){{else}}disableProduct('{{this._id}}', 'enable'){{/if}}">
-                                                                {{#if this.isActive}}
-                                                                <i class="icofont-ui-block text-danger"></i>
-                                                                {{else}}
-                                                                <i class="icofont-ui-reply text-success"></i>
-                                                                {{/if}}
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                {{/each}}
-                                            </tbody>
-                                        </table>
+                                                        </td>
+                                                        <td class="col-2"
+                                                            style="border-bottom: 1px solid #e0e0e0; padding: 10px 0;">
+                                                            <div class="d-flex">
+                                                                <span style="display: none;">{{#if
+                                                                    this.isActive}}active{{else}}disabled{{/if}}</span>
+                                                                <button type="button"
+                                                                    class="btn btn-outline-secondary me-2"
+                                                                    onclick="editProduct('{{this._id}}')">
+                                                                    <i class="icofont-edit text-success"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-secondary"
+                                                                    onclick="{{#if this.isActive}}disableProduct('{{this._id}}', 'disable'){{else}}disableProduct('{{this._id}}', 'enable'){{/if}}">
+                                                                    {{#if this.isActive}}
+                                                                    <i class="icofont-ui-block text-danger"></i>
+                                                                    {{else}}
+                                                                    <i class="icofont-ui-reply text-success"></i>
+                                                                    {{/if}}
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
 
 
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-
             </div>
+            <!-- Row end  -->
         </div>
-        <!-- Row end  -->
     </div>
-</div>
 
 
-{{!-- SweetAlert --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/admin/scripts/productList.js"></script>
+    {{!-- SweetAlert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/admin/scripts/productList.js"></script>

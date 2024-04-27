@@ -1447,6 +1447,16 @@ let placeOrder = async (req, res) => {
 
         // Remove selected product from the cart
         user.cart = user.cart.filter((cartItem) => cartItem !== item);
+
+        // Subtract quantity from the product in the database
+        await Product.findByIdAndUpdate(item.product._id, {
+          $inc: { stock: -item.quantity },
+        });
+      }
+
+      // If a coupon was applied, store the coupon code in usedCoupons array
+      if (req.body.appliedCoupon) {
+        user.usedCoupons.push(req.body.appliedCoupon);
       }
 
       // Save the updated user document
