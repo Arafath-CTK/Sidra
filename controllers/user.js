@@ -1344,6 +1344,9 @@ let checkoutPage = async (req, res) => {
 let applyCoupon = async (req, res) => {
   try {
     if (req.cookies.userToken) {
+      let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
+      let userId = tokenExtracted.userId;
+
       const { couponCode, cartSubtotal } = req.body;
 
       // Find the admin with the associated coupon
@@ -1363,6 +1366,16 @@ let applyCoupon = async (req, res) => {
       // Check if the coupon is active
       if (!coupon.isActive) {
         return res.json({ inactive: true });
+      }
+
+      // Check if the coupon ID exists in the usedCoupons array
+      const couponUsed = await User.findOne({
+        _id: userId,
+        usedCoupons: { $in: [coupon._id] },
+      });
+
+      if (couponUsed) {
+        return res.json({ alreadyUsed: true });
       }
 
       // Check eligibility based on criteria like minimum cart value, start date, end date, and maximum usage

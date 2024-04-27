@@ -351,13 +351,15 @@ document
         document.getElementById("inValidCouponFeedback").innerHTML =
           "Coupon does not exist or is inactive";
         document.getElementById("couponCodeInput").classList.add("is-invalid");
+      } else if (response.data.alreadyUsed) {
+        document.getElementById("inValidCouponFeedback").innerHTML =
+          "You have already used this coupon once";
+        document.getElementById("couponCodeInput").classList.add("is-invalid");
       } else if (response.data.notApplicable) {
-        // Display error message if the coupon is not applicable
         document.getElementById("inValidCouponFeedback").innerHTML =
           "Coupon is not applicable";
         document.getElementById("couponCodeInput").classList.add("is-invalid");
       } else if (response.data.success) {
-        // Display success message if the coupon is applied successfully
         document.getElementById("validCouponFeedback").innerHTML =
           "Coupon Applied";
         document.getElementById("inValidCouponFeedback").innerHTML = ""; // Clear any previous invalid coupon feedback
