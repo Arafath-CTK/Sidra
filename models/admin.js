@@ -6,12 +6,24 @@ const adminSchema = new mongoose.Schema(
     email: { type: String, unique: true, lowercase: true },
     password: { type: String },
     register_date: { type: String },
-    banners: [
-      {
-        image: String,
-        position: String,
+    banner: {
+      mainBanner: {
+        type: Array,
+        required: true,
       },
-    ],
+      categoryBanner: [
+        {
+          image: {
+            type: String,
+          },
+        },
+        {
+          image: {
+            type: String,
+          },
+        },
+      ],
+    },
     coupons: [
       {
         code: { type: String, unique: true, uppercase: true },

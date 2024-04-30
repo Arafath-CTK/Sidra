@@ -16,6 +16,7 @@ let homePage = async (req, res) => {
       category: "supplies",
       isActive: true,
     });
+    const admin = await Admin.findOne();
 
     if (req.cookies.userToken) {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
@@ -25,10 +26,20 @@ let homePage = async (req, res) => {
       return res.render("user/home", {
         title: "Sidra | Home",
         user: true,
-        plants: plants.slice(-8).reverse(),
-        containers: containers.slice(-8).reverse(),
-        supplies: supplies.slice(-8).reverse(),
+        plants: plants
+          .filter((product) => product.isActive)
+          .slice(-8)
+          .reverse(),
+        containers: containers
+          .filter((product) => product.isActive)
+          .slice(-8)
+          .reverse(),
+        supplies: supplies
+          .filter((product) => product.isActive)
+          .slice(-8)
+          .reverse(),
         wishlist: user.wishlist,
+        banner: admin.banner,
       });
     }
     return res.render("user/home", {
@@ -46,6 +57,7 @@ let homePage = async (req, res) => {
         .filter((product) => product.isActive)
         .slice(-8)
         .reverse(),
+      banner: admin.banner,
     });
   } catch (error) {
     res.render("error", { layout: false, errorMessage: error });

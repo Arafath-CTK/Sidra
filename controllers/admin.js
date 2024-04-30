@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const moment = require("moment");
 const puppeteer = require("puppeteer");
 const { createObjectCsvWriter } = require("csv-writer");
+const cloudinary = require("../config/cloudinary");
 
 // Admin signup page
 let signInPage = async (req, res) => {
@@ -894,6 +895,96 @@ let couponEditPost = async (req, res) => {
   }
 };
 
+let bannerList = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+      let adminId = tokenExtracted.adminId;
+      const admin = await Admin.findById(adminId);
+
+      res.status(200).render("admin/banners", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Banners List",
+        adminName: tokenExtracted.adminName,
+        adminMail: tokenExtracted.adminEmail,
+        admin,
+      });
+    } else {
+      res.render("admin/signIn", { layout: false });
+    }
+  } catch (error) {
+    console.error("Error rendering the banners: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the banners: ",
+      error,
+    });
+  }
+};
+
+let changeMainBanner = async (req, res) => {
+  try {
+    let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+    let adminId = tokenExtracted.adminId;
+    let imageData = req.files;
+    const imageUrls = [];
+    if (imageData) {
+      for (const file of imageData) {
+        const result = await cloudinary.uploader.upload(file.path);
+        imageUrls.push(result.secure_url);
+      }
+      console.log(imageUrls);
+
+      const admin = await Admin.findById(adminId);
+      admin.banner.mainBanner = imageUrls;
+      await admin.save();
+    } else {
+      console.log("No Image data found");
+    }
+    res.redirect("/admin/bannerList");
+  } catch (error) {
+    console.error("Error changing the mainbanners: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the banners: ",
+      error,
+    });
+  }
+};
+
+let changeCategoryBanner = async (req, res) => {
+  try {
+    let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
+    let adminId = tokenExtracted.adminId;
+    let count = req.params.count;
+    console.log(count);
+    let imageData = req.file;
+
+    console.log("image passed to cloudinary upload.");
+    if (imageData) {
+      const result = await cloudinary.uploader.upload(imageData.path);
+      const imageUrl = result.secure_url;
+      console.log("image : ", imageUrl);
+
+      const admin = await Admin.findById(adminId);
+      admin.banner.categoryBanner[count - 1].image = imageUrl;
+      await admin.save();
+
+      console.log("Offer banner changed successfully.");
+    } else {
+      console.log("Missing image data, offer value, or title.");
+    }
+    res.redirect("/admin/bannerList");
+  } catch (error) {
+    console.error("Error changing the categorybanners: ", error);
+    res.status(500).render("error", {
+      layout: false,
+      errorMessage: "Error rendering the banners: ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   signInPage,
   signOut,
@@ -917,4 +1008,7 @@ module.exports = {
   deleteCoupon,
   couponEditModal,
   couponEditPost,
+  bannerList,
+  changeMainBanner,
+  changeCategoryBanner,
 };

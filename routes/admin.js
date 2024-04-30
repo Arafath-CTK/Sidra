@@ -35,4 +35,8 @@ router.delete("/coupon/:id", preventBack, adminControllers.deleteCoupon)
 router.get("/coupon/:id", preventBack, adminControllers.couponEditModal)
 router.put("/editCoupon", preventBack, adminControllers.couponEditPost)
 
+router.get("/bannerList", preventBack, adminControllers.bannerList)
+router.post('/changeMainBanner', preventBack, upload.array('image',4), adminControllers.changeMainBanner);
+router.post('/categoryBanner/:count', preventBack, upload.single('image'), adminControllers.changeCategoryBanner);
+
 module.exports = router;
