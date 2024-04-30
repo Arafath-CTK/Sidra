@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const Admin = require("../models/admin");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const cloudinary = require("../config/cloudinary");
 
@@ -120,4 +121,70 @@ function deleteProductHelper(productId) {
   });
 }
 
-module.exports = { addProductHelper, editProductHelper, deleteProductHelper };
+async function getSummaryData(startDate, endDate) {
+  // Query to get summary data based on the startDate and endDate
+  const customersCount = await User.countDocuments();
+  const ordersCount = await User.aggregate([
+    {
+      $unwind: "$orders",
+    },
+    {
+      $match: {
+        "orders.created_at": { $gte: startDate, $lt: endDate },
+      },
+    },
+    {
+      $count: "totalOrders",
+    },
+  ]);
+  const totalSales = await User.aggregate([
+    {
+      $unwind: "$orders",
+    },
+    {
+      $match: {
+        "orders.created_at": { $gte: startDate, $lt: endDate },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$orders.total_price" },
+      },
+    },
+  ]);
+  const averageSale =
+    totalSales.length > 0
+      ? totalSales[0].total / ordersCount[0].totalOrders
+      : 0;
+
+  return {
+    customersCount,
+    ordersCount: ordersCount.length > 0 ? ordersCount[0].totalOrders : 0,
+    totalSales: totalSales.length > 0 ? totalSales[0].total : 0,
+    averageSale,
+  };
+}
+
+function formatNumber(num) {
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(1).replace(/\.0$/, "") + "B";
+  }
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return num;
+}
+
+
+
+module.exports = {
+  addProductHelper,
+  editProductHelper,
+  deleteProductHelper,
+  getSummaryData,
+  formatNumber,
+};

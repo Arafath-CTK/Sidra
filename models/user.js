@@ -43,8 +43,8 @@ const userSchema = new mongoose.Schema(
           ref: "product",
         },
         quantity: Number,
-        price: Number, // Price per unit for this product
-        total_price: Number, // Total price for this product (quantity * price)
+        price: Number,
+        total_price: Number, 
         address: {
           name: String,
           house_name: String,

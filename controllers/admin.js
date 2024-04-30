@@ -4,6 +4,9 @@ const User = require("../models/user");
 const Product = require("../models/product");
 const JWT = require("../middlewares/jwt");
 const bcrypt = require("bcrypt");
+const moment = require("moment");
+const puppeteer = require("puppeteer");
+const { createObjectCsvWriter } = require("csv-writer");
 
 // Admin signup page
 let signInPage = async (req, res) => {
@@ -36,16 +39,267 @@ let adminHome = async (req, res) => {
   try {
     if (req.cookies.adminToken) {
       let tokenExtracted = await JWT.verifyAdmin(req.cookies.adminToken);
-      if (tokenExtracted.role === "admin") {
-        return res.render("admin/dashboard", {
-          layout: "adminLayout",
-          title: "Sidra Admin | Dashboard",
-          adminName: tokenExtracted.adminName,
-          adminMail: tokenExtracted.adminEmail,
-        });
-      }
+
+      // Get today's date
+      const today = new Date();
+      // Set hours, minutes, seconds, and milliseconds to 0
+      today.setHours(0, 0, 0, 0);
+
+      // Get the start of the week (Sunday)
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(startOfWeek.getDate() - today.getDay());
+
+      // Get the start of the month
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+      // Query for today's data
+      const todayData = await helper.getSummaryData(today, new Date());
+
+      // Query for this week's data
+      const weekData = await helper.getSummaryData(startOfWeek, new Date());
+
+      // Query for this month's data
+      const monthData = await helper.getSummaryData(startOfMonth, new Date());
+
+      return res.render("admin/dashboard", {
+        layout: "adminLayout",
+        title: "Sidra Admin | Dashboard",
+        adminName: tokenExtracted.adminName,
+        adminMail: tokenExtracted.adminEmail,
+        todayData: {
+          customersCount: helper.formatNumber(todayData.customersCount),
+          ordersCount: helper.formatNumber(todayData.ordersCount),
+          totalSales: helper.formatNumber(todayData.totalSales),
+          averageSale: helper.formatNumber(todayData.averageSale),
+        },
+        weekData: {
+          customersCount: helper.formatNumber(weekData.customersCount),
+          ordersCount: helper.formatNumber(weekData.ordersCount),
+          totalSales: helper.formatNumber(weekData.totalSales),
+          averageSale: helper.formatNumber(weekData.averageSale),
+        },
+        monthData: {
+          customersCount: helper.formatNumber(monthData.customersCount),
+          ordersCount: helper.formatNumber(monthData.ordersCount),
+          totalSales: helper.formatNumber(monthData.totalSales),
+          averageSale: helper.formatNumber(monthData.averageSale),
+        },
+      });
     }
     return res.redirect("/admin/signIn");
+  } catch (error) {
+    res.render("error", { layout: false, errorMessage: error });
+  }
+};
+
+let dashboardData = async (req, res) => {
+  try {
+    if (req.cookies.adminToken) {
+      const startDate = moment()
+        .subtract(11, "months")
+        .startOf("month")
+        .toDate();
+
+      const ordersData = await User.aggregate([
+        {
+          $unwind: "$orders",
+        },
+        {
+          $match: {
+            "orders.created_at": { $gte: startDate },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$orders.created_at" },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const months = [];
+      const ordersCount = [];
+      const currentMonth = moment().month();
+      for (let i = 0; i < 12; i++) {
+        const monthIndex = (currentMonth + i - 11) % 12;
+        const monthName = moment().month(monthIndex).format("MMM"); // Get abbreviated month name
+        const monthData = ordersData.find(
+          (data) => data._id === monthIndex + 1
+        ); // Find data for the current month
+        months.push(monthName);
+        ordersCount.push(monthData ? monthData.count : 0); // Push orders count for the current month or 0 if no data found
+      }
+
+      const categoryOrders = await User.aggregate([
+        { $unwind: "$orders" },
+        {
+          $lookup: {
+            from: "product",
+            localField: "orders.product",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        { $unwind: "$product" },
+        {
+          $group: {
+            _id: "$product.category",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      // Prepare data for the donut chart
+      const categories = categoryOrders.map((category) => category._id);
+      const categoryCount = categoryOrders.map((category) => category.count);
+
+      // Send the data to the client
+      res.json({ months, ordersCount, categories, categoryCount });
+    } else {
+      return res.redirect("/admin/signIn");
+    }
+  } catch (error) {
+    res.render("error", { layout: false, errorMessage: error });
+  }
+};
+
+let generateReport = async (req, res) => {
+  try {
+    const { fromDate, toDate, format } = req.body;
+    console.log(fromDate, toDate, format);
+
+    // Fetch orders within the selected date range
+    const orders = await User.aggregate([
+      {
+        $match: {
+          "orders.created_at": {
+            $gte: new Date(fromDate),
+            $lte: new Date(toDate),
+          },
+        },
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $match: {
+          "orders.created_at": {
+            $gte: new Date(fromDate),
+            $lte: new Date(toDate),
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "product",
+          localField: "orders.product",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $project: {
+          _id: 0,
+          "User Name": "$name",
+          Email: "$email",
+          "Order Name": "$orders.name",
+          "Product Name": "$product.name",
+          Quantity: "$orders.quantity",
+          Price: "$orders.price",
+          "Total Price": "$orders.total_price",
+          Address: "$orders.address",
+          "Payment Status": "$orders.payment_status",
+          "Order Status": "$orders.status",
+          "Created At": "$orders.created_at",
+        },
+      },
+    ]);
+
+    if (format === "csv") {
+      // Write data to CSV file
+      const csvWriter = createObjectCsvWriter({
+        path: "sales_report.csv",
+        header: [
+          { id: "User Name", title: "User Name" },
+          { id: "Email", title: "Email" },
+          { id: "Order Name", title: "Order Name" },
+          { id: "Product Name", title: "Product Name" },
+          { id: "Quantity", title: "Quantity" },
+          { id: "Price", title: "Price" },
+          { id: "Total Price", title: "Total Price" },
+          { id: "Address", title: "Address" },
+          { id: "Payment Status", title: "Payment Status" },
+          { id: "Order Status", title: "Order Status" },
+          { id: "Created At", title: "Created At" },
+        ],
+      });
+      await csvWriter.writeRecords(orders);
+      res.download("sales_report.csv");
+    } else if (format === "pdf") {
+      // Generate PDF
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      const content = `
+        <html>
+          <head><title>Sales Report</title></head>
+          <body>
+            <h1>Sales Report</h1>
+            <table border="1">
+              <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Order Name</th>
+                  <th>Product Name</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total Price</th>
+                  <th>Address</th>
+                  <th>Payment Status</th>
+                  <th>Order Status</th>
+                  <th>Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${orders
+                  .map(
+                    (order) => `
+                  <tr>
+                    <td>${order["User Name"]}</td>
+                    <td>${order["Email"]}</td>
+                    <td>${order["Order Name"]}</td>
+                    <td>${order["Product Name"]}</td>
+                    <td>${order["Quantity"]}</td>
+                    <td>${order["Price"]}</td>
+                    <td>${order["Total Price"]}</td>
+                    <td>${order["Address"]}</td>
+                    <td>${order["Payment Status"]}</td>
+                    <td>${order["Order Status"]}</td>
+                    <td>${order["Created At"]}</td>
+                  </tr>
+                `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </body>
+        </html>
+      `;
+      await page.setContent(content);
+      const pdfBuffer = await page.pdf();
+      await browser.close();
+      res.set({
+        "Content-Type": "application/pdf",
+        "Content-Length": pdfBuffer.length,
+        "Content-Disposition": `attachment; filename="sales_report.pdf"`,
+      });
+      res.send(pdfBuffer);
+    } else {
+      res.status(400).send("Invalid format specified.");
+    }
   } catch (error) {
     res.render("error", { layout: false, errorMessage: error });
   }
@@ -644,6 +898,8 @@ module.exports = {
   signInPage,
   signOut,
   adminHome,
+  dashboardData,
+  generateReport,
   signInPost,
   usersListPage,
   userAction,

@@ -5,12 +5,15 @@ const adminControllers = require("../controllers/admin");
 const upload = require("../config/multer");
 const preventBack = require("../middlewares/preventBack");
 const { authenticateAdmin } = require('../middlewares/jwt');
+const admin = require("../models/admin");
 
 router.get("/signIn", preventBack, adminControllers.signInPage);
 router.post("/signIn", adminControllers.signInPost);
 router.get("/signout", preventBack, adminControllers.signOut)
 
 router.get("/", preventBack, adminControllers.adminHome);
+router.get("/dashboard", preventBack, adminControllers.dashboardData)
+router.post("/generateReport", preventBack, adminControllers.generateReport)
  
 router.get("/usersList", preventBack, adminControllers.usersListPage)
 router.post("/usersList/:userId/block", authenticateAdmin(), adminControllers.userAction)

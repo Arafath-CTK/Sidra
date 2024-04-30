@@ -1,62 +1,6 @@
 <div class="body d-flex py-3">
   <div class="container-xxl">
-    {{! <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
-      <div class="col">
-        <div class="alert-success alert mb-0">
-          <div class="d-flex align-items-center">
-            <div class="avatar rounded no-thumbnail bg-success text-light">
-              <i class="fa fa-dollar fa-lg"></i>
-            </div>
-            <div class="flex-fill ms-3 text-truncate">
-              <div class="h6 mb-0">Revenue</div>
-              <span class="small">$18,925</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="alert-danger alert mb-0">
-          <div class="d-flex align-items-center">
-            <div class="avatar rounded no-thumbnail bg-danger text-light">
-              <i class="fa fa-credit-card fa-lg"></i>
-            </div>
-            <div class="flex-fill ms-3 text-truncate">
-              <div class="h6 mb-0">Expense</div>
-              <span class="small">$11,024</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="alert-warning alert mb-0">
-          <div class="d-flex align-items-center">
-            <div class="avatar rounded no-thumbnail bg-warning text-light">
-              <i class="fa fa-smile-o fa-lg"></i>
-            </div>
-            <div class="flex-fill ms-3 text-truncate">
-              <div class="h6 mb-0">Happy Clients</div>
-              <span class="small">8,925</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="alert-info alert mb-0">
-          <div class="d-flex align-items-center">
-            <div class="avatar rounded no-thumbnail bg-info text-light">
-              <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            </div>
-            <div class="flex-fill ms-3 text-truncate">
-              <div class="h6 mb-0">New StoreOpen</div>
-              <span class="small">8,925</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> }}
-    <!-- Row end  -->
 
-    {{! today week year and month }}
     <div class="row g-3">
       <div class="col-lg-12 col-md-12">
         <div class="tab-filter d-flex align-items-center justify-content-between mb-3 flex-wrap">
@@ -76,25 +20,18 @@
                 Month
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="tab" href="#summery-year">
-                Year
-              </a>
-            </li>
           </ul>
-          <div class="date-filter d-flex align-items-center mt-2 mt-sm-0 w-sm-100">
-            <div class="input-group">
-              <input type="date" class="form-control" />
-              <button class="btn btn-primary" type="button">
-                <i class="icofont-filter fs-5"></i>
-              </button>
-            </div>
+          <div class="col-auto d-flex w-sm-100">
+            <button type="button" class="btn btn-primary btn-set-task w-sm-100" data-bs-toggle="modal"
+              data-bs-target="#salesReportModal">
+              <i class="icofont-plus-circle me-2 fs-6"></i>Generate Sales Report
+            </button>
           </div>
         </div>
         <div class="tab-content mt-1">
           <div class="tab-pane fade show active" id="summery-today">
             <div class="row g-1 g-sm-3 mb-3 row-deck">
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -103,7 +40,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          14,208
+                          {{todayData.customersCount}}
                         </span>
                       </div>
                     </div>
@@ -113,7 +50,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -122,7 +59,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          2314
+                          {{todayData.ordersCount}}
                         </span>
                       </div>
                     </div>
@@ -132,45 +69,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          $1770
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Item Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          185
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-calculator-alt-2 fs-3 color-danger"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -179,7 +78,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          $35000
+                          &#x20B9;{{todayData.totalSales}}
                         </span>
                       </div>
                     </div>
@@ -189,88 +88,30 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
                       <span class="text-muted">
-                        Visitors
+                        Avg Sale
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          11452
+                          &#x20B9;{{todayData.averageSale}}
                         </span>
                       </div>
                     </div>
                     <div class="right-icon">
-                      <i class="icofont-users-social fs-3 color-light-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Total Products
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          184511
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-bag fs-3 color-light-orange"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Top Selling Item
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          122
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-star fs-3 color-lightyellow"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Dealership
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          32
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-handshake-deal fs-3 color-lavender-purple"></i>
+                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- row end -->
           </div>
           <div class="tab-pane fade" id="summery-week">
-            <div class="row g-3 mb-4 row-deck">
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+            <div class="row g-1 g-sm-3 mb-3 row-deck">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -279,7 +120,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          54,208
+                          {{weekData.customersCount}}
                         </span>
                       </div>
                     </div>
@@ -289,7 +130,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -298,7 +139,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          12314
+                          {{weekData.ordersCount}}
                         </span>
                       </div>
                     </div>
@@ -308,45 +149,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          $11770
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Item Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          1185
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-calculator-alt-2 fs-3 color-danger"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -355,7 +158,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          $135000
+                          &#x20B9;{{weekData.totalSales}}
                         </span>
                       </div>
                     </div>
@@ -365,78 +168,21 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
                       <span class="text-muted">
-                        Visitors
+                        Avg Sale
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          111452
+                          &#x20B9;{{weekData.averageSale}}
                         </span>
                       </div>
                     </div>
                     <div class="right-icon">
-                      <i class="icofont-users-social fs-3 color-light-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Total Products
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          194511
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-bag fs-3 color-light-orange"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Top Selling Item
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          1122
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-star fs-3 color-lightyellow"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Dealership
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          132
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-handshake-deal fs-3 color-lavender-purple"></i>
+                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
                     </div>
                   </div>
                 </div>
@@ -445,8 +191,8 @@
             <!-- row end -->
           </div>
           <div class="tab-pane fade" id="summery-month">
-            <div class="row g-3 mb-4 row-deck">
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+            <div class="row g-1 g-sm-3 mb-3 row-deck">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -455,7 +201,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          74,208
+                          {{monthData.customersCount}}
                         </span>
                       </div>
                     </div>
@@ -465,7 +211,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -474,7 +220,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          22314
+                          {{monthData.ordersCount}}
                         </span>
                       </div>
                     </div>
@@ -484,45 +230,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          $21770
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Item Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          2185
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-calculator-alt-2 fs-3 color-danger"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -531,7 +239,7 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          $235000
+                          &#x20B9;{{monthData.totalSales}}
                         </span>
                       </div>
                     </div>
@@ -541,126 +249,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Visitors
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          211452
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-users-social fs-3 color-light-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Total Products
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          284511
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-bag fs-3 color-light-orange"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Top Selling Item
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          222
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-star fs-3 color-lightyellow"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Dealership
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          232
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-handshake-deal fs-3 color-lavender-purple"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- row end -->
-          </div>
-          <div class="tab-pane fade" id="summery-year">
-            <div class="row g-3 mb-4 row-deck">
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Customers
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          104,208
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-student-alt fs-3 color-light-orange"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Order
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          252314
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-shopping-cart fs-3 color-lavender-purple"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+              <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                   <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                     <div class="left-info">
@@ -669,126 +258,12 @@
                       </span>
                       <div>
                         <span class="fs-6 fw-bold me-2">
-                          $852770
+                          &#x20B9;{{monthData.averageSale}}
                         </span>
                       </div>
                     </div>
                     <div class="right-icon">
                       <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Avg Item Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          75885
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-calculator-alt-2 fs-3 color-danger"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Total Sale
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          $350000
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Visitors
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          114521452
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-users-social fs-3 color-light-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Total Products
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          884511
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-bag fs-3 color-light-orange"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Top Selling Item
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          7522
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-star fs-3 color-lightyellow"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-                <div class="card">
-                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="left-info">
-                      <span class="text-muted">
-                        Dealership
-                      </span>
-                      <div>
-                        <span class="fs-6 fw-bold me-2">
-                          1832
-                        </span>
-                      </div>
-                    </div>
-                    <div class="right-icon">
-                      <i class="icofont-handshake-deal fs-3 color-lavender-purple"></i>
                     </div>
                   </div>
                 </div>
@@ -799,261 +274,79 @@
         </div>
       </div>
     </div>
-    <!-- Row end  -->
 
     <div class="row g-3 mb-3">
-      <div class="col-xl-12">
+      <div class="col-xl-6">
         <div class="card">
           <div
             class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
             <h6 class="m-0 fw-bold">
-              Sales Status
+              Monthly Sales
             </h6>
           </div>
           <div class="card-body">
-            <div id="apex-GenderOverview"></div>
+            <div id="monthsChart"></div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Row end  -->
 
-    <div class="row g-3 mb-3">
-      <div class="col-md-12">
+      <div class="col-xl-6">
         <div class="card">
           <div
             class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
             <h6 class="m-0 fw-bold">
-              Recent Transactions
+              Category wise Sales
             </h6>
           </div>
           <div class="card-body">
-            <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%">
-              <thead>
-                <tr>
-                  <th>
-                    Id
-                  </th>
-                  <th>
-                    Item
-                  </th>
-                  <th>
-                    Customer Name
-                  </th>
-                  <th>
-                    Payment Info
-                  </th>
-                  <th>
-                    Price
-                  </th>
-                  <th>
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-78414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-1.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Oculus VR
-                    </span>
-                  </td>
-                  <td>
-                    Molly
-                  </td>
-                  <td>
-                    Credit Card
-                  </td>
-                  <td>
-                    $420
-                  </td>
-                  <td>
-                    <span class="badge bg-warning">
-                      Progress
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-58414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-2.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Wall Clock
-                    </span>
-                  </td>
-                  <td>
-                    Brian
-                  </td>
-                  <td>
-                    Debit Card
-                  </td>
-                  <td>
-                    $220
-                  </td>
-                  <td>
-                    <span class="badge bg-success">
-                      Complited
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-48414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-3.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Note Diaries
-                    </span>
-                  </td>
-                  <td>
-                    Julia
-                  </td>
-                  <td>
-                    Debit Card
-                  </td>
-                  <td>
-                    $250
-                  </td>
-                  <td>
-                    <span class="badge bg-success">
-                      Complited
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-38414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-4.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Flower Port
-                    </span>
-                  </td>
-                  <td>
-                    Sonia
-                  </td>
-                  <td>
-                    Credit Card
-                  </td>
-                  <td>
-                    $320
-                  </td>
-                  <td>
-                    <span class="badge bg-warning">
-                      Progress
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-28414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-1.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Oculus VR
-                    </span>
-                  </td>
-                  <td>
-                    Adam H
-                  </td>
-                  <td>
-                    Debit Card
-                  </td>
-                  <td>
-                    $20
-                  </td>
-                  <td>
-                    <span class="badge bg-warning">
-                      Progress
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-18414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-2.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Wall Clock
-                    </span>
-                  </td>
-                  <td>
-                    Alexander
-                  </td>
-                  <td>
-                    Debit Card
-                  </td>
-                  <td>
-                    $820
-                  </td>
-                  <td>
-                    <span class="badge bg-success">
-                      Complited
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>
-                      #Order-11414
-                    </strong>
-                  </td>
-                  <td>
-                    <img src="/admin/assets/images/product/product-3.jpg" class="avatar lg rounded me-2"
-                      alt="profile-image" />
-                    <span>
-                      Note Diaries
-                    </span>
-                  </td>
-                  <td>
-                    Gabrielle
-                  </td>
-                  <td>
-                    Bank Emi
-                  </td>
-                  <td>
-                    $620
-                  </td>
-                  <td>
-                    <span class="badge bg-success">
-                      Complited
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div id="categoryPie"></div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Row end  -->
   </div>
 </div>
+
+<!-- Modal -->
+<form id="reportGenerationForm" action="" method="post">
+  <div class="modal fade" id="salesReportModal" tabindex="-1" aria-labelledby="salesReportModalLabel" aria-hidden="true"
+    data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="salesReportModalLabel">Generate Sales Report</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Date input fields -->
+
+          <div class="mb-3">
+            <label for="fromDate" class="form-label">From:</label>
+            <input type="date" name="fromDate" class="form-control" id="fromDate" required>
+            <div class="invalid-feedback" id="fromDateFeedback">Please select a valid From date.</div>
+          </div>
+          <div class="mb-3">
+            <label for="toDate" class="form-label">To:</label>
+            <input type="date" name="toDate" class="form-control" id="toDate" required>
+            <div class="invalid-feedback" id="toDateFeedback">Please select a valid To date.</div>
+          </div>
+          <!-- Select option for format -->
+          <div class="mb-3">
+            <label for="formatSelect" class="form-label">Format:</label>
+            <select class="form-select" name="format" id="formatSelect">
+              <option value="csv">CSV</option>
+              <option value="pdf">PDF</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="downloadReportBtn">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/admin/scripts/dashboard.js"></script>
