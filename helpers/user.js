@@ -3,6 +3,8 @@ const Product = require("../models/product");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const { trusted } = require("mongoose");
+const { resolve4 } = require("dns");
 require("dotenv").config();
 
 function signUpVerificationHelper(email) {
@@ -374,6 +376,18 @@ let addToCartHelper = async (productData, userId) => {
 
       let user = await User.findById(userId);
 
+      // Find the product by ID
+      let product = await Product.findById(productId);
+
+      if (!product) {
+        resolve({ productNotExist: true });
+      }
+
+      // Check if stock is sufficient
+      if (product.stock < quantity) {
+        resolve({ outOfStock: true });
+      }
+
       let existingCartIndex = user.cart.findIndex((item) =>
         item.product.equals(productId)
       );
@@ -417,14 +431,22 @@ let updateQuantityHelper = async (userId, cartData) => {
     try {
       let { cartId, newQuantity } = cartData;
 
+      let user = await User.findById(userId);
+      let cartItem = user.cart.find((item) => item._id.equals(cartId));
+      let product = await Product.findById(cartItem.product);
+
+      if (product.stock < newQuantity) {
+        return resolve({ outOfStock: true });
+      }
+
       const updatedCart = await User.findOneAndUpdate(
-        { _id: userId, "cart._id": cartId }, // Criteria to find the user and the cart object
-        { $set: { "cart.$.quantity": newQuantity } }, // Update operation
-        { new: true } // Return the updated document
+        { _id: userId, "cart._id": cartId },
+        { $set: { "cart.$.quantity": newQuantity } },
+        { new: true }
       );
 
       if (!updatedCart) {
-        reject({ productNotExist: true });
+        return resolve({ productNotExist: true });
       }
 
       resolve({ success: true, updatedCart });
@@ -438,17 +460,25 @@ let updateSelectedHelper = async (userId, cartId, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let { isSelected } = data;
-      const updatedCart = await User.findOneAndUpdate(
-        { _id: userId, "cart._id": cartId },
-        { $set: { "cart.$.isSelected": isSelected } },
-        { new: true }
-      );
+      console.log(isSelected);
 
-      if (!updatedCart) {
-        reject({ productNotExist: true });
+      let user = await User.findById(userId);
+      let cartItem = user.cart.find((item) => item._id.equals(cartId));
+      let product = await Product.findById(cartItem.product);
+
+      if (product.stock < cartItem.quantity) {
+        return resolve({ outOfStock: true });
+      } else {
+        const updatedCart = await User.findOneAndUpdate(
+          { _id: userId, "cart._id": cartId },
+          { $set: { "cart.$.isSelected": isSelected } },
+          { new: true }
+        );
+        if (!updatedCart) {
+          return resolve({ productNotExist: true });
+        }
+        resolve({ success: true, updatedCart });
       }
-
-      resolve({ success: true, updatedCart });
     } catch (error) {
       reject(error);
     }

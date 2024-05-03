@@ -69,10 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelector(".cartId").value;
       const newQuantity = Math.max(parseInt(inputField.value) - 1, 1);
       if (newQuantity < inputField.value) {
-        await updateQuantity(cartId, newQuantity);
-        inputField.value = newQuantity;
-        updateTotalPrice(button.closest("tr"), newQuantity);
-        calculateCartTotals();
+        let updateQuantityResult = await updateQuantity(cartId, newQuantity);
+
+        if (updateQuantityResult) {
+          inputField.value = newQuantity;
+          updateTotalPrice(button.closest("tr"), newQuantity);
+          calculateCartTotals();
+        }
       } else {
         showToast("Minimum quantity reached");
       }
@@ -88,16 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelector(".cartId").value;
       const newQuantity = parseInt(inputField.value) + 1;
 
-      // Limit the maximum quantity to 10
       if (newQuantity > 10) {
         showToast("Maximum quantity reached");
-        return; // Exit function if maximum quantity is reached
+        return;
       }
 
-      await updateQuantity(cartId, newQuantity);
-      inputField.value = newQuantity;
-      updateTotalPrice(button.closest("tr"), newQuantity);
-      calculateCartTotals();
+      let updateQuantityResult = await updateQuantity(cartId, newQuantity);
+      if (updateQuantityResult) {
+        inputField.value = newQuantity;
+        updateTotalPrice(button.closest("tr"), newQuantity);
+        calculateCartTotals();
+      }
     });
   });
 
@@ -105,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     checkbox.addEventListener("change", async () => {
       const cartId = checkbox.closest("tr").querySelector(".cartId").value;
       const isSelected = checkbox.checked;
+      console.log(isSelected);
 
       try {
         const response = await axios.put(`/cart/updateSelected/${cartId}`, {
@@ -114,12 +119,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.status === 200) {
           const data = response.data;
 
-          if (data.productNotExist) {
+          if (data.outOfStock) {
+            showToast("Insufficient Stock");
+          } else if (data.productNotExist) {
             showToast("Product not exist");
           } else if (data.failed) {
             showToast("Failed to select the product");
           } else if (data.success) {
-            showToast("Product selected");
+            if (isSelected) {
+              showToast("Product selected");
+            } else {
+              showToast("Product deselected");
+            }
             calculateCartTotals();
           }
         } else {
@@ -150,12 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.status === 200) {
         const data = response.data;
 
-        if (data.productNotExist) {
+        if (data.outOfStock) {
+          showToast("Insufficient Stock");
+          return false;
+        } else if (data.productNotExist) {
           showToast("Product not exist");
+          return false;
         } else if (data.failed) {
           showToast("Failed to update the quantity");
+          return false;
         } else if (data.success) {
           showToast("Quantity updated");
+          return true;
         }
       } else {
         console.error("Unexpected response from the server: ", response);

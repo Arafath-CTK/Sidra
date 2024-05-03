@@ -45,7 +45,7 @@ router.delete("/cart/remove/:id", preventBack, userControllers.removeFromCart);
 router.post("/cart/updateQuantity", userControllers.updateQuantity);
 router.put("/cart/updateSelected/:id", userControllers.updateSelected)
 router.get("/cart/count", userControllers.cartCount);
-router.get("/checkout", userControllers.checkoutPage);
+router.get("/checkout", preventBack, userControllers.checkoutPage);
 router.post("/coupon", userControllers.applyCoupon)
 router.post("/placeOrder", userControllers.placeOrder);
 router.post("/payment/create-order", userControllers.createOrder);

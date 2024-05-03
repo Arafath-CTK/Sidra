@@ -36,13 +36,6 @@ const adminSchema = new mongoose.Schema(
         min_cart_value: Number,
       },
     ],
-    blogs: [
-      {
-        title: String,
-        content: String,
-        created_at: Date,
-      },
-    ],
   },
   { versionKey: false }
 );

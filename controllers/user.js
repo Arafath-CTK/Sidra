@@ -793,10 +793,6 @@ let filter = async (req, res) => {
     } else if (sortBy === "hightolow") {
       sortOption = { price: -1 };
     }
-    // else if (sortBy === "rating") {
-    //   // You need to implement sorting by rating
-    //   // sortOption = { averageRating: -1 };
-    // }
 
     let filters = {};
 
@@ -821,7 +817,6 @@ let filter = async (req, res) => {
     const currentPageMinusOne = Math.max(1, page - 1);
     const currentPagePlusOne = Math.min(totalPages, page + 1);
 
-    // Calculate pages array
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
       pages.push({
@@ -1159,7 +1154,10 @@ let addToCart = async (req, res) => {
 
       let addedProduct = await helper.addToCartHelper(req.body, userId);
 
-      if (addedProduct.success) {
+      if (addedProduct.productNotExist || addedProduct.outOfStock) {
+        console.log("Product is ran out of stock");
+        return res.status(200).json({ outOfStock: true });
+      } else if (addedProduct.success) {
         console.log("Product added to cart successfully");
         return res.status(200).json({ success: true });
       }
@@ -1210,7 +1208,9 @@ let updateQuantity = async (req, res) => {
 
       let updated = await helper.updateQuantityHelper(userId, req.body);
 
-      if (updated.productNotExist) {
+      if (updated.outOfStock) {
+        return res.status(200).json({ outOfStock: true });
+      } else if (updated.productNotExist) {
         return res.status(200).json({ productNotExist: true });
       } else if (updated.success) {
         console.log("Cart updated successfully");
@@ -1239,7 +1239,9 @@ let updateSelected = async (req, res) => {
 
       let updated = await helper.updateSelectedHelper(userId, cartId, req.body);
 
-      if (updated.productNotExist) {
+      if (updated.outOfStock) {
+        return res.status(200).json({ outOfStock: true });
+      } else if (updated.productNotExist) {
         return res.status(200).json({ productNotExist: true });
       } else if (updated.success) {
         console.log("Cart item selected successfully");
@@ -1292,12 +1294,10 @@ let checkoutPage = async (req, res) => {
       let userData = await User.findById(userId).populate("cart.product");
 
       let allAddresses = userData.addresses;
-      // Filter out the primary address
       let primaryAddress = allAddresses.find(
         (address) => address.isPrimary === true
       );
 
-      // Filter out all other addresses except the primary one
       let addresses = allAddresses
         .filter((address) => address.isPrimary !== true)
         .slice(0, 2);
@@ -1306,17 +1306,28 @@ let checkoutPage = async (req, res) => {
         .filter((address) => address.isPrimary !== true)
         .slice(2);
 
-      let products = userData.cart
-        .map((item) => {
-          return {
-            product: item.product,
-            quantity: item.quantity,
-            isSelected: item.isSelected,
-            totalPrice: item.product.price * item.quantity,
-            _id: item._id,
-          };
+      let products = await Promise.all(
+        userData.cart.map(async (item) => {
+          let product = await Product.findById(item.product);
+          if (product.stock >= item.quantity && item.isSelected) {
+            return {
+              product: product,
+              quantity: item.quantity,
+              isSelected: item.isSelected,
+              totalPrice: product.price * item.quantity,
+              _id: item._id,
+            };
+          }
+          return null;
         })
-        .filter((product) => product.isSelected === true);
+      );
+
+      // Filter out null values (products with insufficient stock or not selected)
+      products = products.filter((product) => product !== null);
+
+      if (products.length === 0) {
+        throw new Error("No product is selected for checkout.");
+      }
 
       let subTotal = products.reduce((total, item) => {
         return total + item.product.price * item.quantity;
@@ -1345,10 +1356,10 @@ let checkoutPage = async (req, res) => {
       res.redirect("/signin");
     }
   } catch (error) {
-    console.error("Error rendering the checkout page: ", error);
+    console.error("Error getting checkout page: ", error);
     res.status(500).render("error", {
       layout: false,
-      errorMessage: "Error rendering the checkout page",
+      errorMessage: error,
     });
   }
 };
@@ -1385,7 +1396,6 @@ let applyCoupon = async (req, res) => {
         _id: userId,
         usedCoupons: { $in: [coupon._id] },
       });
-
       if (couponUsed) {
         return res.json({ alreadyUsed: true });
       }
@@ -1481,7 +1491,22 @@ let placeOrder = async (req, res) => {
 
       // If a coupon was applied, store the coupon code in usedCoupons array
       if (req.body.appliedCoupon) {
-        user.usedCoupons.push(req.body.appliedCoupon);
+        let appliedCoupon = req.body.appliedCoupon;
+
+        const admins = await Admin.find({});
+        for (const admin of admins) {
+          const couponIndex = admin.coupons.findIndex((coupon) =>
+            coupon._id.equals(appliedCoupon)
+          );
+
+          if (couponIndex !== -1) {
+            admin.coupons[couponIndex].max_usage -= 1;
+            await admin.save();
+            break;
+          }
+        }
+
+        user.usedCoupons.push(appliedCoupon);
       }
 
       // Save the updated user document

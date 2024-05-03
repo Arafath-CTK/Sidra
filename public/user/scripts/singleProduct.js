@@ -91,8 +91,8 @@ async function addToCart(productId) {
     if (response.status === 200) {
       const data = response.data;
 
-      if (data.productExist) {
-        showToast("Product already exists in the Cart");
+      if (data.outOfStock) {
+        showToast("Sorry! Product ran Out Of Stock");
       } else if (data.success) {
         showToast("Product added to the Cart");
         await new Promise((resolve) => setTimeout(resolve, 1500));
