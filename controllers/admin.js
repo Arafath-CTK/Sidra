@@ -18,7 +18,7 @@ let signInPage = async (req, res) => {
         return res.redirect("/admin");
       }
     }
-    res.render("admin/signIn", { layout: false });
+    res.render("admin/signin", { layout: false });
   } catch (error) {
     console.log("Error while rendering the signin page");
     res.status(404).render("error", { layout: false, errorMessage: error });
