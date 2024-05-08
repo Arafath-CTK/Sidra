@@ -3,12 +3,26 @@ function showSpinner() {
   document.getElementById("spinner").style.display = "block";
   document.getElementById("spinnerOverlay").style.display = "block";
 }
-
 // Function to hide the spinner and overlay
 function hideSpinner() {
   document.getElementById("spinner").style.display = "none";
   document.getElementById("spinnerOverlay").style.display = "none";
 }
+
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function () {
+    var passwordInput = document.getElementById("password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      this.classList.remove("fa-eye");
+      this.classList.add("fa-eye-slash");
+    } else {
+      passwordInput.type = "password";
+      this.classList.remove("fa-eye-slash");
+      this.classList.add("fa-eye");
+    }
+  });
 
 async function sendOTP() {
   try {
@@ -40,9 +54,9 @@ async function sendOTP() {
     } else {
       document.getElementById("phoneNumberError").innerHTML = "";
     }
-    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(password)) {
+    if (!/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/.test(password)) {
       document.getElementById("passwordError").innerHTML =
-        "Password must contain atleast 6 characters";
+        "Password must be 6 characters long and contain at least one digit";
       errorCount++;
     } else {
       document.getElementById("passwordError").innerHTML = "";

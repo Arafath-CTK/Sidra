@@ -35,11 +35,17 @@
                 <input type="number" name="phoneNumber" id="phoneNumber" value="{{enteredPhoneNumber}}" />
                 <small id="phoneNumberError" style="color: red;"></small>
               </p>
+
               <p>
                 <label>Password</label>
+              <div style="position: relative; margin-top: -21px">
                 <input type="password" name="password" id="password" value="{{enteredPassword}}" />
-                <small id="passwordError" style="color: red;"></small>
+                <i id="togglePassword" class="fas fa-eye"
+                  style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+              </div>
+              <small id="passwordError" style="color: red;"></small>
               </p>
+
               <p>
                 <label>Confirm Password</label>
                 <input type="password" name="confirmPassword" id="confirmPassword" />

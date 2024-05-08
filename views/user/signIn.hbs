@@ -14,8 +14,12 @@
             </p>
             <p>
               <label>Password</label>
+            <div style="position: relative; margin-top: -21px">
               <input id="password" type="password" name="password" value="{{password}}" />
-              <small id="passwordError" style="color: red;">{{passwordError}}</small>
+              <i id="togglePassword" class="fas fa-eye"
+                style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+            </div>
+            <small id="passwordError" style="color: red;">{{passwordError}}</small>
             </p>
             <div class="login_submit" style="display: flex; justify-content: space-between;">
               <div style="display: flex; flex-direction: column;">
