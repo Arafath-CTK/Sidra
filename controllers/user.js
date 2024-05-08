@@ -1587,6 +1587,21 @@ let cancelOrder = async (req, res) => {
   }
 };
 
+let contactusPage = async (req, res) => {
+  try {
+    res.status(200).render("user/contact", {
+      title: "Sidra | Contact Us",
+      user: req.cookies.userToken ? true : false,
+    });
+  } catch (error) {
+    console.error("Error getting checkout page: ", error);
+    res.status(500).render("error", {
+      layout: false, 
+      errorMessage: error,
+    });
+  }
+};
+
 module.exports = {
   homePage,
   signUpPage,
@@ -1629,4 +1644,5 @@ module.exports = {
   placeOrder,
   createOrder,
   cancelOrder,
+  contactusPage,
 };

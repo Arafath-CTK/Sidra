@@ -1153,16 +1153,6 @@ textarea:-ms-input-placeholder {
   margin-top: -8px;
   right: 0;
 }
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .hover_category::before {
-    display: none;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .hover_category::before {
-    display: none;
-  }
-}
 .hover_category .select_option {
   border: 0;
   background: inherit;
@@ -1179,22 +1169,30 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .hover_category .select_option {
+    border: none;
+    background: inherit;
     height: 34px;
     line-height: 35px;
     font-size: 13px;
-    padding-left: 50px;
-    padding-right: 51px;
-    border: 1px solid #e1e1e1;
+    padding-left: 15px;
+    padding-right: 24px;
+  }
+  .hover_category .select_option::after {
+    right: 10px;
   }
 }
 @media only screen and (max-width: 767px) {
   .hover_category .select_option {
-    height: 34px;
-    line-height: 35px;
-    font-size: 13px;
-    padding-left: 50px;
-    padding-right: 51px;
-    border: 1px solid #e1e1e1;
+    border: none;
+    background: inherit;
+    height: 20px;
+    line-height: 20px;
+    font-size: 9px;
+    padding-left: 8px;
+    padding-right: 22px;
+  }
+  .hover_category .select_option::after {
+    right: 10px;
   }
 }
 .hover_category .select_option::after {
@@ -1226,18 +1224,17 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .search_container {
-    display: none;
     margin-right: 0;
   }
 }
 @media only screen and (max-width: 767px) {
   .search_container {
     margin-right: 0;
-    display: none;
   }
 }
 .search_container form {
   display: flex;
+  align-items: center;
   border-radius: 30px;
   border: 1px solid #e1e1e1;
   background: #fff;
@@ -1250,35 +1247,31 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .search_container form {
-    flex-direction: column-reverse;
-    border: 0;
-    align-items: center;
     width: 100%;
   }
 }
 @media only screen and (max-width: 767px) {
   .search_container form {
-    flex-direction: column-reverse;
-    border: 0;
-    align-items: center;
     width: 100%;
   }
 }
 
 .search_box {
   position: relative;
+  /* top: 12px; */
   width: 100%;
+  text-align: center;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .search_box {
-    border: 1px solid #e1e1e1;
-    margin-bottom: 25px;
+    border: none;
+    /* margin-bottom: 25px; */
   }
 }
 @media only screen and (max-width: 767px) {
   .search_box {
-    border: 1px solid #e1e1e1;
-    margin-bottom: 25px;
+    border: none;
+    /* margin-bottom: 22px; */
   }
 }
 .search_box input::-webkit-input-placeholder {
@@ -1300,7 +1293,7 @@ textarea:-ms-input-placeholder {
 .search_box input {
   border: 0;
   background: inherit;
-  width: 100%;
+  width: calc(100% - 40px);
   height: 54px;
   color: #222222;
   font-size: 14px;
@@ -1310,18 +1303,26 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .search_box input {
+    border: none;
+    background: inherit;
+    color: #222222;
     font-size: 12px;
-    padding: 0 54px 0 10px;
+    padding: 0 34px 0 5px;
     width: 100%;
     height: 34px;
+    opacity: 0.7;
   }
 }
 @media only screen and (max-width: 767px) {
   .search_box input {
-    font-size: 12px;
-    padding: 0 54px 0 10px;
+    border: none;
+    background: inherit;
+    color: #222222;
+    font-size: 8px;
+    padding: 0 20px 0 5px;
     width: 100%;
-    height: 34px;
+    height: 28px;
+    opacity: 0.7;
   }
 }
 .search_box button {
@@ -1329,7 +1330,7 @@ textarea:-ms-input-placeholder {
   position: absolute;
   top: 0;
   height: 100%;
-  right: 15px;
+  right: 0;
   font-weight: 400;
   font-size: 25px;
   border-radius: 0 5px 5px 0;
@@ -1342,22 +1343,35 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .search_box button {
+    border: 0;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: 10px;
+    font-size: 20px;
+    border-radius: 0 5px 5px 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    background: inherit;
     min-width: 55px;
     padding: 0 6px;
-    top: 0;
     bottom: 0;
-    right: 0;
-    font-size: 20px;
   }
 }
 @media only screen and (max-width: 767px) {
   .search_box button {
-    min-width: 55px;
-    padding: 0 6px;
+    border: 0;
+    position: absolute;
     top: 0;
+    right: 0px;
+    font-size: 17px;
+    min-width: 35px;
+    padding: 0 2px;
+    height: 100%;
+    border-radius: 0 5px 5px 0;
+    transition: 0.3s;
+    background: inherit;
     bottom: 0;
-    right: 0;
-    font-size: 20px;
   }
 }
 
@@ -1409,12 +1423,12 @@ textarea:-ms-input-placeholder {
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .header_bottom {
-    border-bottom: 0;
+    display: none;
   }
 }
 @media only screen and (max-width: 767px) {
   .header_bottom {
-    border-bottom: 0;
+    display: none;
   }
 }
 
@@ -1423,16 +1437,6 @@ textarea:-ms-input-placeholder {
   position: relative;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .main_menu {
-    display: none;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .main_menu {
-    display: none;
-  }
-}
 .main_menu nav > ul {
   display: flex;
 }

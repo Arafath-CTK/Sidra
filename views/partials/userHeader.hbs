@@ -1,49 +1,154 @@
+<style>
+    .side_menu {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        transition: left 0.3s ease;
+        z-index: 1000;
+    }
+
+    .menu_header {
+        background-color: #79a206;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 15px 20px;
+    }
+
+    .menu_content {
+        padding: 20px;
+    }
+
+    .side_menu.active {
+        left: 0;
+    }
+
+    .side_menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .side_menu ul li {
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .side_menu ul li a {
+        text-decoration: none;
+        color: #333;
+        display: block;
+        transition: color 0.3s ease;
+    }
+
+    .side_menu ul li a:hover {
+        color: #79a206;
+    }
+
+
+    .custom_mega_menu {
+        display: none;
+        position: absolute;
+        background-color: #fff; /* Change the background color as needed */
+        border: 1px solid #ccc; /* Optional: Add a border */
+        padding: 10px;
+    }
+
+    .custom_mega_items:hover .custom_mega_menu {
+        display: block;
+    }
+
+    .custom_mega_menu_inner {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .custom_mega_menu_inner li {
+        padding: 5px 0;
+        display: block; /* Display list items as block elements */
+    }
+
+    .custom_mega_menu_inner li a {
+        color: #333; /* Change link color as needed */
+        text-decoration: none;
+    }
+
+    .custom_mega_menu_inner li a:hover {
+        color: #79a206; /* Change hover color as needed */
+    }
+</style>
+
 <!--header area start-->
 <header>
     <div class="main_header">
         <div class="header_middle">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-3 col-4">
+                    <!-- Logo -->
+                    <div class="col-lg-3 col-md-3 d-none d-md-block d-lg-block">
                         <div class="logo">
-                            <a href="/"><img src="/user/assets/img/logo/logo.png" alt="" /></a>
+                            <a href="/"><img src="/user/assets/img/logo/logo.png" /></a>
                         </div>
                     </div>
-                    <div class="col-lg-9 col-md-6 col-6">
+                    <div class="col-2 d-block d-md-none d-lg-none">
+                        <div class="logo">
+                            <a href="/"><img src="/user/assets/img/logo/logoSmall.png" width="45px" height="45px" /></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9 col-md-6 col-7">
                         <div class="header_right_info">
-                            <div class="search_container">
-                                <form id="searchForm">
-                                    <div class="hover_category">
-                                        <select class="select_option" name="category" id="category">
-                                            <option selected value="all">All Categories</option>
-                                            <option value="plants">Plants</option>
-                                            <option value="pots">Containers For Plants</option>
-                                            <option value="supplies">Gardening Supplies</option>
-                                        </select>
-                                    </div>
-                                    <div class="search_box">
-                                        <input id="searchInput" placeholder="Search product..." type="text" />
-                                        <button type="submit"><i class="icon-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="header_account_area">
-                                <div class="header_account-list top_links">
-                                    <a href="/myAccount" id="accountButton"><i class="icon-users"></i></a>
-                                </div>
-                                <div class="header_account-list header_wishlist">
-                                    <a href="/wishlist"><i class="icon-heart"></i></a>
-                                </div>
-                                <div class="header_account-list mini_cart_wrapper">
-                                    <a href="/cart"><i class="icon-shopping-bag"></i><span
-                                            class="item_count"></span></a>
+                            <!-- Search Container -->
+                            <div class="col-lg-9">
+                                <div class="search_container mt-3">
+                                    <form id="searchForm">
+                                        <div class="hover_category">
+                                            <select class="select_option" name="category" id="category">
+                                                <option selected value="all">All Categories</option>
+                                                <option value="plants">Plants</option>
+                                                <option value="pots">Containers For Plants</option>
+                                                <option value="supplies">Gardening Supplies</option>
+                                            </select>
+                                        </div>
+                                        <div class="search_box">
+                                            <input id="searchInput" placeholder="Search product..." type="text" />
+                                            <button type="submit"><i class="icon-search"></i></button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+                            <div class="col-lg-3 d-none d-lg-block">
+                                <div class="header_account_area">
+                                    <div class="header_account-list top_links">
+                                        <a href="/myAccount" id="accountButton"><i class="icon-users"></i></a>
+                                    </div>
+                                    <div class="header_account-list header_wishlist">
+                                        <a href="/wishlist"><i class="icon-heart"></i></a>
+                                    </div>
+                                    <div class="header_account-list mini_cart_wrapper">
+                                        <a href="/cart"><i class="icon-shopping-bag"></i><span
+                                                class="item_count"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Toggler -->
+                    <div class="col-md-3 col-3">
+                        <div class="header_right_info">
+                            <i class="fa-solid fa-bars fs-5 d-md-block d-lg-none" id="menuToggler"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="header_bottom sticky-header">
             <div class="container">
 
@@ -71,14 +176,7 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li><a href="blog.html">blogs<i class="fa fa-angle-down"></i></a>
-                                        <ul class="sub_menu pages">
-                                            <li><a href="blog-details.html">blog details</a></li>
-                                            <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
-                                            <li><a href="blog-sidebar.html">blog sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href=""> Contact Us</a></li>
+                                    <li><a href="/contactus"> Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -93,7 +191,49 @@
                     {{/unless}}
                 </div>
             </div>
+
         </div>
     </div>
 </header>
 <!--header area end-->
+
+<div class="side_menu" id="sideMenu">
+    <div class="menu_header">Menu</div>
+    <div class="menu_content">
+        <ul>
+            <li><a class="active" href="/">Home</a></li>
+            <li class="custom_mega_items">
+                <a>Shop <i class="fa fa-angle-down"></i></a>
+                <div class="custom_mega_menu">
+                    <ul class="custom_mega_menu_inner">
+                        <li><a href="/shop">Shop All</a></li>
+                        <li><a href="/shop/plants">Plants</a></li>
+                        <li><a href="/shop/containers">Containers for plants</a></li>
+                        <li><a href="/shop/supplies">Gardening Supplies</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="/wishlist">Wish List</a></li>
+            <li><a href="/cart"></a>Cart</li>
+            <li><a href="/myAccount">My Account</a></li>
+            <li><a href="/contactus">Contact Us</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuToggler = document.getElementById('menuToggler');
+        const sideMenu = document.getElementById('sideMenu');
+
+        menuToggler.addEventListener('click', function () {
+            sideMenu.classList.toggle('active');
+        });
+
+        window.addEventListener('click', function (event) {
+            if (!sideMenu.contains(event.target) && !menuToggler.contains(event.target)) {
+                sideMenu.classList.remove('active');
+            }
+        });
+    })
+</script>

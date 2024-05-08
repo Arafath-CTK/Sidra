@@ -51,4 +51,7 @@ router.post("/placeOrder", userControllers.placeOrder);
 router.post("/payment/create-order", userControllers.createOrder);
 router.put("/cancelOrder", userControllers.cancelOrder);
 
+router.get("/contactus", userControllers.contactusPage)
+
 module.exports = router;
+ 
