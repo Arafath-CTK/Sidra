@@ -53,8 +53,10 @@
     .custom_mega_menu {
         display: none;
         position: absolute;
-        background-color: #fff; /* Change the background color as needed */
-        border: 1px solid #ccc; /* Optional: Add a border */
+        background-color: #fff;
+        /* Change the background color as needed */
+        border: 1px solid #ccc;
+        /* Optional: Add a border */
         padding: 10px;
     }
 
@@ -70,16 +72,19 @@
 
     .custom_mega_menu_inner li {
         padding: 5px 0;
-        display: block; /* Display list items as block elements */
+        display: block;
+        /* Display list items as block elements */
     }
 
     .custom_mega_menu_inner li a {
-        color: #333; /* Change link color as needed */
+        color: #333;
+        /* Change link color as needed */
         text-decoration: none;
     }
 
     .custom_mega_menu_inner li a:hover {
-        color: #79a206; /* Change hover color as needed */
+        color: #79a206;
+        /* Change hover color as needed */
     }
 </style>
 
@@ -97,7 +102,7 @@
                     </div>
                     <div class="col-2 d-block d-md-none d-lg-none">
                         <div class="logo">
-                            <a href="/"><img src="/user/assets/img/logo/logoSmall.png" width="45px" height="45px" /></a>
+                            <a href="/"><img src="/user/assets/img/logo/logoSmall.png" width="40px" height="40px" /></a>
                         </div>
                     </div>
 
@@ -151,7 +156,6 @@
 
         <div class="header_bottom sticky-header">
             <div class="container">
-
                 <div class="row d-flex align-items-center justify-content-between">
                     <div class="col-lg-6">
                         <!--main menu start-->
@@ -214,8 +218,12 @@
                 </div>
             </li>
             <li><a href="/wishlist">Wish List</a></li>
-            <li><a href="/cart"></a>Cart</li>
+            <li><a href="/cart">Cart</a></li>
+            {{#if user}}
             <li><a href="/myAccount">My Account</a></li>
+            {{else}}
+            <li><a href="/signIn">Signin</a></li>
+            {{/if}}
             <li><a href="/contactus">Contact Us</a></li>
         </ul>
     </div>
