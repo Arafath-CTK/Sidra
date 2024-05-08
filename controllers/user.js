@@ -22,6 +22,7 @@ let homePage = async (req, res) => {
       let tokenExtracted = await JWT.verifyUser(req.cookies.userToken);
       let userId = tokenExtracted.userId;
       let user = await User.findById(userId).populate("wishlist");
+      let wishlist = user.wishlist.length >= 4 ? user.wishlist : [];
 
       return res.render("user/home", {
         title: "Sidra | Home",
@@ -38,7 +39,7 @@ let homePage = async (req, res) => {
           .filter((product) => product.isActive)
           .slice(-8)
           .reverse(),
-        wishlist: user.wishlist,
+        wishlist: wishlist,
         banner: admin.banner,
       });
     }
