@@ -1,36 +1,27 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signin</title>
-    <link rel="stylesheet" href="/admin/styles/signin.css" />
-  </head>
-  <body>
-    <div class="signin-container">
-      <h2>Sign In</h2>
-      <form action="/admin/signIn" method="post" onsubmit="return validateForm()">
-        <input
-          type="text"
-          class="signin-input"
-          placeholder="Email"
-          name="signInEmail"
-          id="email"
-          value="{{enteredMail}}"
-        />
-        <small id="emailError">{{replaceMail}}</small>
-        <input
-          type="password"
-          class="signin-input"
-          placeholder="Password"
-          name="signInPassword"
-          id="password"
-          value="{{enteredPassword}}"
-        />
-        <small id="passwordError">{{replacePassword}}</small>
-        <button type="submit" class="signin-button">Sign In</button>
-      </form>
-    </div>
 
-    <script src="/admin/scripts/signin.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signin</title>
+  <link rel="stylesheet" href="/admin/styles/signin.css" />
+</head>
+
+<body>
+  <div class="signin-container">
+    <h2>Sign In</h2>
+    <form action="/admin/signIn" method="post" onsubmit="return validateForm()">
+      <input type="text" class="signin-input" placeholder="Email" name="signInEmail" id="email"
+        value="{{enteredMail}}" />
+      <small id="emailError">{{replaceMail}}</small>
+      <input type="password" class="signin-input" placeholder="Password" name="signInPassword" id="password"
+        value="{{enteredPassword}}" />
+      <small id="passwordError">{{replacePassword}}</small>
+      <button type="submit" class="signin-button">Sign In</button>
+    </form>
+  </div>
+
+  <script src="/admin/scripts/signin.js"></script>
+</body>
+
 </html>
