@@ -53,6 +53,7 @@ function signUpHelper(userData) {
 
 let signInHelper = async (signInData) => {
   try {
+    console.log(signInData)
     const { email, password } = signInData;
     let existingUser = await User.findOne({ email: email });
     if (existingUser) {
