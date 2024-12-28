@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const env = require("dotenv").config();
+require("dotenv").config();
 
 let signUser = (user) => {
   return new Promise((resolve, reject) => {

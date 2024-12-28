@@ -25,6 +25,42 @@ let signInPage = async (req, res) => {
   }
 };
 
+let signInPost = async (req, res) => {
+  try {
+    const { signInEmail, signInPassword } = req.body;
+    const adminData = await Admin.findOne({ email: signInEmail });
+
+    if (adminData === null) {
+      return res.status(401).render("admin/signin", {
+        layout: false,
+        replaceMail: "Wrong email id",
+        enteredMail: signInEmail,
+        enteredPassword: signInPassword,
+      });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      signInPassword,
+      adminData.password
+    );
+    if (!passwordMatch) {
+      return res.status(401).render("admin/signin", {
+        layout: false,
+        replacePassword: "Wrong Password",
+        enteredMail: signInEmail,
+      });
+    } else {
+      console.log("Admin verified and signed in successfully");
+      const token = await JWT.signAdmin(adminData);
+      res.cookie("adminToken", token, { htttpOnly: true, maxAge: 7200000 });
+      res.redirect("/admin/");
+    }
+  } catch (error) {
+    console.error("Error while logging in ", error);
+    res.render("error", { layout: false, errorMessage: error });
+  }
+};
+
 let signOut = async (req, res) => {
   try {
     res.clearCookie("adminToken");
@@ -302,42 +338,6 @@ let generateReport = async (req, res) => {
       res.status(400).send("Invalid format specified.");
     }
   } catch (error) {
-    res.render("error", { layout: false, errorMessage: error });
-  }
-};
-
-let signInPost = async (req, res) => {
-  try {
-    const { signInEmail, signInPassword } = req.body;
-    const adminData = await Admin.findOne({ email: signInEmail });
-
-    if (adminData === null) {
-      return res.status(401).render("admin/signin", {
-        layout: false,
-        replaceMail: "Wrong email id",
-        enteredMail: signInEmail,
-        enteredPassword: signInPassword,
-      });
-    }
-
-    const passwordMatch = await bcrypt.compare(
-      signInPassword,
-      adminData.password
-    );
-    if (!passwordMatch) {
-      return res.status(401).render("admin/signin", {
-        layout: false,
-        replacePassword: "Wrong Password",
-        enteredMail: signInEmail,
-      });
-    } else {
-      console.log("Admin verified and signed in successfully");
-      const token = await JWT.signAdmin(adminData);
-      res.cookie("adminToken", token, { htttpOnly: true, maxAge: 7200000 });
-      res.redirect("/admin/");
-    }
-  } catch (error) {
-    console.error("Error while logging in ", error);
     res.render("error", { layout: false, errorMessage: error });
   }
 };
